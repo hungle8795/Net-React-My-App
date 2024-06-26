@@ -52,6 +52,7 @@ function App() {
         setForecasts(data);
     }
 }
-test thu 
+test thu 6
+lai lan nua
 
 export default App;
