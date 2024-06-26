@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.Repository;
+using Net_React.Server.Service;
 
 namespace Net_React.Server.Controllers
 {
@@ -11,11 +13,13 @@ namespace Net_React.Server.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
+        private readonly IRepository _repository;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
         {
             _logger = logger;
+            this._repository = repository;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
