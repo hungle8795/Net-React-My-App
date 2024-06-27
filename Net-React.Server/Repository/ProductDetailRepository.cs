@@ -1,33 +1,39 @@
-﻿using Net_React.Server.Model;
+﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.Model;
 using Net_React.Server.Repository;
 
 namespace Net_React.Server.Service
 {
-    public class ProductDetailRepository: IRepository
+    public class ProductDetailRepository : IRepository
     {
-        private List<ProductDetailModel> _products = new List<ProductDetailModel>
+        private List<ProductDetail> _products;
+        public ProductDetailRepository()
         {
-            new ProductDetailModel {
-                ProductName = "PS1 ",
-                ProductDescription = "This is a PS gamepad"
-            },
-            new ProductDetailModel {
-                ProductName = "Xbox 1",
-                ProductDescription = "This is a xbox gamepad"
-            },
-            new ProductDetailModel
+            _products = new List<ProductDetail>()
             {
-                ProductName = "HDMI Cap 1",
-                ProductDescription = "This is a cap"
-            }
-        };
+                new ProductDetail() {
+                    ProductName = "PS 1",
+                    ProductDescription = "This is a PS gamepad"
+                },
+                new ProductDetail() {
+                    ProductName = "Xbox 1",
+                    ProductDescription = "This is a xbox gamepad"
+                },
+                new ProductDetail()
+                {
+                    ProductName = "HDMI Cable 1",
+                    ProductDescription = "This is a cap"
+                }
+            };
+        }
 
-        public List<ProductDetailModel> GetAll()
+        public ActionResult<List<ProductDetail>> GetAllProductDetail()
         {
+
             return _products;
         }
 
-        public ProductDetailModel GetByName(string productname)
+        public async Task<ActionResult<ProductDetail>> GetByProductName(string productname)
         {
             var data = _products.Where(n => n.ProductName == productname).FirstOrDefault();
             if (data != null) return data;

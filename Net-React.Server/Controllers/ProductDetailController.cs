@@ -16,10 +16,15 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet] 
-        public List<ProductDetailModel> GetAllData()
+        public ActionResult<List<ProductDetail>> GetAll()
         {
-            var data = _repository.GetAll();
-            return _repository.GetAll();
+            return _repository.GetAllProductDetail();
+        }
+
+        [HttpGet("name")]
+        public async Task<ActionResult<ProductDetail>> GetByName(string productName)
+        {
+            return await _repository.GetByProductName(productName);
         }
     }
 

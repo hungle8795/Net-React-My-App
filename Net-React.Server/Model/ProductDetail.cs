@@ -1,6 +1,6 @@
 ﻿namespace Net_React.Server.Model
 {
-    public class ProductDetailModel
+    public class ProductDetail
     {
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
