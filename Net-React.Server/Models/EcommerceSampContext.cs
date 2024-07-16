@@ -4,13 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Models;
 
-public partial class EcommerceSampContext : DbContext
+public partial class ECommerceSampContext : DbContext
 {
-    public EcommerceSampContext()
-    {
-    }
-
-    public EcommerceSampContext(DbContextOptions<EcommerceSampContext> options)
+    public ECommerceSampContext(DbContextOptions<ECommerceSampContext> options)
         : base(options)
     {
     }
@@ -36,9 +32,9 @@ public partial class EcommerceSampContext : DbContext
             entity.ToTable("addresses");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ChremoStreetaddress)
+            entity.Property(e => e.ChromeStreetaddress)
                 .HasMaxLength(20)
-                .HasColumnName("chremo_streetaddress");
+                .HasColumnName("chrome_streetaddress");
             entity.Property(e => e.City)
                 .HasMaxLength(20)
                 .HasColumnName("city");
@@ -133,6 +129,14 @@ public partial class EcommerceSampContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
         });
+
+        modelBuilder.Entity<Category>().HasData(
+                new Category { Name = "PS1", Description = "brand new" },
+                new Category { Name = "PS2", Description = "like new" }
+            );
+        //modelBuilder.Entity<ProductDetail>().HasData(
+            
+        //    )
 
         OnModelCreatingPartial(modelBuilder);
     }

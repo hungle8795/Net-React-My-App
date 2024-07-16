@@ -23,7 +23,7 @@ public partial class Address
 
     public string City { get; set; } = null!;
 
-    public string ChremoStreetaddress { get; set; } = null!;
+    public string ChromeStreetaddress { get; set; } = null!;
 
     public int RoomNumber { get; set; }
 

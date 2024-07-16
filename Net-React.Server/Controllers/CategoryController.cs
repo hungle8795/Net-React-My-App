@@ -1,6 +1,5 @@
 ﻿using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
-using Net_React.Server.Repository.Interface;
 
 namespace Net_React.Server.Controllers
 {
@@ -13,11 +12,11 @@ namespace Net_React.Server.Controllers
             this._categoryRepository = categoryRepository;
         }
 
-        public async Task<List<Category>> GetAll()
-        {
-            var a = _categoryRepository.GetAll();
-            return a;
-        }
+        //public async Task<List<Category>> GetAll()
+        //{
+        //    var a = _categoryRepository.GetAll();
+        //    return a;
+        //}
         //[HttpGet]
         //public List<CategoryModel> GetAll()
         //{

@@ -1,10 +1,11 @@
-﻿namespace Net_React.Server.Repository.Interface
+﻿namespace Net_React.Server.Repositories.Interface
 {
-    public interface IRepository
+    public interface IRepository<T> where T : class
     {
-        //Task<List<T>> GetAll();
-        Task<T> Create<T>(T entity);
-        Task<T> Update<T>(T entity);
-        Task Delete<T>(T entity);
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(int id);
     }
 }
