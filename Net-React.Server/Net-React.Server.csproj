@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="SeedData\" />
   </ItemGroup>
 
 </Project>
