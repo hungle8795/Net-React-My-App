@@ -1,31 +1,47 @@
-﻿using Net_React.Server.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
+using Net_React.Server.Services.Interfaces;
+using Net_React.Server.Services.Services;
 
 namespace Net_React.Server.Controllers
 {
 
     public class CategoryController
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)  
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)  
         {  
-            this._categoryRepository = categoryRepository;
+            this._categoryService = categoryService;
         }
 
-        //public async Task<List<Category>> GetAll()
-        //{
-        //    var a = _categoryRepository.GetAll();
-        //    return a;
-        //}
-        //[HttpGet]
-        //public List<CategoryModel> GetAll()
-        //{
-        //    return _repository.GetAllCategory();
-        //}
+        public async Task<IEnumerable<Category>> GetAll()
+        {
+            return _categoryService.GetAll();
+        }
 
-        //public async Task<CategoryModel> GetByName(string categoryName)
-        //{
-        //    return await _repository.GetByCategoryName(categoryName);
-        //}
+        [HttpGet]
+        public async Task<Category> GetByCategoryId(int id)
+        {
+            return _categoryService.GetById(id);
+        }
+
+        [HttpGet("name")]
+        public async Task<Category> GetByCategoryName(string name)
+        {
+            return _categoryService.GetByName(name);
+        }
+        public async void AddCategory(Category category)
+        {
+            _categoryService.Add(category);
+        }
+        public async void UpdateCategory(Category category)
+        {
+            _categoryService.Update(category);
+        }
+        public async void DeleteById(int id)
+        {
+            _categoryService.Delete(id);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Net_React.Server.Repositories.Interface
+﻿namespace Net_React.Server.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
     {
