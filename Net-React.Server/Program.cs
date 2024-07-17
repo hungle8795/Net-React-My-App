@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
+using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Repositories.Repository;
-using Net_React.Server.Service;
+using Net_React.Server.Services.Services;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,9 @@ builder.Services.AddScoped((provider) => new NpgsqlConnection(connectionString))
 //Connect to DbContext
 builder.Services.AddDbContext<ECommerceSampContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Sign in Unit Of Works
+builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
 
 //Sign in Repositories
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();

@@ -1,5 +1,5 @@
 ﻿using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
+using Net_React.Server.Repositories.Interfaces;
 using System.Data.Entity;
 
 namespace Net_React.Server.Repositories.Repository
