@@ -18,11 +18,14 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductDetail>> GetAllProductDetail()
+        public async Task<IEnumerable<ProductDetail>> GetAll()
         {
-            return _productDetailService.GetAll();
+            return _productDetailService.GetAllProductDetails();
         }
-
+        public async Task<ProductDetail> GetById(int id)
+        {
+            return _productDetailService.GetById(productName);
+        }
         [HttpGet("name")]
         public async Task<ProductDetail> GetByName(string productName)
         {

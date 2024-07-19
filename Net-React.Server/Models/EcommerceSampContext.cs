@@ -134,9 +134,7 @@ public partial class ECommerceSampContext : DbContext
                 new Category { Name = "PS1", Description = "brand new" },
                 new Category { Name = "PS2", Description = "like new" }
             );
-        //modelBuilder.Entity<ProductDetail>().HasData(
-            
-        //    )
+        modelBuilder.Entity<ProductDetail>().ToTable("Product");
 
         OnModelCreatingPartial(modelBuilder);
     }
