@@ -17,31 +17,31 @@ namespace Net_React.Server.Controllers
 
         public async Task<IEnumerable<Category>> GetAll()
         {
-            return _categoryService.GetAll();
+            return _categoryService.GetAllCategories();
         }
 
         [HttpGet]
-        public async Task<Category> GetByCategoryId(int id)
+        public async Task<Category> GetById(int id)
         {
-            return _categoryService.GetById(id);
+            return _categoryService.GetByCategoryId(id);
         }
 
         [HttpGet("name")]
-        public async Task<Category> GetByCategoryName(string name)
+        public async Task<Category> GetByName(string name)
         {
-            return _categoryService.GetByName(name);
+            return _categoryService.GetByCategoryName(name);
         }
-        public async void AddCategory(Category category)
+        public async void Add(Category category)
         {
-            _categoryService.Add(category);
+            _categoryService.AddCategory(category);
         }
-        public async void UpdateCategory(Category category)
+        public async void Update(Category category)
         {
-            _categoryService.Update(category);
+            _categoryService.UpdateCategory(category);
         }
         public async void DeleteById(int id)
         {
-            _categoryService.Delete(id);
+            _categoryService.DeleteByCategoryId(id);
         }
     }
 }

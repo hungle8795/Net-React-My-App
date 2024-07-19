@@ -7,18 +7,16 @@ namespace Net_React.Server.Services.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IRepository<Category> _repository;
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository, IRepository<Category> repository)
+        public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _repository = repository;
         }
-        public IEnumerable<Category> GetAll() => _repository.GetAll();
-        public Category GetById(int id) => _repository.GetById(id);
-        public Category GetByName(string name) => _categoryRepository.GetByName(name);
-        public void AddCategory(Category category) => _repository.Add(category);
-        public void UpdateCategory(Category category) => _repository.Update(category);
-        public void DeleteById(int id) => _repository.Delete(id);
+        public IEnumerable<Category> GetAllCategories() => _categoryRepository.GetAll();
+        public Category GetByCategoryId(int id) => _categoryRepository.GetById(id);
+        public Category GetByCategoryName(string name) => _categoryRepository.GetByName(name);
+        public void AddCategory(Category category) => _categoryRepository.Add(category);
+        public void UpdateCategory(Category category) => _categoryRepository.Update(category);
+        public void DeleteByCategoryId(int id) => _categoryRepository.Delete(id);
     }
 }

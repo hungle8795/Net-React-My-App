@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Net_React.Server.Repository;
-using Net_React.Server.Repositories.Interface;
-using Net_React.Server.Service;
 
 namespace Net_React.Server.Controllers
 {

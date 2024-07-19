@@ -3,8 +3,10 @@ using Net_React.Server.Repositories.Interfaces;
 
 namespace Net_React.Server.Services.Interfaces
 {
-    public interface IProductDetailService : IProductDetailRepository
+    public interface IProductDetailService 
     {
-        ProductDetail GetByProductDetailName(string name);
+        IEnumerable<ProductDetail> GetAllProductDetails();
+        ProductDetail GetByProductDetailName(string productName);
+        ProductDetail GetByProductName(string name);
     }
 }

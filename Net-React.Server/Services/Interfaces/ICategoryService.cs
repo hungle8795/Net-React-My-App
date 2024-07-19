@@ -3,8 +3,13 @@ using Net_React.Server.Repositories.Interface;
 
 namespace Net_React.Server.Services.Interfaces
 {
-    public interface ICategoryService : ICategoryRepository
+    public interface ICategoryService
     {
-        Category GetByName(string name);
+        IEnumerable<Category> GetAllCategories();
+        Category GetByCategoryId(int id);
+        Category GetByCategoryName(string name); 
+        void AddCategory(Category category);
+        void UpdateCategory(Category category);
+        void DeleteByCategoryId(int id);
     }
 }

@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Net_React.Server.Data;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Repositories.Interfaces;
+using Net_React.Server.Repositories.Repositories;
 using Net_React.Server.Repositories.Repository;
 using Net_React.Server.Services.Services;
 using Npgsql;
@@ -24,7 +26,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers(); 
 
 //Connect to  DB
-var connectionString = builder.Configuration.GetConnectionString("PostgreDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddScoped((provider) => new NpgsqlConnection(connectionString));
 
 //Connect to DbContext
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
 //Sign in Repositories
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
 
 //Sign in Services
 builder.Services.AddScoped<CategoryService>();
