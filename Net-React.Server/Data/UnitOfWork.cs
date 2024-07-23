@@ -13,11 +13,11 @@ namespace Net_React.Server.Data
         {
             _context = context;
             Categories = new CategoryRepository(_context);
-            Products = new ProductDetailRepository(_context);
+            Products = new ProductRepository(_context);
             Addresses = new AddressRepository(_context);
         }
         public ICategoryRepository Categories { get; private set; }
-        public IProductDetailRepository Products { get; private set; }
+        public IProductRepository Products { get; private set; }
         public IAddressRepository Addresses { get; private set; }
         public async Task<int> CompleteAsync()
         {
