@@ -6,6 +6,10 @@ namespace Net_React.Server.Models;
 
 public partial class ECommerceSampContext : DbContext
 {
+    public ECommerceSampContext()
+    {
+    }
+
     public ECommerceSampContext(DbContextOptions<ECommerceSampContext> options)
         : base(options)
     {
@@ -15,13 +19,13 @@ public partial class ECommerceSampContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<ProductDetail> ProductDetails { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Server=0.0.21.56;Host=localhost;Database=ECommerceSamp;Username=postgres;Password=jdgtmg95");
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=ECommerceSamp;Username=postgres;Password=jdgtmg95");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,13 +80,15 @@ public partial class ECommerceSampContext : DbContext
                 .HasColumnName("name");
         });
 
-        modelBuilder.Entity<ProductDetail>(entity =>
+        modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("product_details_pkey");
 
-            entity.ToTable("product_details");
+            entity.ToTable("products");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("nextval('product_details_id_seq'::regclass)")
+                .HasColumnName("id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -103,7 +109,7 @@ public partial class ECommerceSampContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
 
-            entity.HasOne(d => d.Category).WithMany(p => p.ProductDetails)
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("product_details_category_id_fkey");
@@ -129,12 +135,6 @@ public partial class ECommerceSampContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
         });
-
-        modelBuilder.Entity<Category>().HasData(
-                new Category { Name = "PS1", Description = "brand new" },
-                new Category { Name = "PS2", Description = "like new" }
-            );
-        modelBuilder.Entity<ProductDetail>().ToTable("Product");
 
         OnModelCreatingPartial(modelBuilder);
     }

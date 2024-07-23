@@ -3,10 +3,11 @@ using Net_React.Server.Repositories.Interfaces;
 
 namespace Net_React.Server.Data
 {
-    public class IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         ICategoryRepository Categories { get; }
-        IProductDetailRepository Product { get; }
+        IProductRepository Products { get; }
+        IAddressRepository Addresses { get; }
         Task<int> CompleteAsync();
     }
 }

@@ -40,7 +40,7 @@ builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-builder.Services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //Sign in Services
 builder.Services.AddScoped<CategoryService>();
