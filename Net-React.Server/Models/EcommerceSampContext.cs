@@ -135,6 +135,13 @@ public partial class ECommerceSampContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
         });
+        
+        // Seed data
+        modelBuilder.Entity<Category>().HasData(
+            new Category { Id = 4, Name = "Category A", Description = "1" },
+            new Category { Id = 2, Name = "Category B", Description = "12.99m" },
+            new Category { Id = 3, Name = "Category C", Description = "14.99m" }
+        );
 
         OnModelCreatingPartial(modelBuilder);
     }
