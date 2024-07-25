@@ -5,7 +5,7 @@ namespace Net_React.Server.Services.Interfaces
 {
     public interface ICategoryService
     {
-        IEnumerable<Category> GetAllCategories();
+        IList<Category> GetAllCategories();
         Category GetByCategoryId(int id);
         Category GetByCategoryName(string name); 
         void AddCategory(Category category);

@@ -4,7 +4,7 @@ namespace Net_React.Server.Repositories.Interfaces
 {
     public interface IAddressRepository : IRepository<Address>
     {
-        IEnumerable<Address> GetAll();
+        IList<Address> GetAll();
         Address GetById(int id);
         Address GetByUserId(int userId);
         void Add(Address category);

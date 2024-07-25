@@ -4,7 +4,7 @@ namespace Net_React.Server.Repositories.Interfaces
 {
     public interface IProductRepository : IRepository<Product>
     {
-        IEnumerable<Product> GetAll();
+        IList<Product> GetAll();
         Product GetById(int id);
         Product GetByName(string name);
         void Add(Product category);

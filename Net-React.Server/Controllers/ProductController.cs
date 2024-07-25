@@ -9,7 +9,7 @@ namespace Net_React.Server.Controllers
 {
 
     [Route("api/products")]
-    public class ProductController
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
         public ProductController(IProductService productService)
@@ -18,30 +18,57 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<IList<Product>> GetAll()
         {
             return _productService.GetAllProducts();
         }
-        public async Task<Product> GetById(int id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetById(int id)
         {
-            return _productService.GetProductById(id);
+            var model = _productService.GetProductById(id);
+            if (model == null) return NotFound();
+            else return model;
         }
-        [HttpGet("name")]
-        public async Task<Product> GetByName(string productName)
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Product>> GetByName(string productName)
         {
-            return _productService.GetProductByName(productName);
+            var model = _productService.GetProductByName(productName);
+            if(model == null) return NotFound();
+            else return model;
         }
-        public async void AddCategory(Product product)
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(Product product)
         {
             _productService.AddProduct(product);
+            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
-        public async void UpdateCategory(Product productDetai)
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Product>> Update(int id, Product product)
         {
-            _productService.UpdateProduct(productDetai);
+            if (id != product.Id) return BadRequest();
+            var model = _productService.GetProductById(id);
+            if (model == null) return NotFound();
+            else
+            {
+                _productService.UpdateProduct(product);
+                return Ok(product);
+            }
         }
-        public async void DeleteById(int id)
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
-            _productService.DeleteProductById(id);
+            var model = _productService.GetProductById(id);
+            if (model == null) return NotFound();
+            else
+            {
+                _productService.DeleteProductById(id);
+                return Ok("Deleted " + id);
+            }
         }
     }
 

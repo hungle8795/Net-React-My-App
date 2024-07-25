@@ -5,7 +5,7 @@ namespace Net_React.Server.Services.Interfaces
 {
     public interface IAddressService
     {
-        IEnumerable<Address> GetAllAddresses();
+        IList<Address> GetAllAddresses();
         Address GetByAddressId(int id);
         Address GetByUserId(int userId);
         void AddAddress(Address address);

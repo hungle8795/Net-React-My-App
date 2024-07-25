@@ -12,7 +12,7 @@ namespace Net_React.Server.Repositories.Repository
             _context = dbContext;
         }
 
-        public IEnumerable<T> GetAll()
+        public IList<T> GetAll()
         {
             return _context.Set<T>().ToList();
         }
@@ -25,13 +25,13 @@ namespace Net_React.Server.Repositories.Repository
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
         }
 
         public void Update(T entity)
         {
             _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
         }
 
         public void Delete(int id)
@@ -40,7 +40,7 @@ namespace Net_React.Server.Repositories.Repository
             if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
             }
         }
     }

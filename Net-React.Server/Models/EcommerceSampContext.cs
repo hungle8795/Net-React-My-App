@@ -65,6 +65,7 @@ public partial class ECommerceSampContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("addresses_user_id_fkey");
+            //entity.Ignore(n => n.Region); Fluent API
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -140,7 +141,8 @@ public partial class ECommerceSampContext : DbContext
         modelBuilder.Entity<Category>().HasData(
             new Category { Id = 4, Name = "Category A", Description = "1" },
             new Category { Id = 2, Name = "Category B", Description = "12.99m" },
-            new Category { Id = 3, Name = "Category C", Description = "14.99m" }
+            new Category { Id = 3, Name = "Category C", Description = "14.99m" },
+            new Category { Id = 5, Name = "Category D", Description = "15m" }
         );
 
         OnModelCreatingPartial(modelBuilder);
