@@ -9,7 +9,7 @@ namespace Net_React.Server.Controllers
     [ApiController]
     [Route("api/[Controller]")]
 
-    public class CategoryController
+    public class CategoryController :  ControllerBase
     {
         private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)  
@@ -18,82 +18,61 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Category>> GetAll()
+        public async Task<IList<Category>> GetAll()
         {
             return _categoryService.GetAllCategories();
         }
 
-        [HttpGet("id")]
-        public async Task<Category> GetById(int id)
+        //[HttpGet("id")]
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Category>> GetById(int id)
         {
-            return _categoryService.GetByCategoryId(id);
+            var model = _categoryService.GetByCategoryId(id);
+            if (model == null) return NotFound();
+            else return model;
         }
 
-        [HttpGet("name")]
-        public async Task<Category> GetByName(string name)
+        [HttpGet("{name:string}")]
+        public async Task<ActionResult<Category>> GetByName(string name)
         {
-            return _categoryService.GetByCategoryName(name);
+            var model = _categoryService.GetByCategoryName(name);
+            if (model == null) return NotFound();
+            else return model;
         }
 
         [HttpPost]
-        public async Task<string> Add(Category category)
+        public async Task<ActionResult<Category>> Add(Category category)
         {
             _categoryService.AddCategory(category);
-            var mess = new MessageReport()
-            {
-                IsSuccess = true,
-                Message = "New Record is added."
-            };
-            return mess.Message;
+            return CreatedAtAction("GetCategory", new { id =  category.Id }, category);
         }
 
-        [HttpPut("id")]
-        public async Task<string> Update(int id, Category category)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Category category)
         {
+            if (id != category.Id) return BadRequest();
             var model = _categoryService.GetByCategoryId(id);
-            if (model == null)
-            {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
-            }
+            if (model == null) return NotFound();
             else
             {
                 _categoryService.UpdateCategory(category);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is updated."
-                };
-                return mess.Message;
+                return Ok(category);
             }
+
         }
 
-        [HttpDelete("id")]
-        public async Task<string> DeleteById(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
             var model = _categoryService.GetByCategoryId(id);
             if (model == null)
             {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
+                return BadRequest();
             }
             else
             {
                 _categoryService.DeleteByCategoryId(id);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is deleted."
-                };
-                return mess.Message;
+                return Ok("Deleted " + id);
             }
         }
     }

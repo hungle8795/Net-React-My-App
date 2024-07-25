@@ -11,7 +11,7 @@ namespace Net_React.Server.Services.Services
         {
             _categoryRepository = categoryRepository;
         }
-        public IEnumerable<Category> GetAllCategories() => _categoryRepository.GetAll();
+        public IList<Category> GetAllCategories() => _categoryRepository.GetAll();
         public Category GetByCategoryId(int id) => _categoryRepository.GetById(id);
         public Category GetByCategoryName(string name) => _categoryRepository.GetByName(name);
         public void AddCategory(Category category) => _categoryRepository.Add(category);

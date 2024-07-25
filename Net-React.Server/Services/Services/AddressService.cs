@@ -11,7 +11,7 @@ namespace Net_React.Server.Services.Services
         {
             _addressRepository = addressRepository;
         }
-        public IEnumerable<Address> GetAllAddresses() => _addressRepository.GetAll();
+        public IList<Address> GetAllAddresses() => _addressRepository.GetAll();
         public Address GetByAddressId(int id) => _addressRepository.GetById(id);
         public Address GetByUserId(int userId) => _addressRepository.GetByUserId(userId);
         public void AddAddress(Address address) => _addressRepository.Add(address);

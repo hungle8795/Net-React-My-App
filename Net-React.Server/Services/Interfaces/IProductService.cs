@@ -5,7 +5,7 @@ namespace Net_React.Server.Services.Interfaces
 {
     public interface IProductService 
     {
-        IEnumerable<Product> GetAllProducts();
+        IList<Product> GetAllProducts();
         Product GetProductById(int id);
         Product GetProductByName(string productName);
         void AddProduct(Product product);

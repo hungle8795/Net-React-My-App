@@ -4,6 +4,7 @@ using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Repositories.Repositories;
 using Net_React.Server.Repositories.Repository;
+using Net_React.Server.Services.Interfaces;
 using Net_React.Server.Services.Services;
 using Npgsql;
 
@@ -44,7 +45,9 @@ builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //Sign in Services
-builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 //// Seed Data
