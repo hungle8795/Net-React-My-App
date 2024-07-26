@@ -14,59 +14,106 @@ namespace Net_React.Server.Controllers
         {
             _addressService = addressService;
         }
+
         [HttpGet]
         public async Task<IList<Address>> GetAll()
         {
             return _addressService.GetAllAddresses();
         }
 
-        [HttpGet("{id}")]
-        public async Task<Address> GetById(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Address>> GetById(int id)
         {
             return _addressService.GetByAddressId(id);
         }
 
         [HttpGet("{userid}")]
-        public async Task<Address> GetByUserId(int userId)
+        public async Task<ActionResult<Address>> GetByUserId(int userId)
         {
             return _addressService.GetByUserId(userId);
         }
-        [HttpPost]
 
-        public async Task<ActionResult<Address>> Add(Address address)
+        [HttpPost]
+        public async Task<ActionResult<string>> Add(Address address)
         {
             _addressService.AddAddress(address);
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            //return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            var mess = new MessageReport()
+            {
+                IsSuccess = true,
+                Message = "New Record is added."
+            };
+            return mess.Message;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Address address)
+        public async Task<ActionResult<string>> Update(int id, Address address)
         {
-            if(id != address.Id) return BadRequest();
+            //if(id != address.Id) return BadRequest();
+            //var model = _addressService.GetByAddressId(id);
+            //if (model == null)
+            //{
+            //    return NotFound();
+            //}
+            //else
+            //{
+            //    _addressService.UpdateAddress(address);
+            //    return Ok(address);
+            //}
             var model = _addressService.GetByAddressId(id);
             if (model == null)
             {
-                return NotFound();
+                var mess = new MessageReport()
+                {
+                    IsSuccess = false,
+                    Message = "Model is not exist."
+                };
+                return mess.Message;
             }
             else
             {
                 _addressService.UpdateAddress(address);
-                return Ok(address);
+                var mess = new MessageReport()
+                {
+                    IsSuccess = true,
+                    Message = "Model is updated."
+                };
+                return mess.Message;
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteById(int id)
+        public async Task<ActionResult<string>> DeleteById(int id)
         {
+            //var model = _addressService.GetByAddressId(id);
+            //if (model == null)
+            //{
+            //    return NotFound();
+            //}
+            //else
+            //{
+            //    _addressService.DeleteByAddressId(id);
+            //    return Ok("Deleted " + id);
+            //}
             var model = _addressService.GetByAddressId(id);
             if (model == null)
             {
-                return NotFound();
+                var mess = new MessageReport()
+                {
+                    IsSuccess = false,
+                    Message = "Model is not exist."
+                };
+                return mess.Message;
             }
             else
             {
                 _addressService.DeleteByAddressId(id);
-                return Ok("Deleted " + id);
+                var mess = new MessageReport()
+                {
+                    IsSuccess = true,
+                    Message = "Model is deleted."
+                };
+                return mess.Message;
             }
         }
     }
