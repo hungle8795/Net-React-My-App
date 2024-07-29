@@ -6,13 +6,15 @@ const CategoryList: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
-        axios.get<Category[]>('https://localhost:5001/api/categories')
+        axios.get<Category[]>('https://localhost:7006/api/category')
             .then(respose => {
                 setCategories(respose.data);
             })
-            .catch(error => {
+            .catch(
+                error => {
                 console.error('There was an error!', error);
-            });
+            }
+            );
     }, []);
 
     return (

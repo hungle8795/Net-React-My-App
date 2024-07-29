@@ -9,7 +9,7 @@ const AddCategory: React.FC = () => {
     const handleAddCategory = () => {
         const newCategory: Omit<Category, 'id'> = { name, description };
 
-        axios.post('https://localhost:5001/api/categories', newCategory)
+        axios.post('https://localhost:7006/api/categories', newCategory)
             .then(response => {
                 console.log('Category added', response.data);
             })
