@@ -7,7 +7,7 @@ const DeleteCategory: React.FC = () => {
     const handleDeleteCategory = () => {
         axios.delete(`https://localhost:5001/api/categories/${id}`)
             .then(response => {
-                console.log('Category deleted');
+                console.log('Category deleted: ', response.data);
             })
             .catch(error => {
                 console.error('There was an error!', error);
