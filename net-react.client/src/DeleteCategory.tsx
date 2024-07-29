@@ -5,7 +5,7 @@ const DeleteCategory: React.FC = () => {
     const [id, setId] = useState('');
 
     const handleDeleteCategory = () => {
-        axios.delete(`https://localhost:5001/api/categories/${id}`)
+        axios.delete(`https://localhost:7006/api/Category/${id}`)
             .then(response => {
                 console.log('Category deleted: ', response.data);
             })
