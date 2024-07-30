@@ -26,96 +26,57 @@ namespace Net_React.Server.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Product>> GetById(int id)
         {
-            //var model = _productService.GetProductById(id);
-            //if (model == null) return NotFound();
-            //else return model;
-            return _productService.GetProductById(id);
+            var model = _productService.GetProductById(id);
+            if (model == null) return NotFound();
+            else return model;
         }
 
         [HttpGet("{name}")]
         public async Task<ActionResult<Product>> GetByName(string name)
         {
-            //var model = _productService.GetProductByName(productName);
-            //if(model == null) return NotFound();
-            //else return model;
-            return _productService.GetProductByName(name);
+            var model = _productService.GetProductByName(name);
+            if (model == null) return NotFound();
+            else return model;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<string>> AddCategory(Product product)
+        [HttpPost("Create")]
+        public async Task<ActionResult<Product>> AddCategory(Product product)
         {
             _productService.AddProduct(product);
-            //return CreatedAtAction("GetProduct", new { id = product.Id }, product);
-            var mess = new MessageReport()
-            {
-                IsSuccess = true,
-                Message = "New Record is added."
-            };
-            return mess.Message;
+            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<string>> Update(int id, Product product)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> Update(int id, Product product)
         {
-            //if (id != product.Id) return BadRequest();
-            //var model = _productService.GetProductById(id);
-            //if (model == null) return NotFound();
-            //else
-            //{
-            //    _productService.UpdateProduct(product);
-            //    return Ok(product);
-            //}
+            if (id != product.Id) return BadRequest();
             var model = _productService.GetProductById(id);
-            if (model == null)
-            {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
-            }
+            if (model == null) return NotFound();
             else
             {
-                _productService.UpdateProduct(product);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is updated."
-                };
-                return mess.Message;
+                model.Price = product.Price;
+                model.Name = product.Name;
+                model.Quantity = product.Quantity;
+                model.Category = product.Category;
+                model.CategoryId = product.CategoryId;
+                model.Id = product.Id;
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+                model.Description = product.Description;
+                _productService.UpdateProduct(model);
+                return Ok(product);
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteById(int id)
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
-            //var model = _productService.GetProductById(id);
-            //if (model == null) return NotFound();
-            //else
-            //{
-            //    _productService.DeleteProductById(id);
-            //    return Ok("Deleted " + id);
-            //}
             var model = _productService.GetProductById(id);
-            if (model == null)
-            {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
-            }
+            if (model == null) return NotFound();
             else
             {
                 _productService.DeleteProductById(id);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is deleted."
-                };
-                return mess.Message;
+                return Ok("Deleted " + id);
             }
         }
     }

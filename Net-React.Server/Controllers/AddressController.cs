@@ -33,87 +33,52 @@ namespace Net_React.Server.Controllers
             return _addressService.GetByUserId(userId);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<string>> Add(Address address)
+        [HttpPost("Create")]
+        public async Task<ActionResult<Address>> Add(Address address)
         {
             _addressService.AddAddress(address);
-            //return CreatedAtAction("GetAddress", new { id = address.Id }, address);
-            var mess = new MessageReport()
-            {
-                IsSuccess = true,
-                Message = "New Record is added."
-            };
-            return mess.Message;
+            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<string>> Update(int id, Address address)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> Update(int id, Address address)
         {
-            //if(id != address.Id) return BadRequest();
-            //var model = _addressService.GetByAddressId(id);
-            //if (model == null)
-            //{
-            //    return NotFound();
-            //}
-            //else
-            //{
-            //    _addressService.UpdateAddress(address);
-            //    return Ok(address);
-            //}
+            if (id != address.Id) return BadRequest();
             var model = _addressService.GetByAddressId(id);
             if (model == null)
             {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
+                return NotFound();
             }
             else
             {
-                _addressService.UpdateAddress(address);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is updated."
-                };
-                return mess.Message;
+                model.PhoneNumber = address.PhoneNumber;
+                model.RoomNumber = address.RoomNumber;
+                model.LastName = address.LastName;
+                model.FirstName = address.FirstName;
+                model.User = address.User;
+                model.ChromeStreetaddress = address.ChromeStreetaddress;
+                model.City = address.City;
+                model.Province = address.Province;
+                model.Region = address.Region;
+                model.UserId = address.UserId;
+                model.ZipCode = address.ZipCode;
+                _addressService.UpdateAddress(model);
+                return Ok(address);
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteById(int id)
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
-            //var model = _addressService.GetByAddressId(id);
-            //if (model == null)
-            //{
-            //    return NotFound();
-            //}
-            //else
-            //{
-            //    _addressService.DeleteByAddressId(id);
-            //    return Ok("Deleted " + id);
-            //}
             var model = _addressService.GetByAddressId(id);
             if (model == null)
             {
-                var mess = new MessageReport()
-                {
-                    IsSuccess = false,
-                    Message = "Model is not exist."
-                };
-                return mess.Message;
+                return NotFound();
             }
             else
             {
                 _addressService.DeleteByAddressId(id);
-                var mess = new MessageReport()
-                {
-                    IsSuccess = true,
-                    Message = "Model is deleted."
-                };
-                return mess.Message;
+                return Ok("Deleted " + id);
             }
         }
     }
