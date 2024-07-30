@@ -5,12 +5,14 @@ const DeleteCategory: React.FC = () => {
     const [id, setId] = useState('');
 
     const handleDeleteCategory = () => {
-        axios.delete(`https://localhost:7006/api/Category/${id}`)
+        axios.delete(`https://localhost:7006/api/Category/Delete/${id}`)
             .then(response => {
                 console.log('Category deleted: ', response.data);
+                alert("Deleted");
             })
             .catch(error => {
                 console.error('There was an error!', error);
+                alert("Id not found!");
             });
     };
 

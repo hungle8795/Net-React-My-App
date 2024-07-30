@@ -3,24 +3,33 @@ import axios from 'axios';
 import { Category } from './types';
 
 const AddCategory: React.FC = () => {
+    const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
     const handleAddCategory = () => {
-        const newCategory: Omit<Category, 'id'> = { name, description };
+        const newCategory: Omit<Category, 'id'> = { id, name, description };
 
-        axios.post('https://localhost:7006/api/categories', newCategory)
+        axios.post('https://localhost:7006/api/Category/Create', newCategory)
             .then(response => {
                 console.log('Category added', response.data);
+                alert("Created");
             })
             .catch(error => {
                 console.error('There was an error!', error);
+                alert("Record is exist!");
             });
     };
 
     return (
         <div>
             <h2>Add Category</h2>
+            <input
+                type="text"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+                placeholder="Category id"
+            />
             <input
                 type="text"
                 value={name}
