@@ -8,7 +8,7 @@ const AddCategory: React.FC = () => {
     const [description, setDescription] = useState('');
 
     const handleAddCategory = () => {
-        const newCategory: Omit<Category, 'id'> = { id, name, description };
+        const newCategory: Category = { id, name, description };
 
         axios.post('https://localhost:7006/api/Category/Create', newCategory)
             .then(response => {
@@ -23,26 +23,28 @@ const AddCategory: React.FC = () => {
 
     return (
         <div>
-            <h2>Add Category</h2>
-            <input
-                type="text"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                placeholder="Category id"
-            />
-            <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Category name"
-            />
-            <input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Category description"
-            />
-            <button onClick={handleAddCategory}>Add</button>
+            <form>
+                <h2>Add Category</h2>
+                <input
+                    type="text"
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                    placeholder="Category id"
+                />
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Category name"
+                />
+                <input
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Category description"
+                />
+                <button onClick={handleAddCategory}>Add</button>
+            </form>
         </div>
     );
 };
