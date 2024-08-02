@@ -3,6 +3,7 @@ import './App.css';
 import CategoryList from './CategoryList';
 import AddCategory from './AddCategory';
 import DeleteCategory from './DeleteCategory';
+import UpdateCategory from './UpdateCategory';
 import React from 'react';
 
 //interface Forecast {
@@ -65,6 +66,7 @@ const App: React.FC = () => {
                 <CategoryList />
                 <AddCategory />
                 <DeleteCategory />
+                <UpdateCategory />
             </header>
         </div>
     );

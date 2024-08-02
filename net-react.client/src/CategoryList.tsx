@@ -13,17 +13,15 @@ const CategoryList: React.FC = () => {
 
     useEffect(() => {
         axios.get<Category[]>('https://localhost:7006/api/Category')
-            .then(respose => {
+            .then((respose: any) => {
                 setCategories(respose.data);
             })
-            .catch(
-                error => {
-                    console.error('There was an error!', error);
-                }
-            );
+            .catch((error: any) => {
+                console.error('There was an error!', error.data);
+            });
     }, []);
 
-    const tableCategories = 
+    const tableCategories =
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -33,8 +31,8 @@ const CategoryList: React.FC = () => {
                 </tr>
             </thead>
             <tbody>
-                {categories.map(category => 
-                    <tr key={category.id}> 
+                {categories.map(category =>
+                    <tr key={category.id}>
                         <td>{category.id}</td>
                         <td>{category.name}</td>
                         <td>{category.description}</td>

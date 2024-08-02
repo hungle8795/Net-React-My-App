@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
@@ -18,41 +19,41 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Category>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return _categoryService.GetAllCategories();
+            var categories = await _categoryService.GetAllCategories();
+            return Ok(categories);
         }
 
         //[HttpGet("id")]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Category>> GetById(int id)
+        public async Task<ActionResult<CategoryDTO>> GetById(int id)
         {
-            var model = _categoryService.GetByCategoryId(id);
+            var model = await _categoryService.GetCategoryById(id);
             if (model == null) return NotFound();
-            else return model;
-            //return _categoryService.GetByCategoryId(id);
+            return await model;
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<Category>> GetByName(string name)
+        public async Task<ActionResult<CategoryDTO>> GetByName(string name)
         {
-            var model = _categoryService.GetByCategoryName(name);
+            var model = await _categoryService.GetCategoryByName(name);
             if (model == null) return NotFound();
-            else return model;
+            return await model;
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> Add(Category category)
+        public async Task<ActionResult> Add(CategoryDTO category)
         {
-            _categoryService.AddCategory(category);
+            await _categoryService.AddCategory(category);
             return CreatedAtAction("GetCategory", new { id =  category.Id }, category);
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, Category category)
+        public async Task<IActionResult> Update(int id, CategoryDTO category)
         {
             if (id != category.Id) return BadRequest();
-            var model = _categoryService.GetByCategoryId(id);
+            var model = _categoryService.GetCategoryById(id);
             if (model == null) return NotFound();
             else
             {
@@ -66,7 +67,7 @@ namespace Net_React.Server.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
-            var model = _categoryService.GetByCategoryId(id);
+            var model = _categoryService.GetCategoryById(id);
             if (model == null)
             {
                 return BadRequest();

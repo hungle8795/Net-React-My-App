@@ -12,9 +12,9 @@ namespace Net_React.Server.Repositories.Repository
             _context = dbContext;
         }
 
-        public IList<T> GetAll()
+        public async IList<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToList();
         }
 
         public T GetById(int id)

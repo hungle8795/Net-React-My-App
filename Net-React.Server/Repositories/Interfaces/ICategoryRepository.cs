@@ -1,4 +1,5 @@
-﻿using Net_React.Server.Models;
+﻿using Net_React.Server.DTOs;
+using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Repositories.Repository;
 
@@ -6,7 +7,7 @@ namespace Net_React.Server.Repositories.Interface
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        IList<Category> GetAll();
+        Task<IEnumerable<Category>> GetAll();
         Category GetById(int id);
         Category GetByName(string name);
         void Add(Category category);
