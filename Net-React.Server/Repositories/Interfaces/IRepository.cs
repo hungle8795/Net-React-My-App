@@ -1,11 +1,16 @@
-﻿namespace Net_React.Server.Repositories.Interfaces
+﻿using System.Linq.Expressions;
+
+namespace Net_React.Server.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IList<T> GetAll();
-        T GetById(int id);
-        void Add(T entity);
+        Task<T> GetByIdAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task AddAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
         void Update(T entity);
-        void Delete(int id);
+        void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
     }
 }
