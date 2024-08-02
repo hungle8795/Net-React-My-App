@@ -16,10 +16,10 @@ namespace Net_React.Server.Services.Services
             _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
+        public async Task<IList<CategoryDTO>> GetAllCategories()
         {
             var categories = _categoryRepository.GetAll();
-            return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+            return _mapper.Map<IList<CategoryDTO>>(categories);
         }
         public async Task<CategoryDTO> GetCategoryByName(int id)
         {

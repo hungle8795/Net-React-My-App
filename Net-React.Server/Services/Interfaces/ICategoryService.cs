@@ -6,7 +6,7 @@ namespace Net_React.Server.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryDTO>> GetAllCategories();
+        Task<IList<CategoryDTO>> GetAllCategories();
         Task<CategoryDTO> GetCategoryById(int id);
         Task<CategoryDTO> GetCategoryByName(string name); 
         void AddCategory(CategoryDTO category);
