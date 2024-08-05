@@ -45,7 +45,8 @@ namespace Net_React.Server.Controllers
         public async Task<ActionResult> Add(Category category)
         {
             _categoryService.AddCategory(category);
-            return CreatedAtAction("GetCategory", new { id =  category.Id }, category);
+            var a = CreatedAtAction("GetCategory", new { id =  category.Id }, category);
+            return a;
         }
 
         [HttpPut("Update/{id}")]
