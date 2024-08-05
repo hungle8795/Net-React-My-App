@@ -4,6 +4,7 @@ import CategoryList from './CategoryList';
 import AddCategory from './AddCategory';
 import DeleteCategory from './DeleteCategory';
 import React from 'react';
+import UpdateCategory from './UpdateCategory';
 
 //interface Forecast {
 //    date: string;
@@ -65,6 +66,7 @@ const App: React.FC = () => {
                 <CategoryList />
                 <AddCategory />
                 <DeleteCategory />
+                <UpdateCategory />
             </header>
         </div>
     );
