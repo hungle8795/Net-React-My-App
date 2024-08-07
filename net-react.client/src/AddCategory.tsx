@@ -3,11 +3,18 @@ import axios from 'axios';
 import { Category } from './types';
 
 const AddCategory: React.FC = () => {
-    const [id, setId] = useState('');
+    const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleAddCategory = () => {
+    //const handleAddCategory = () => {
+    const handleAddCategory = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+
+        if (id === undefined) {
+            alert("Category ID is required");
+            return;
+        }
         const newCategory: Category = { id, name, description };
 
         axios.post('https://localhost:7006/api/Category/Create', newCategory)
@@ -27,8 +34,8 @@ const AddCategory: React.FC = () => {
                 <h2>Add Category</h2>
                 <input
                     type="text"
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
+                    value={id !== undefined ? id.toString() : ''}
+                    onChange={(e) => setId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                     placeholder="Category id"
                 />
                 <input
