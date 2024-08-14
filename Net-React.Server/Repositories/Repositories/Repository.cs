@@ -8,45 +8,37 @@ namespace Net_React.Server.Repositories.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly ECommerceSampContext _context;
+        private readonly DbSet<T> _dbSet;
         public Repository(ECommerceSampContext dbContext)
         {
             _context = dbContext;
+            _dbSet = _context.Set<T>();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _context.Set<T>().ToList();
+            return await _dbSet.ToListAsync();
         }
 
-        public T GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _dbSet.FindAsync(id);
         }
         public async Task AddAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-        }
-
-        public async Task AddRangeAsync(IEnumerable<T> entities)
-        {
-            await _context.Set<T>().AddRangeAsync(entities);
+            await _dbSet.AddAsync(entity);
         }
 
         public async Task UpdateAsync(T entity)
         {
-            _context.Set<T>().Update(entity);
-        }
-
-        public async Task RemoveRange(IEnumerable<T> entities)
-        {
-            _context.Set<T>().RemoveRange(entities);
+             _dbSet.Update(entity);
         }
         public async Task DeleteAsync(int id)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
             if (entity != null)
             {
-                _context.Set<T>().Remove(entity);
+                _dbSet.Remove(entity);
             }
         }
     }

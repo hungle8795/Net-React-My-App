@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Net_React.Server.Data;
 using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
@@ -9,48 +10,47 @@ namespace Net_React.Server.Services.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ProductDTO>> GetAllProducts()
+        public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _unitOfWork.Repository<Product>().GetAllAsync();
             return _mapper.Map<List<ProductDTO>>(products);
         }
-        public async Task<ProductDTO> GetProductById(int id)
+        public async Task<ProductDTO> GetProductByIdAsync(int id)
         {
-            var product = await _productRepository.GetByIdAsync(id);
-            if (product == null) return null;
-            var productDto = _mapper.Map<ProductDTO>(product);
-            return productDto;
+            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
+            return _mapper.Map<ProductDTO>(product);
         }
-        public async Task<ProductDTO> GetProductByName(string name)
+        public async Task<ProductDTO> GetProductByNameAsync(string name)
         {
-            var product = await _productRepository.GetByNameAsync(name);
-            if (product == null) return null;
-            var productDto = _mapper.Map<ProductDTO>(product);
-            return productDto;
+            var productRepository = _unitOfWork.ProductRepository() as IProductRepository;
+            var product = await productRepository.GetByNameAsync(name);
+            return _mapper.Map<ProductDTO>(product);
         }
-        public async Task AddProduct(ProductDTO productDto)
+        public async Task AddProductAsync(ProductDTO productDto)
         {
             var product = _mapper.Map<Product>(productDto);
-            await _productRepository.AddAsync(product);
+            await _unitOfWork.Repository<Product>().AddAsync(product);
+            await _unitOfWork.CompleteAsync();
         }
-        public async Task UpdateProduct(ProductDTO productDto)
+        public async Task UpdateProductAsync(ProductDTO productDto)
         {
             var product = _mapper.Map<Product>(productDto);
             product.CreatedAt = DateTime.Now;
             product.UpdatedAt = DateTime.Now;
-            await _productRepository.UpdateAsync(product);
+            await _unitOfWork.Repository<Product>().UpdateAsync(product);
+            await _unitOfWork.CompleteAsync();
         }
-        public async Task DeleteProduct(ProductDTO productDto)
+        public async Task DeleteProductAsync(int id)
         {
-            var product = _mapper.Map<Product>(productDto);
-            await _productRepository.Remove(product);
+            await _unitOfWork.Repository<Product>().DeleteAsync(id);
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

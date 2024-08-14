@@ -8,10 +8,8 @@ namespace Net_React.Server.Repositories.Interfaces
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> GetByIdAsync(int id);
         Task<Product> GetByNameAsync(string name);
-        Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate);
         Task AddAsync(Product entity);
-        Task AddRangeAsync(IEnumerable<Product> entities);
-        Task Remove(Product entity);
-        Task RemoveRange(IEnumerable<Product> entities);
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(int id);
     }
 }

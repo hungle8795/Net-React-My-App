@@ -6,11 +6,11 @@ namespace Net_React.Server.Services.Interfaces
 {
     public interface IProductService 
     {
-        Task<IEnumerable<ProductDTO>> GetAllProducts();
-        Task<ProductDTO> GetProductById(int id);
-        Task<ProductDTO> GetProductByName(string name);
-        Task AddProduct(ProductDTO ProductDTO);
-        Task UpdateProduct(ProductDTO ProductDTO);
-        Task DeleteProduct(ProductDTO ProductDTO);
+        Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
+        Task<ProductDTO> GetProductByIdAsync(int id);
+        Task<ProductDTO> GetProductByNameAsync(string name);
+        Task AddProductAsync(ProductDTO ProductDTO);
+        Task UpdateProductAsync(ProductDTO ProductDTO);
+        Task DeleteProductAsync(int id);
     }
 }
