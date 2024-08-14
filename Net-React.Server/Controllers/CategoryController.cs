@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
@@ -9,74 +10,55 @@ namespace Net_React.Server.Controllers
     [ApiController]
     [Route("api/[Controller]")]
 
-    public class CategoryController :  ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)  
-        {  
+        public CategoryController(ICategoryService categoryService)
+        {
             this._categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<IList<Category>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return _categoryService.GetAllCategories();
+            var categoriesDto = await _categoryService.GetAllCategoriesAsync();
+            return Ok(categoriesDto);
         }
 
         //[HttpGet("id")]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Category>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var model = _categoryService.GetByCategoryId(id);
-            if (model == null) return NotFound();
-            else return model;
-            //return _categoryService.GetByCategoryId(id);
+            var categoryDto = await _categoryService.GetCategoryByIdAsync(id);
+            return categoryDto == null ? NotFound() : Ok(categoryDto);
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<Category>> GetByName(string name)
+        public async Task<ActionResult> GetByName(string name)
         {
-            var model = _categoryService.GetByCategoryName(name);
-            if (model == null) return NotFound();
-            else return model;
+            var categoryDto = await _categoryService.GetCategoryByNameAsync(name);
+            return categoryDto == null ? NotFound() : Ok(categoryDto);
         }
 
-        [HttpPost("Create")]
-        public async Task<ActionResult> Add(Category category)
+        [HttpPost("create")]
+        public async Task<IActionResult> Post([FromBody] CategoryDTO categoryDto)
         {
-            _categoryService.AddCategory(category);
-            //var a = CreatedAtAction("GetCategory", new { id =  category.Id }, category);
-            return Ok("Updated");
+            await _categoryService.AddCategoryAsync(categoryDto);   
+            return CreatedAtAction(nameof(GetById), new {id = categoryDto.Id }, categoryDto);
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, Category category)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update([FromBody] CategoryDTO categoryDto)
         {
-            if (id != category.Id) return BadRequest();
-            var model = _categoryService.GetByCategoryId(id);
-            if (model == null) return NotFound();
-            else
-            {
-                model.Name = category.Name;
-                model.Description = category.Description;
-                _categoryService.UpdateCategory(model);
-                return Ok(category);
-            }
+            await _categoryService.UpdateCategoryAsync(categoryDto);
+            return Ok(categoryDto);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
-            var model = _categoryService.GetByCategoryId(id);
-            if (model == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                _categoryService.DeleteByCategoryId(id);
-                return Ok("Deleted " + id);
-            }
+            await _categoryService.DeleteCategoryAsync(id);
+            return NoContent();
         }
     }
 }

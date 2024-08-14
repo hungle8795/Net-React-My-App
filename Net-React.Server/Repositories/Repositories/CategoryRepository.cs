@@ -1,5 +1,6 @@
 ﻿using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Repositories.Repository
 {
@@ -8,7 +9,10 @@ namespace Net_React.Server.Repositories.Repository
         public CategoryRepository(ECommerceSampContext context) : base(context)
         { 
         }
-
-        public Category GetByName(string name) => _context.Categories.FirstOrDefault(n => n.Name == name);
+        public async Task<Category> GetByNameAsync(string name)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);  
+        }
     }
 }
+    

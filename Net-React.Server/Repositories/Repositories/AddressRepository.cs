@@ -1,6 +1,7 @@
 ﻿using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Repositories.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Repositories.Repositories
 {
@@ -9,9 +10,10 @@ namespace Net_React.Server.Repositories.Repositories
         public AddressRepository(ECommerceSampContext context) : base(context)
         {
         }
-        public Address GetByUserId(int userId)
+        public async Task<Address> GetByUserIdAsync(int userId)
         {
-            return _context.Addresses.FirstOrDefault(n => n.UserId == userId);
+            return await _context.Set<Address>()
+                .FirstOrDefaultAsync(c => c.UserId == userId);
         }
     }
 }

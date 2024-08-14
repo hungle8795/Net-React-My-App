@@ -1,4 +1,7 @@
-﻿using Net_React.Server.Models;
+using AutoMapper;
+using Net_React.Server.Data;
+using Net_React.Server.DTOs;
+using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Services.Interfaces;
 
@@ -6,16 +9,45 @@ namespace Net_React.Server.Services.Services
 {
     public class AddressService : IAddressService
     {
-        private readonly IAddressRepository _addressRepository;
-        public AddressService(IAddressRepository addressRepository)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        public AddressService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _addressRepository = addressRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public IList<Address> GetAllAddresses() => _addressRepository.GetAll();
-        public Address GetByAddressId(int id) => _addressRepository.GetById(id);
-        public Address GetByUserId(int userId) => _addressRepository.GetByUserId(userId);
-        public void AddAddress(Address address) => _addressRepository.Add(address);
-        public void UpdateAddress(Address address) => _addressRepository.Update(address);
-        public void DeleteByAddressId(int id) => _addressRepository.Delete(id);
+        public async Task<IEnumerable<AddressDTO>> GetAllAddressesAsync()
+        {
+            var addresses = await _unitOfWork.Repository<Address>().GetAllAsync();
+            return _mapper.Map<List<AddressDTO>>(addresses);
+        }
+        public async Task<AddressDTO> GetAddressByIdAsync(int id)
+        {
+            var address = await _unitOfWork.Repository<Address>().GetByIdAsync(id);
+            return _mapper.Map<AddressDTO>(address);
+        }
+        public async Task<AddressDTO> GetAddressByUserIdAsync(int userId)
+        {
+            var addressRepository = _unitOfWork.AddressRepository() as IAddressRepository;
+            var address = await addressRepository.GetByUserIdAsync(userId);
+            return _mapper.Map<AddressDTO>(address);
+        }
+        public async Task AddAddressAsync(AddressDTO addressDto)
+        {
+            var address = _mapper.Map<Address>(addressDto);
+            await _unitOfWork.Repository<Address>().AddAsync(address);
+            await _unitOfWork.CompleteAsync();
+        }
+        public async Task UpdateAddressAsync(AddressDTO addressDto)
+        {
+            var address = _mapper.Map<Address>(addressDto);
+            await _unitOfWork.Repository<Address>().UpdateAsync(address);
+            await _unitOfWork.CompleteAsync();
+        }
+        public async Task DeleteAddressAsync(int id)
+        {
+            await _unitOfWork.Repository<Address>().DeleteAsync(id);
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }
