@@ -13,7 +13,7 @@ namespace Net_React.Server.Repositories.Repositories
         public async Task<Product> GetByNameAsync(string name)
         {
             return await _context.Set<Product>()
-            .FirstOrDefaultAsync(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefaultAsync(c => c.Name == name);
         }
     }
 }

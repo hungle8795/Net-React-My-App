@@ -10,10 +10,8 @@ namespace Net_React.Server.Repositories.Interface
         Task<IEnumerable<Category>> GetAllAsync();
         Task<Category> GetByIdAsync(int id);
         Task<Category> GetByNameAsync(string name);
-        Task<IEnumerable<Category>> FindAsync(Expression<Func<Category, bool>> predicate);
-        Task AddAsync(Category entity);
-        Task AddRangeAsync(IEnumerable<Category> entities);
-        Task Remove(Category entity);
-        Task RemoveRange(IEnumerable<Category> entities);
+        Task AddAsync(Category category);
+        Task UpdateAsync(Category category);
+        Task DeleteAsync(int id);
     }
 }
