@@ -1,6 +1,7 @@
-﻿using Net_React.Server.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
-using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace Net_React.Server.Repositories.Repository
 {
@@ -12,35 +13,40 @@ namespace Net_React.Server.Repositories.Repository
             _context = dbContext;
         }
 
-        public IList<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return _context.Set<T>().ToList();
         }
 
-        public T GetById(int id)
+        public T GetByIdAsync(int id)
         {
             return _context.Set<T>().Find(id);
         }
-
-        public void Add(T entity)
+        public async Task AddAsync(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChangesAsync();
+            await _context.Set<T>().AddAsync(entity);
         }
 
-        public void Update(T entity)
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _context.Set<T>().AddRangeAsync(entities);
+        }
+
+        public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
-            _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task RemoveRange(IEnumerable<T> entities)
         {
-            var entity = _context.Set<T>().Find(id); 
+            _context.Set<T>().RemoveRange(entities);
+        }
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
             if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
-                _context.SaveChangesAsync();
             }
         }
     }

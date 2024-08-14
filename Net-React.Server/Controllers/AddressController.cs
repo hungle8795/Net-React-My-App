@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Services.Interfaces;
 using Net_React.Server.Services.Services;
@@ -16,70 +17,45 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Address>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return _addressService.GetAllAddresses();
+            var addressesDto = await _addressService.GetAllAddressesAsync();
+            return Ok(addressesDto);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Address>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return _addressService.GetByAddressId(id);
+            var addressDto = await _addressService.GetAddressByIdAsync(id);
+            return addressDto == null ? NotFound() : Ok(addressDto);
         }
 
         [HttpGet("{userid}")]
         public async Task<ActionResult<Address>> GetByUserId(int userId)
         {
-            return _addressService.GetByUserId(userId);
+            var addressDto = await _addressService.GetAddressByUserIdAsync(userId);
+            return addressDto != null ? Ok(addressDto) : NotFound();
         }
 
-        [HttpPost("Create")]
-        public async Task<ActionResult<Address>> Add(Address address)
+        [HttpPost("create")]
+        public async Task<IActionResult> Add([FromBody] AddressDTO AddressDto)
         {
-            _addressService.AddAddress(address);
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            await _addressService.AddAddressAsync(AddressDto);
+            return CreatedAtAction(nameof(GetById), new { id = AddressDto.Id }, AddressDto);
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, Address address)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update([FromBody] AddressDTO addressDto)
         {
-            if (id != address.Id) return BadRequest();
-            var model = _addressService.GetByAddressId(id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                model.PhoneNumber = address.PhoneNumber;
-                model.RoomNumber = address.RoomNumber;
-                model.LastName = address.LastName;
-                model.FirstName = address.FirstName;
-                model.User = address.User;
-                model.ChromeStreetaddress = address.ChromeStreetaddress;
-                model.City = address.City;
-                model.Province = address.Province;
-                model.Region = address.Region;
-                model.UserId = address.UserId;
-                model.ZipCode = address.ZipCode;
-                _addressService.UpdateAddress(model);
-                return Ok(address);
-            }
+            await _addressService.UpdateAddressAsync(addressDto);
+            return Ok(addressDto);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
-            var model = _addressService.GetByAddressId(id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                _addressService.DeleteByAddressId(id);
-                return Ok("Deleted " + id);
-            }
+            await _addressService.GetAddressByIdAsync(id);
+            return NoContent();
         }
     }
 }

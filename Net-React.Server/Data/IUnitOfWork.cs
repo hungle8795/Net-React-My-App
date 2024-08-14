@@ -5,9 +5,11 @@ namespace Net_React.Server.Data
 {
     public interface IUnitOfWork : IDisposable
     {
-        ICategoryRepository Categories { get; }
-        IProductRepository Products { get; }
-        IAddressRepository Addresses { get; }
+        IRepository<T> Repository<T>() where T : class;
+        ICategoryRepository CategoryRepository();
+        IProductRepository ProductRepository();
+        IAddressRepository AddressRepository();
         Task<int> CompleteAsync();
+        void Dispose();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
@@ -18,66 +19,45 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Product>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return _productService.GetAllProducts();
+            var productsDto = await _productService.GetAllProducts();
+            return Ok(productsDto);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var model = _productService.GetProductById(id);
-            if (model == null) return NotFound();
-            else return model;
+            var productDto = await _productService.GetProductById(id);
+            return productDto != null ? Ok(productDto) : NotFound();
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<Product>> GetByName(string name)
+        public async Task<IActionResult> GetByName(string name)
         {
-            var model = _productService.GetProductByName(name);
-            if (model == null) return NotFound();
-            else return model;
+            var productDto = await _productService.GetProductByName(name);
+            return productDto == null ? NotFound() : Ok(productDto);
         }
 
-        [HttpPost("Create")]
-        public async Task<ActionResult<Product>> AddCategory(Product product)
+        [HttpPost("create")]
+        public async Task<IActionResult> Add([FromBody] ProductDTO productDto)
         {
-            _productService.AddProduct(product);
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            await _productService.AddProduct(productDto);
+            return CreatedAtAction("GetById", new { id = productDto.Id }, productDto);
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, Product product)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update([FromBody] ProductDTO productDto)
         {
-            if (id != product.Id) return BadRequest();
-            var model = _productService.GetProductById(id);
-            if (model == null) return NotFound();
-            else
-            {
-                model.Price = product.Price;
-                model.Name = product.Name;
-                model.Quantity = product.Quantity;
-                model.Category = product.Category;
-                model.CategoryId = product.CategoryId;
-                model.Id = product.Id;
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
-                model.Description = product.Description;
-                _productService.UpdateProduct(model);
-                return Ok(product);
-            }
+            await _productService.UpdateProduct(productDto);
+            return Ok(productDto);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
-            var model = _productService.GetProductById(id);
-            if (model == null) return NotFound();
-            else
-            {
-                _productService.DeleteProductById(id);
-                return Ok("Deleted " + id);
-            }
+            await _productService.GetProductById(id);
+            return NoContent();
         }
     }
 

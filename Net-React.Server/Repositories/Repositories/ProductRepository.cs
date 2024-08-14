@@ -1,6 +1,7 @@
 ﻿using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Repositories.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Repositories.Repositories
 {
@@ -9,6 +10,10 @@ namespace Net_React.Server.Repositories.Repositories
         public ProductRepository(ECommerceSampContext context) : base(context)
         {
         }
-        public Product GetByName(string name) => _context.Products.FirstOrDefault(n => n.Name == name);
+        public async Task<Product> GetByNameAsync(string name)
+        {
+            return await _context.Set<Product>()
+            .FirstOrDefaultAsync(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

@@ -9,16 +9,34 @@ namespace Net_React.Server.Data
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ECommerceSampContext _context;
+        private readonly Dictionary<Type, object> _repositories = new();
         public UnitOfWork(ECommerceSampContext context)
         {
             _context = context;
-            Categories = new CategoryRepository(_context);
-            Products = new ProductRepository(_context);
-            Addresses = new AddressRepository(_context);
         }
-        public ICategoryRepository Categories { get; private set; }
-        public IProductRepository Products { get; private set; }
-        public IAddressRepository Addresses { get; private set; }
+        public IRepository<T> Repository<T>() where T : class
+        {
+            if (_repositories.ContainsKey(typeof(T)))
+            {
+                return (IRepository<T>)_repositories[typeof(T)];
+            }
+
+            var repository = new Repository<T>(_context);
+            _repositories.Add(typeof(T), repository);
+            return repository;
+        }
+        public ICategoryRepository CategoryRepository()
+        {
+            return (ICategoryRepository)Repository<Category>();
+        }
+        public IProductRepository ProductRepository()
+        {
+            return (IProductRepository)Repository<Product>();
+        }
+        public IAddressRepository AddressRepository()
+        {
+            return (IAddressRepository)Repository<Address>();
+        }
         public async Task<int> CompleteAsync()
         {
             return await _context.SaveChangesAsync();

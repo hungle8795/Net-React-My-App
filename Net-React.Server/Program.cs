@@ -7,6 +7,10 @@ using Net_React.Server.Repositories.Repository;
 using Net_React.Server.Services.Interfaces;
 using Net_React.Server.Services.Services;
 using Npgsql;
+using AutoMapper;
+using System.Reflection;
+using Net_React.Server.Helpers;
+using Net_React.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +38,7 @@ builder.Services.AddDbContext<ECommerceSampContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Sign in Unit Of Works
-//builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Sign in Repositories
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
@@ -49,6 +53,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+//Sign in AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 //// Seed Data
 //builder.Services.AddDbContext<ECommerceSampContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
