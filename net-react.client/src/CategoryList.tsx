@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { DotNetApi } from './helpers/DotNetApi';
 //import { Category } from './types';
 
 export interface Category {
@@ -12,7 +13,7 @@ const CategoryList: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
-        axios.get<Category[]>('https://localhost:7006/api/Category')
+        axios.get<Category[]>(DotNetApi + 'Category')
             .then(respose => {
                 setCategories(respose.data);
             })

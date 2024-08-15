@@ -1,0 +1,1 @@
+export const DotNetApi = 'https://localhost:7006/api/';
