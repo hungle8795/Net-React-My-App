@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { DotNetApi } from './helpers/DotNetApi';
 
 const DeleteCategory: React.FC = () => {
     const [id, setId] = useState('');
 
     const handleDeleteCategory = () => {
-        axios.delete(`https://localhost:7006/api/Category/Delete/${id}`)
+        axios.delete(DotNetApi + `Category/Delete/${id}`)
             .then(response => {
                 console.log('Category deleted: ', response.data);
                 alert("Deleted");

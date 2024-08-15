@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { ProductCard } from '../components/ProductCard';
-import { Product } from '../types/Product';
+import { Product } from '../types';
 
 const ProductPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
