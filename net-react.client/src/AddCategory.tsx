@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Category } from './types';
+import { DotNetApi } from './helpers/DotNetApi';
 
 const AddCategory: React.FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
@@ -17,7 +18,7 @@ const AddCategory: React.FC = () => {
         }
         const newCategory: Category = { id, name, description };
 
-        axios.post('https://localhost:7006/api/Category/Create', newCategory)
+        axios.post(DotNetApi + 'Category/Create', newCategory)
             .then(response => {
                 console.log('Category added', response.data);
                 alert("Created");

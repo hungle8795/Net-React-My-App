@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import { Category } from "./types";
+import { DotNetApi } from './helpers/DotNetApi';
 
 const updateCategory: React.FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
@@ -16,7 +17,7 @@ const updateCategory: React.FC = () => {
             return;
         }
         const updateCategory: Category = { id, name, description };
-        axios.put(`https://localhost:7006/api/Category/Update/${id}`, updateCategory)
+        axios.put(DotNetApi + `Category/Update/${id}`, updateCategory)
             //.then((response: Response) => response.json())
             .then(response => {
                 console.log(response.data);

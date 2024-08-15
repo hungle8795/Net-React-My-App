@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { Product } from '../types/Product';
-
-const API_URL = 'https://localhost:7006/api/product';
+import { DotNetApi } from '../helpers/DotNetApi';
+import { Product } from '../types';
 
 export const fetchProducts = async (): Promise<Product[]> => {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(DotNetApi + 'product');
     return response.data;
 };

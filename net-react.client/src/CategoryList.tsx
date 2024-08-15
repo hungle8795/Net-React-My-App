@@ -1,13 +1,13 @@
 ﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { DotNetApi } from './helpers/DotNetApi';
-//import { Category } from './types';
+import { Category } from './types';
 
-export interface Category {
-    id: number;
-    name: string;
-    description: string;
-}
+//export interface Category {
+//    id: number;
+//    name: string;
+//    description: string;
+//}
 
 const CategoryList: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
