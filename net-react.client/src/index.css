@@ -12,6 +12,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.font {
+    font-family: Noto;
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: Noto;
+    src: url(''assets/Fonts/Hiragino Kaku Gothic ProN/Hiragino Kaku Gothic ProN W3/format('opentype'));
+}
 
 a {
   font-weight: 500;

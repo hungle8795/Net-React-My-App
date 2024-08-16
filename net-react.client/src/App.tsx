@@ -6,6 +6,7 @@ import DeleteCategory from './DeleteCategory';
 import React from 'react';
 import UpdateCategory from './UpdateCategory';
 import Header from './components/Header';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //interface Forecast {
 //    date: string;
