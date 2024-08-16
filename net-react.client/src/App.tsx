@@ -5,6 +5,7 @@ import AddCategory from './AddCategory';
 import DeleteCategory from './DeleteCategory';
 import React from 'react';
 import UpdateCategory from './UpdateCategory';
+import Header from './components/Header';
 
 //interface Forecast {
 //    date: string;
@@ -63,10 +64,12 @@ const App: React.FC = () => {
         <div className="App">
             <header className="App-header">
                 <h1>Category Management</h1>
+                <Header />
                 <CategoryList />
                 <AddCategory />
                 <DeleteCategory />
                 <UpdateCategory />
+                {/*<Footer />*/}
             </header>
         </div>
     );
