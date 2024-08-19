@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/Header.css';
 //import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
@@ -17,7 +18,7 @@ const Header: React.FC = () => {
                 {/*<a className="navbar-logo" href="#logo" id="#logo">*/}
                 {/*    <img src="../img/logo-dark.png" />*/}
                 {/*</a>*/}
-                <h4 className="text-white">ホームページ</h4>
+                <h4 className="text-white">Home Page</h4>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -40,17 +41,16 @@ const Header: React.FC = () => {
                         {/*</li>*/}
                         <li className="nav-item">
                             <form className="nav-link mb-0 mr-3" >
-                                <input placeholder="検索" className="text-left">
-                                    {/*<p className="text-right">tim</p>*/}
-                                </input>
+                                <input placeholder="Search" className="text-left" />
+                                <i className="fa-solid fa-magnifying-glass"></i>
                             </form>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link mb-0 mr-3" href="#pricing">サインアップ</a>
+                            <a className="nav-link mb-0 mr-3" href="#pricing">SignUp</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="https://themeforest.net/checkout/82475332/create_account">
-                                <button className="btn bg-white text-danger">ログイン</button>
+                                <button className="btn bg-white text-danger">Login</button>
                             </a>
                         </li>
                     </ul>

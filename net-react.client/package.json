@@ -13,6 +13,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "'": "file:awesome.me/kit-KIT_CODE@latest'",
     "@babel/parser": "^7.24.8",
     "@react-google-maps/api": "^2.19.3",
     "@types/react-router-dom": "^5.3.3",
