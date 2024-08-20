@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
@@ -10,6 +11,8 @@ namespace Net_React.Server.Controllers
 {
 
     [Route("api/products")]
+    [Authorize]
+    [ApiController]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
