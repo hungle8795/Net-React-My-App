@@ -9,7 +9,7 @@ const DeleteCategory: React.FC = () => {
         axios.delete(DotNetApi + `Category/Delete/${id}`)
             .then(response => {
                 console.log('Category deleted: ', response.data);
-                alert("Deleted");
+                alert("Deleted. Reload page");
             })
             .catch(error => {
                 console.error('There was an error!', error);

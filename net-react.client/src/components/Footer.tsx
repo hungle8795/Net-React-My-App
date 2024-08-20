@@ -7,16 +7,16 @@ const Footer: React.FC = () => {
                 <div className="">
                     <p>Category list</p>
                     <div>
-                        <a href="https://www.youtube.com" target="_blank">
+                        <a href="#fb" target="_blank">
                             <i className="fa-brands fa-facebook"></i>
                         </a>
-                        <a href="https://www.youtube.com" target="_blank">
+                        <a href="#you" target="_blank">
                             <i className="fa-brands fa-youtube"></i>
                         </a>
-                        <a href="https://www.youtube.com" target="_blank">
+                        <a href="#lin" target="_blank">
                             <i className="fa-brands fa-linkedin"></i>
                         </a>
-                        <a href="https://www.youtube.com" target="_blank">
+                        <a href="#ins" target="_blank">
                             <i className="fa-brands fa-instagram"></i>
                         </a>
                     </div>

@@ -5,15 +5,19 @@ import { DotNetApi } from './helpers/DotNetApi';
 
 const AddCategory: React.FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
-    const [name, setName] = useState('');
+    const [name, setName] = useState<string | ''>('');
     const [description, setDescription] = useState('');
 
-    //const handleAddCategory = () => {
-    const handleAddCategory = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
+    const handleAddCategory = () => {
+    //const handleAddCategory = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        //event.preventDefault();
 
         if (id === undefined) {
             alert("Category ID is required");
+            return;
+        }
+        if (name === '') {
+            alert("Name is null");
             return;
         }
         const newCategory: Category = { id, name, description };
@@ -21,7 +25,7 @@ const AddCategory: React.FC = () => {
         axios.post(DotNetApi + 'Category/Create', newCategory)
             .then(response => {
                 console.log('Category added', response.data);
-                alert("Created");
+                alert("Created. Reload page");
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -41,8 +45,8 @@ const AddCategory: React.FC = () => {
                 />
                 <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={name !== '' ? name : ''}
+                    onChange={(e) => setName(e.target.value !== '' ? e.target.value : '')}
                     placeholder="Category name"
                 />
                 <input
