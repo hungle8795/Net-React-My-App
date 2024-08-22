@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Net_React.Server.Models;
 
-public partial class Category
+public partial class Category : BaseModel
 {
     public int Id { get; set; }
 

@@ -1,154 +1,93 @@
+using System.Text;
+using backend.Data;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
-using Net_React.Server.Repositories.Interfaces;
-using Net_React.Server.Repositories.Repositories;
-using Net_React.Server.Repositories.Repository;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Net_React.Server.Services.Interfaces;
 using Net_React.Server.Services.Services;
-using Npgsql;
-using AutoMapper;
-using System.Reflection;
-using Net_React.Server.Helpers;
-using Net_React.Server.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        builder =>
-        {
-            builder.WithOrigins("https://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAllOrigins",
+      builder =>
+      {
+          builder.AllowAnyOrigin()
+                 .AllowAnyHeader()
+                 .AllowAnyMethod();
+      });
 });
 
-builder.Services.AddAuthentication(option =>
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
 {
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new TokenValidationParameters
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = false,
-        ValidateIssuerSigningKey = true
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
 
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration.GetSection("Jwt:Key").Value!))
     };
 });
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-//Connect to DbContext
-builder.Services.AddDbContext<ECommerceSampContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//builder.Services.AddSingleton<IDepartment, DepartmentServices>();
-
-//Connect to  DB
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddScoped((provider) => new NpgsqlConnection(connectionString));
-
-
-//Sign in Unit Of Works
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-//Sign in Repositories
-builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
-builder.Services.AddScoped<IRepository<Address>, Repository<Address>>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
-//Sign in Services
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IAddressService, AddressService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-//Sign in AutoMapper
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-//// Seed Data
-//builder.Services.AddDbContext<ECommerceSampContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
+builder.Services.AddAuthorization(options =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleAuthenticationProject", Version = "v1" });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 });
-var app = builder.Build();
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+//builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
+//builder.Services.AddScoped<ICartService, CartService>();
+//builder.Services.AddScoped<ICartItemService, CartItemService>();
+
+builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var app = builder.Build();
+
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Configure the HTTP request pipeline.
+else if (app.Environment.IsProduction())
+{
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "E-commerce API v1");
+    });
+}
 
-app.UseHttpsRedirection();
-
+app.UseCors("AllowAllOrigins");
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
-
 app.UseHttpsRedirection();
 
-app.UseCors("AllowReactApp");
-
-app.UseAuthorization();
-
-app.MapControllers();
-//app.MapAreaControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("/index.html");
+app.UseEndpoints(endpoints =>
+{
+    _ = endpoints.MapControllers();
+});
 
 app.Run();

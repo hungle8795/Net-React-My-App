@@ -10,3 +10,9 @@ appsettings.json
     "Issuer": "AuthBasicAPI",
     "Audiences": [ "Swagger-Client" ]
   },
+
+## Dependencies <a name="backend-dependencies"></a> 
+- AutoMapper version 12.0.1
+- AutoMapper.Extensions.Microsoft.DependencyInjection version 12.0.1
+- BCrypt.Net-Next version 4.0.3
+- Microsoft.AspNetCore.Authentication.JwtBearer version 7.0.8
