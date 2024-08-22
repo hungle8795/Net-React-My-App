@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import /*React,*/ { useState, FC } from 'react';
 import axios from 'axios';
 import { Category } from './types';
 import { DotNetApi } from './helpers/DotNetApi';
 
-const AddCategory: React.FC = () => {
+const AddCategory: FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState<string | ''>('');
     const [description, setDescription] = useState('');
 
     const handleAddCategory = () => {
-    //const handleAddCategory = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        //const handleAddCategory = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         //event.preventDefault();
 
         if (id === undefined) {
@@ -17,7 +17,7 @@ const AddCategory: React.FC = () => {
             return;
         }
         if (name === '') {
-            alert("Name is null");
+            alert("Name is required");
             return;
         }
         const newCategory: Category = { id, name, description };
@@ -26,6 +26,7 @@ const AddCategory: React.FC = () => {
             .then(response => {
                 console.log('Category added', response.data);
                 alert("Created. Reload page");
+                location.reload();
             })
             .catch(error => {
                 console.error('There was an error!', error);
@@ -34,7 +35,7 @@ const AddCategory: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <form>
                 <h2>Add Category</h2>
                 <input

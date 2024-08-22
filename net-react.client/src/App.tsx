@@ -67,15 +67,17 @@ import './index.tsx'
 const App: React.FC = () => {
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Category Management</h1>
-                <Header />
+            {/*<header className="App-header">*/}
+            {/*</header>*/}
+            <Header />
+            <div className="margin-top-60px">
                 <CategoryList />
                 <AddCategory />
                 <DeleteCategory />
                 <UpdateCategory />
-                <Footer />
-            </header>
+            </div>
+            <hr></hr>
+            <Footer />
         </div>
     );
 };

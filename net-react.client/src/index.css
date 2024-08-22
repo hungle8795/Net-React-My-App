@@ -12,6 +12,10 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.margin-top-60px {
+    margin-top: 60px;
+}
+
 
 .font {
     font-family: NotoSansJP, serif;
