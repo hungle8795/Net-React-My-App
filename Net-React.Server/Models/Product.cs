@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Net_React.Server.Models;
 
-public partial class Product
+public partial class Product : BaseModel
 {
     public int Id { get; set; }
 

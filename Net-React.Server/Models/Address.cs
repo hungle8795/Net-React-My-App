@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Net_React.Server.Models;
 
-public partial class Address
+public partial class Address : BaseModel
 {
     [Key] //DataAnnotations
     public int Id { get; set; }

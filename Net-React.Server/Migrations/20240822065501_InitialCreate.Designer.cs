@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Net_React.Server.Models;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using backend.Data;
 
 #nullable disable
 
 namespace Net_React.Server.Migrations
 {
-    [DbContext(typeof(ECommerceSampContext))]
-    [Migration("20240724050049_InitialCreate")]
+    [DbContext(typeof(DataContext))]
+    [Migration("20240822065501_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,10 +20,55 @@ namespace Net_React.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Net_React.Server.Models.Accounts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("firstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("lastname");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("password");
+
+                    b.Property<DateTime>("UpdatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id")
+                        .HasName("accounts_pkey");
+
+                    b.ToTable("accounts", (string)null);
+                });
 
             modelBuilder.Entity("Net_React.Server.Models.Address", b =>
                 {
@@ -45,6 +90,9 @@ namespace Net_React.Server.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("city");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -77,6 +125,9 @@ namespace Net_React.Server.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("room_number");
 
+                    b.Property<DateTime>("UpdatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
@@ -95,104 +146,6 @@ namespace Net_React.Server.Migrations
                     b.ToTable("addresses", (string)null);
                 });
 
-            modelBuilder.Entity("Net_React.Server.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("Category_pkey");
-
-                    b.ToTable("categories", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 4,
-                            Description = "1",
-                            Name = "Category A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "12.99m",
-                            Name = "Category B"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "14.99m",
-                            Name = "Category C"
-                        });
-                });
-
-            modelBuilder.Entity("Net_React.Server.Models.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("nextval('product_details_id_seq'::regclass)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer")
-                        .HasColumnName("category_id");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("price");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
-                        .HasColumnName("quantity");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.HasKey("Id")
-                        .HasName("product_details_pkey");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("products", (string)null);
-                });
-
             modelBuilder.Entity("Net_React.Server.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -207,6 +160,9 @@ namespace Net_React.Server.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("address");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -225,6 +181,13 @@ namespace Net_React.Server.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("lastname");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id")
                         .HasName("users_pkey");
 
@@ -240,22 +203,6 @@ namespace Net_React.Server.Migrations
                         .HasConstraintName("addresses_user_id_fkey");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Net_React.Server.Models.Product", b =>
-                {
-                    b.HasOne("Net_React.Server.Models.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("product_details_category_id_fkey");
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Net_React.Server.Models.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Net_React.Server.Models.User", b =>

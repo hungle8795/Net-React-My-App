@@ -19,38 +19,38 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Login loginRequest)
+        public IActionResult Post(Accounts loginRequest)
         {
-            if (loginRequest.Username != "Admin" && loginRequest.Password != "Passw0rd")
-            {
-                var issuer = _configuration["Jwt:Issuer"];
-                var audience = _configuration["Jwt:Audience"];
-                var _key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            //    if (loginRequest.Email != "Admin" && loginRequest.Password != "Passw0rd")
+            //    {
+            //        var issuer = _configuration["Jwt:Issuer"];
+            //        var audience = _configuration["Jwt:Audience"];
+            //        var _key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
 
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[]
-                                    {
-                        new Claim("Id",Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, loginRequest.Username),
-                        new Claim(JwtRegisteredClaimNames.Email, loginRequest.Username),
-                        new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
-                   }),
+            //        var tokenDescriptor = new SecurityTokenDescriptor
+            //        {
+            //            Subject = new ClaimsIdentity(new[]
+            //                            {
+            //                new Claim("Id",Guid.NewGuid().ToString()),
+            //                new Claim(JwtRegisteredClaimNames.Sub, loginRequest.Username),
+            //                new Claim(JwtRegisteredClaimNames.Email, loginRequest.Username),
+            //                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+            //           }),
 
-                    Expires = DateTime.UtcNow.AddMinutes(10),
-                    Issuer = issuer,
-                    Audience = audience,
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256Signature)
-                };
+            //            Expires = DateTime.UtcNow.AddMinutes(10),
+            //            Issuer = issuer,
+            //            Audience = audience,
+            //            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256Signature)
+            //        };
 
 
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var jwttoken = tokenHandler.WriteToken(token);
-                var stringToken = tokenHandler.WriteToken(token);
-                return Ok(stringToken);
-            }
+            //        var tokenHandler = new JwtSecurityTokenHandler();
+            //        var token = tokenHandler.CreateToken(tokenDescriptor);
+            //        var jwttoken = tokenHandler.WriteToken(token);
+            //        var stringToken = tokenHandler.WriteToken(token);
+            //        return Ok(stringToken);
+            //    }
             return Ok("Unauthorized");
         }
     }
