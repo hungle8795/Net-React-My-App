@@ -11,6 +11,8 @@ namespace Net_React.Server.DTOs.User
         [Required]
         public string LastName { get; set; } = string.Empty;
 
+        public string Role { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Email address is invalid")]
         [Display(Name = "Email")]
