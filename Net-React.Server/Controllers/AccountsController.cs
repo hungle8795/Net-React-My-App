@@ -13,10 +13,10 @@ namespace Net_React.Server.Controllers
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountsService _userService;
-        public AccountsController(IAccountsService userService)
+        private readonly IAccountsService _accountService;
+        public AccountsController(IAccountsService accountService)
         {
-            _userService = userService;
+            _accountService = accountService;
         }
 
         [HttpPost("register")]
@@ -27,14 +27,27 @@ namespace Net_React.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(await _userService.Register(newUser));
+            return Ok(await _accountService.Register(newUser));
         }
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<AccountRespDTO>>> Login(AccountReqDTO request)
         {
-            return Ok(await _userService.Login(request));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok(await _accountService.Login(request));
         }
 
+        //[Authorize]
+        //[HttpPost("SignOut")]
+        //public IActionResult SignOut()
+        //{
+        //    string id = User.Claims.FirstOrDefault(x => x.Type == "id")?.Value;
+        //    if (String.IsNullOrEmpty(id)) return NotFound();
+        //    _accountService.SignOut(Int32.Parse(id));
+        //    return Ok();
+        //}
     }
 }

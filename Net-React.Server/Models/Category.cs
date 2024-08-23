@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Net_React.Server.Models;
 
 public partial class Category : BaseModel
 {
+    [Key]
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    [Required]
+    public string CategoryName { get; set; } = null!;
 
     public string? Description { get; set; }
 

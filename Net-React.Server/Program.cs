@@ -55,8 +55,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-//builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 //builder.Services.AddScoped<ICartService, CartService>();
 //builder.Services.AddScoped<ICartItemService, CartItemService>();

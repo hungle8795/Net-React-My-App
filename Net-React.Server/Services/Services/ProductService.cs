@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using Azure;
 using backend.Data;
 using Net_React.Server.DTOs;
+using Net_React.Server.DTOs.Product;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Net_React.Server.Services.Services
 {
@@ -16,40 +20,101 @@ namespace Net_React.Server.Services.Services
             _context = context;
             _mapper = mapper;
         }
-        //public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
-        //{
-        //    var products = await _unitOfWork.Repository<Product>().GetAllAsync();
-        //    return _mapper.Map<List<ProductDTO>>(products);
-        //}
-        //public async Task<ProductDTO> GetProductByIdAsync(int id)
-        //{
-        //    var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
-        //    return _mapper.Map<ProductDTO>(product);
-        //}
-        //public async Task<ProductDTO> GetProductByNameAsync(string name)
-        //{
-        //    var productRepository = _unitOfWork.ProductRepository() as IProductRepository;
-        //    var product = await productRepository.GetByNameAsync(name);
-        //    return _mapper.Map<ProductDTO>(product);
-        //}
-        //public async Task AddProductAsync(ProductDTO productDto)
-        //{
-        //    var product = _mapper.Map<Product>(productDto);
-        //    await _unitOfWork.Repository<Product>().AddAsync(product);
-        //    await _unitOfWork.CompleteAsync();
-        //}
-        //public async Task UpdateProductAsync(ProductDTO productDto)
-        //{
-        //    var product = _mapper.Map<Product>(productDto);
-        //    product.CreatedAt = DateTime.Now;
-        //    product.UpdatedAt = DateTime.Now;
-        //    await _unitOfWork.Repository<Product>().UpdateAsync(product);
-        //    await _unitOfWork.CompleteAsync();
-        //}
-        //public async Task DeleteProductAsync(int id)
-        //{
-        //    await _unitOfWork.Repository<Product>().DeleteAsync(id);
-        //    await _unitOfWork.CompleteAsync();
-        //}
+        /// <summary>
+        /// GetAllProducts
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetProductDTO>>> GetAllProducts()
+        {
+            var serviceResponse = new ServiceResponse<List<GetProductDTO>>();
+            try
+            {
+                var dbProducts = await _context.Products.ToListAsync();
+                serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDTO>(p)).ToList();
+
+                serviceResponse.Message = "Get Product successfully!";
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.IsSuccess = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+
+        }
+
+        /// <summary>
+        /// AddProduct
+        /// </summary>
+        /// <param name="newProduct"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<AddProductDTO>>> AddProduct(AddProductDTO newProduct)
+        {
+            var serviceResponse = new ServiceResponse<List<AddProductDTO>>();
+            try
+            {
+                var product = _mapper.Map<Product>(newProduct);
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.Products
+                        .Select(p => _mapper.Map<AddProductDTO>(p))
+                        .ToListAsync();
+
+                serviceResponse.Message = "Product created successfully!";
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.IsSuccess = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
+        public async Task<ServiceResponse<List<GetProductDTO>>> DeleteProduct(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetProductDTO>>();
+
+            try
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+                if (product is null)
+                    throw new Exception($"Product with Id '{id}' not found.");
+
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = await _context.Products.Select(p => _mapper.Map<GetProductDTO>(p)).ToListAsync();
+                serviceResponse.Message = "Product deleted successfully!";
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.IsSuccess = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+
+        /// <summary>
+        /// GetProductById: Get product by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetProductDTO>> GetProductById(int id)
+        {
+            var serviceResponse = new ServiceResponse<GetProductDTO>();
+            try
+            {
+                var dbProduct = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+                serviceResponse.Data = _mapper.Map<GetProductDTO>(dbProduct);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.IsSuccess = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
     }
 }
