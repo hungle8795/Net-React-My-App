@@ -1,0 +1,107 @@
+### Ignore unnecessary files in Net-React.Server
+
+# User-specific files
+Net-React.Server/appsettings.json
+Net-React.Server/appsettings.*.json
+Net-React.Server/obj
+Net-React.Server/bin
+Net-React.Server/Migrations
+
+# Visual Studio 2015/2017/2022 cache/options directory
+.vs/
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# NuGet Packages
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+
+
+### Ignore unnecessary files in net-react.client
+
+# dependencies
+net-react.client/node_modules
+net-react.client/.pnp
+.pnp.js
+# testing
+net-react.client/coverage
+
+# production
+net-react.client/build
+
+# env files
+net-react.client/.env
+net-react.client/.DS_Store
+net-react.client/.env.local
+net-react.client/.env.development.local
+net-react.client/.env.test.local
+net-react.client/.env.production.local
+
+net-react.client/npm-debug.log*
+net-react.client/yarn-debug.log*
+net-react.client/yarn-error.log*
+net-react.client/yarn.lock
+net-react.client/package-*.json
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
