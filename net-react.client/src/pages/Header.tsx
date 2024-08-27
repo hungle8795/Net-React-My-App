@@ -4,7 +4,7 @@ const Header: React.FC = () => {
             <div
                 className="navbar navbar-expand-sm bg-dark navbar-dark nav-pills fixed-top justify-content-between pl-5 pt-3 pr-5 pb-3">
                 <a className="navbar-logo" href="#logo" id="#logo">
-                    <img src="../img/logo-dark.png">
+                    <img src="../img/logo-dark.png"></img>
                 </a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>

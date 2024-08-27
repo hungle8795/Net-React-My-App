@@ -7,7 +7,7 @@ interface ProductCardProps {
     imageUrl: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, imageUrl }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ name, price, imageUrl }) => {
     return (
         <div className="product-card">
             <img src={imageUrl} alt={name} />

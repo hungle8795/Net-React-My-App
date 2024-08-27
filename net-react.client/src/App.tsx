@@ -1,77 +1,49 @@
-//import { useEffect, useState } from 'react';
-import './App.css';
-import CategoryList from './CategoryList';
-import AddCategory from './AddCategory';
-import DeleteCategory from './DeleteCategory';
-import React from 'react';
-import UpdateCategory from './UpdateCategory';
-import Header from './components/Header';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './components/navbar/Navbar';
+//import Cart from './pages/cart/Cart';
+import Home from './pages/home/Home';
+//import Shop from './pages/shop/Shop';
+//import Product from './pages/product/Product';
+//import Profile from './pages/profile/Profile';
+//import Blog from './pages/blog/Blog';
+//import About from './pages/about/About';
+//import NotFound from './pages/not-found/NotFound';
+//import Category from './pages/category/Category';
+//import Footer from './components/footer/Footer';
+//import Register from './pages/user-forms/register/Register';
+import Login from './pages/login/Login';
+//import Favorite from './pages/favorite/Favorite';
 
-//interface Forecast {
-//    date: string;
-//    temperatureC: number;
-//    temperatureF: number;
-//    summary: string;
-//}
-
-//function App() {
-//    const [forecasts, setForecasts] = useState<Forecast[]>();
-
-//    useEffect(() => {
-//        populateWeatherData();
-//    }, []);
-
-//    const contents = forecasts === undefined
-//        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-//        : <table className="table table-striped" aria-labelledby="tabelLabel">
-//            <thead>
-//                <tr>
-//                    <th>Date</th>
-//                    <th>Temp. (C)</th>
-//                    <th>Temp. (F)</th>
-//                    <th>Summary</th>
-//                </tr>
-//            </thead>
-//            <tbody>
-//                {forecasts.map(forecast =>
-//                    <tr key={forecast.date}>
-//                        <td>{forecast.date}</td>
-//                        <td>{forecast.temperatureC}</td>
-//                        <td>{forecast.temperatureF}</td>
-//                        <td>{forecast.summary}</td>
-//                    </tr>
-//                )}
-//            </tbody>
-//        </table>;
-
-//    return (
-//        <div>
-//            <h1 id="tabelLabel">Hi! Weather forecast</h1>
-//            <p>This component demonstrates fetching data from the server.</p>
-//            {contents}
-//        </div>
-//    );
-
-//    async function populateWeatherData() {
-//        const response = await fetch('weatherforecast');
-//        const data = await response.json();
-//        setForecasts(data);
-//    }
-//}
-
-const App: React.FC = () => {
+const App = () => {
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Category Management</h1>
-                <Header />
-                <CategoryList />
-                <AddCategory />
-                <DeleteCategory />
-                <UpdateCategory />
-                {/*<Footer />*/}
-            </header>
-        </div>
+        <BrowserRouter>
+            <Navbar />
+            <Routes>
+                <Route path="/">
+                    <Route path="" element={<Home />} />
+                    {/*<Route path=":category">*/}
+                    {/*    <Route path="" element={<Category />} />*/}
+                    {/*    <Route path=":name" element={<Product />} />*/}
+                    {/*</Route>*/}
+                </Route>
+                {/*<Route path="/shop">*/}
+                {/*    <Route path="" element={<Shop />} />*/}
+                {/*    <Route path=":category">*/}
+                {/*        <Route path="" element={<Category />} />*/}
+                {/*        <Route path=":name" element={<Product />} />*/}
+                {/*    </Route>*/}
+                {/*</Route>*/}
+                {/*<Route path="/blog" element={<Blog />} />*/}
+                {/*<Route path="/about" element={<About />} />*/}
+                {/*<Route path="/profile" element={<Profile />} />*/}
+                {/*<Route path="/cart" element={<Cart />} />*/}
+                {/*<Route path="/favorite" element={<Favorite />} />*/}
+                {/*<Route path="/*" element={<NotFound />} />*/}
+                <Route path="/login" element={<Login />} />
+                {/*<Route path="/register" element={<Register />} />*/}
+            </Routes>
+            {/*<Footer />*/}
+        </BrowserRouter>
     );
 };
 
