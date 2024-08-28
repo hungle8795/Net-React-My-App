@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="src\common\" />
     <Folder Include="src\pages\home\" />
+    <Folder Include="src\pages\register\" />
     <Folder Include="src\types\" />
     <Folder Include="src\utils\" />
   </ItemGroup>

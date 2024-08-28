@@ -40,17 +40,18 @@ export const registerUser = createAsyncThunk(
   'registerUser',
   async (user: IUserRegister) => {
     try {
-      const initials = user.name
+      const initials = user.firstName
         .split(' ')
         .map((name) => name[0].toUpperCase())
         .join('');
-
-      const UserResponse = await axiosInstance.post('/Users', {
+      console.log('Chưa thêm data vào được');
+      const UserResponse = await axiosInstance.post('/Auth/register', {
         ...user,
         initials: initials,
       });
 
       const data = UserResponse.data;
+      console.log('data: ', data);
       return data;
     } catch (e) {
       const error = e as AxiosError;
@@ -65,7 +66,8 @@ export const loginUser = createAsyncThunk<
   { rejectValue: { error: boolean; errorMsg: string } }
 >('account/loginUser', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axiosInstance.post<any>('/Accounts/login', credentials);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = await axiosInstance.post<any>('/Auth/login', credentials);
     const { data, success, message } = response.data;
 
     if (success) {
@@ -84,6 +86,7 @@ export const loginUser = createAsyncThunk<
     } else {
       throw new Error(message || 'Authentication failed');
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue({
       error: true,

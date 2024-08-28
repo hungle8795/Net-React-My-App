@@ -1,8 +1,9 @@
 export interface IUserRegister {
-  name: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
   email: string;
   password: string;
-  initials: string;
 }
 
 export interface AuthCreds {
