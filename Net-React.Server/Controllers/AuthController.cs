@@ -34,14 +34,14 @@ namespace Net_React.Server.Controllers
         #region Login
         [HttpPost(), AllowAnonymous]
         [Route("login")]
-        public async Task<ActionResult<LoginServiceResponseDTO>> Login([FromBody] LoginDto loginDto)
+        public async Task<ActionResult<LoginServiceResponseDTO>> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var loginResult = await _accountService.LoginAsync(loginDto);
+            var loginResult = await _accountService.LoginAsync(loginDTO);
             if (loginResult is null)
             {
                 return Unauthorized("Your credentials are invalid. Please contact to an Admin");
@@ -51,6 +51,29 @@ namespace Net_React.Server.Controllers
         }
         #endregion
 
+        #region Me
+        [HttpPost]
+        [Route("me")]
+        public async Task<ActionResult<LoginServiceResponseDTO>> Me([FromBody] MeDTO token)
+        {
+            try
+            {
+                var me = await _accountService.MeAsync(token);
+                if(me is not null)
+                {
+                    return Ok(me);
+                }
+                else
+                {
+                    return Unauthorized("Invalid Token");
+                }
+            }
+            catch (Exception)
+            {
+                return Unauthorized("Invalid Token");
+            }
+        }
+        #endregion
         //[Authorize]
         //[HttpPost("SignOut")]
         //public IActionResult SignOut()

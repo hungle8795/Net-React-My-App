@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useReducer, useCallback } from 'react';
+import { ReactNode, createContext, useReducer, useCallback, useEffect } from 'react';
 import {
   IAuthContext,
   IAuthContextAction,
@@ -6,13 +6,13 @@ import {
   IAuthContextState,
   ILoginResponseDto,
 } from '../types/auth.types';
-import {  setSession } from './auth.utils';
+import {  getSession, setSession } from './auth.utils';
 import axiosInstance from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import {
   LOGIN_URL,
-//   ME_URL,
+  ME_URL,
   PATH_AFTER_LOGIN,
   PATH_AFTER_LOGOUT,
   PATH_AFTER_REGISTER,
@@ -61,43 +61,43 @@ const AuthContextProvider = ({ children }: IProps) => {
   const navigate = useNavigate();
 
   // Initialize Method
-//   const initializeAuthContext = useCallback(async () => {
-//     try {
-//       const token = getSession();
-//       if (token) {
-//         // validate accessToken by calling backend
-//         const response = await axiosInstance.post<ILoginResponseDto>(ME_URL, {
-//           token,
-//         });
-//         // In response, we receive jwt token and user data
-//         const { newToken, userInfo } = response.data;
-//         setSession(newToken);
-//         dispatch({
-//           type: IAuthContextActionTypes.LOGIN,
-//           payload: userInfo,
-//         });
-//       } else {
-//         setSession(null);
-//         dispatch({
-//           type: IAuthContextActionTypes.LOGOUT,
-//         });
-//       }
-//     } catch (error) {
-//       setSession(null);
-//       dispatch({
-//         type: IAuthContextActionTypes.LOGOUT,
-//       });
-//     }
-//   }, []);
+  const initializeAuthContext = useCallback(async () => {
+    try {
+      const token = getSession();
+      if (token) {
+        // validate accessToken by calling backend
+        const response = await axiosInstance.post<ILoginResponseDto>(ME_URL, {
+          token,
+        });
+        // In response, we receive jwt token and user data
+        const { newToken, userInfo } = response.data;
+        setSession(newToken);
+        dispatch({
+          type: IAuthContextActionTypes.LOGIN,
+          payload: userInfo,
+        });
+      } else {
+        setSession(null);
+        dispatch({
+          type: IAuthContextActionTypes.LOGOUT,
+        });
+      }
+    } catch (error) {
+      setSession(null);
+      dispatch({
+        type: IAuthContextActionTypes.LOGOUT,
+      });
+    }
+  }, []);
 
   // In start of Application, We call initializeAuthContext to be sure about authentication status
-//   useEffect(() => {
-//     console.log('AuthContext Initialization start');
-//     initializeAuthContext()
-//       .then(() => console.log('initializeAuthContext was successfull'))
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//       .catch((error: any) => console.log(error));
-//   }, []);
+  useEffect(() => {
+    console.log('AuthContext Initialization start');
+    initializeAuthContext()
+      .then(() => console.log('initializeAuthContext was successfull'))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .catch((error: any) => console.log(error));
+  }, []);
   
   // Register Method
   const register = useCallback(

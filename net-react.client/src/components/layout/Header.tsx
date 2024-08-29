@@ -32,17 +32,17 @@ const Header = () => {
         />
         <div className='flex gap-1'>
           <h1 className='px-1 border border-dashed border-purple-300 rounded-lg'>
-            AuthLoading: {isAuthLoading ? 'True' : '--'}
+            AuthLoading: <b>{isAuthLoading ? 'True' : '--'}</b>
           </h1>
           <h1 className='px-1 border border-dashed border-purple-300 rounded-lg flex items-center gap-1'>
             Auth:
-            {isAuthenticated ? <FiUnlock className='text-green-600' /> : <FiLock className='text-red-600' />}
+            <b>{isAuthenticated ? <FiUnlock className='text-green-600' /> : <FiLock className='text-red-600' />}</b>
           </h1>
           <h1 className='px-1 border border-dashed border-purple-300 rounded-lg'>
-            UserName: {user ? user.userName : '--'}
+            UserName: <b>{user ? user.userName : '--'}</b>
           </h1>
           <h1 className='px-1 border border-dashed border-purple-300 rounded-lg'>
-            UserRoles: {userRolesLabelCreator()}
+            UserRoles: <b>{userRolesLabelCreator()}</b>
           </h1>
         </div>
       </div>

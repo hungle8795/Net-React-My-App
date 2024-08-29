@@ -1,5 +1,4 @@
-﻿using Net_React.Server.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Net_React.Server.DTOs.User
 {
@@ -17,6 +16,7 @@ namespace Net_React.Server.DTOs.User
 
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email is required")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
         public string Email { get; set; }
 
         [DataType(DataType.Password)]
@@ -24,5 +24,6 @@ namespace Net_React.Server.DTOs.User
         [StringLength(100,ErrorMessage = "The {0} must be at least {2} characters long", MinimumLength = 8)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+        public string Role { get; set; }
     }
 }

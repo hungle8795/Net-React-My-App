@@ -11,6 +11,7 @@ using Net_React.Server.DTOs.User;
 using Net_React.Server.Interfaces;
 using Net_React.Server.Models;
 using Net_React.Server.Services.Interfaces;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -124,7 +125,6 @@ namespace Net_React.Server.Services.Services
                     };
                 }
 
-                // Add a Default USER Role to all users
                 await _userManager.AddToRoleAsync(newUser, StaticUserRoles.USER);
                 await _logService.SaveNewLog(newUser.UserName, "Registered to Website");
             } 
@@ -140,46 +140,6 @@ namespace Net_React.Server.Services.Services
                 StatusCode = 201,
                 Message = "User Created Successfully"
             };
-            
-            // // var isExistsUser = await _userManager.FindByNameAsync(registerDto.UserName);
-            // // var response = new ServiceResponse<List<RegisterDto>>();
-
-            // try
-            // {
-            //     var user = _mapper.Map<Auth>(newUser);
-
-            //     string passwordHash = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
-
-            //     user.Email = newUser.Email;
-            //     user.Password = passwordHash;
-
-            //     // Check email is already in use
-            //     if (_context.Auth.Any(u => u.Email == user.Email))
-            //     {
-            //         response.Message = "Email is already in use.";
-            //         response.IsSuccess = false;
-            //         response.StatusCode = 409;
-            //     }
-            //     else
-            //     {
-            //         _context.Auth.Add(user);
-            //         await _context.SaveChangesAsync();
-
-            //         response.Data = await _context.Users
-            //                .Select(p => _mapper.Map<AddAccountDTO>(p))
-            //                .ToListAsync();
-            //         response.IsSuccess = true;
-            //         response.StatusCode = 201;
-            //         response.Message = "Account created successfully!";
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     response.IsSuccess = false;
-            //     response.Message = ex.Message;
-            // }
-            
-            // return response;
         }
         #endregion
         #region Login
@@ -188,7 +148,7 @@ namespace Net_React.Server.Services.Services
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<LoginServiceResponseDTO?> LoginAsync(LoginDto loginDto)
+        public async Task<LoginServiceResponseDTO?> LoginAsync(LoginDTO loginDto)
         {
             // Find user with username
             var user = await _userManager.FindByNameAsync(loginDto.UserName);
@@ -211,61 +171,47 @@ namespace Net_React.Server.Services.Services
                 NewToken = newToken,
                 UserInfo = userInfo
             };
-
-            // var serviceResponse = new ServiceResponse<AccountRespDTO>();
-            // try
-            // {
-            //     var dbUser = await _context.Auth.FirstOrDefaultAsync(u => u.Email == request.Email);
-            //     if (dbUser == null)
-            //     {
-            //         serviceResponse.IsSuccess = false;
-            //         serviceResponse.Message = "Email not found.";
-            //         return serviceResponse;
-            //     }
-
-            //     if (!BCrypt.Net.BCrypt.Verify(request.Password, dbUser.Password))
-            //     {
-            //         serviceResponse.IsSuccess = false;
-            //         serviceResponse.Message = "Wrong password.";
-            //         return serviceResponse;
-            //     }
-
-            //     var token = GenerateJwtToken(dbUser);
-
-            //     //var authResponse = new AccountRespDTO
-            //     //{
-            //     //    Token = token,
-            //     //    UserId = dbUser.Id,
-            //     //    FirstName = dbUser.FirstName,
-            //     //    LastName = dbUser.LastName,
-            //     //    Email = dbUser.Email,
-            //     //};
-
-            //     return new ServiceResponse<AccountRespDTO>()
-            //     {
-            //         IsSuccess = true,
-            //         StatusCode = 201,
-            //         Token = token,
-            //         Message = "Login successfully!"
-            //     };
-            //     //serviceResponse.Data = authResponse;
-            // }
-            // catch (Exception ex)
-            // {
-            //     serviceResponse.IsSuccess = false;
-            //     serviceResponse.Message = ex.Message;
-            // }
-
-            // return serviceResponse;
         }
+        #endregion
 
+        #region MeAsync
+        public async Task<LoginServiceResponseDTO?> MeAsync(MeDTO meDto)
+        {
+            ClaimsPrincipal handler = new JwtSecurityTokenHandler().ValidateToken(meDto.Token, new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidAudience = _configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
+            }, out SecurityToken securityToken);
+
+            string decodedUserName = handler.Claims.First(q => q.Type == ClaimTypes.Name).Value;
+            if (decodedUserName is null)
+                return null;
+
+            var user = await _userManager.FindByNameAsync(decodedUserName);
+            if (user is null)
+                return null;
+
+            var newToken = await GenerateJWTTokenAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var userInfo = GenerateUserInfoObject(user, roles);
+            await _logService.SaveNewLog(user.UserName, "New Token Generated");
+
+            return new LoginServiceResponseDTO()
+            {
+                NewToken = newToken,
+                UserInfo = userInfo
+            };
+        }
         #endregion
 
         #region GenerateJWTTokenAsync
         private async Task<string> GenerateJWTTokenAsync(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
-
+            
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
@@ -279,12 +225,12 @@ namespace Net_React.Server.Services.Services
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
 
-            var authSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+            var authSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var signingCredentials = new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256);
 
             var tokenObject = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 notBefore: DateTime.Now,
                 expires: DateTime.Now.AddHours(3),
                 claims: authClaims,
@@ -310,41 +256,6 @@ namespace Net_React.Server.Services.Services
                 CreatedAt = user.CreatedAt,
                 Roles = Roles
             };
-        }
-        #endregion
-
-        #region GenerateJWTTokenAsync
-        /// <summary>
-        /// GenerateJwtToken
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        private string GenerateJwtToken(Auth acc)
-        {
-            var claims = new List<Claim> {
-                new Claim(ClaimTypes.NameIdentifier, acc.Id.ToString()),
-                //new Claim(ClaimTypes.Email, acc.Email),
-                //new Claim(ClaimTypes.Role, acc.Role)
-                new Claim(ClaimTypes.Role, "Admin"),
-                new Claim(ClaimTypes.Role, "Customer")
-
-                //new Claim(ClaimTypes.Role, "Customer")
-            };
-
-            var jwtToken = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
-                claims: claims,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.Now.AddHours(3),
-
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(
-                       Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])
-                        ),
-                    SecurityAlgorithms.HmacSha256Signature)
-                );
-            return string.Concat("Bearer ", new JwtSecurityTokenHandler().WriteToken(jwtToken));
         }
         #endregion
     }

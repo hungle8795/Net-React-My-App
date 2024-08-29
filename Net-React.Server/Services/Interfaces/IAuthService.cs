@@ -1,7 +1,6 @@
 ﻿using Net_React.Server.DTOs.Auth;
 using Net_React.Server.DTOs.General;
 using Net_React.Server.DTOs.User;
-using Net_React.Server.Models;
 
 namespace Net_React.Server.Services.Interfaces
 {
@@ -10,7 +9,8 @@ namespace Net_React.Server.Services.Interfaces
         //Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers();
         //Task<ServiceResponse<GetUserDTO>> GetUserById(int id);
         Task<GeneralServiceResponseDto> RegisterAsync(RegisterDto newUser);
-        Task<LoginServiceResponseDTO?> LoginAsync(LoginDto request);
+        Task<LoginServiceResponseDTO?> LoginAsync(LoginDTO request);
+        Task<LoginServiceResponseDTO?> MeAsync(MeDTO meDto);
         //Task<ServiceResponse<GetUserDTO>> UpdateUser(UpdateUserDTO updatedProduct);
         //Task<ServiceResponse<List<GetUserDTO>>> DeleteUser(int id);
     }
