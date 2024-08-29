@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Net_React.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,8 @@ namespace Net_React.Server.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    description = table.Column<string>(type: "text", nullable: true),
+                    image = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +49,7 @@ namespace Net_React.Server.Migrations
                 name: "products",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false, defaultValueSql: "nextval('product_details_id_seq'::regclass)"),
+                    id = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     price = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
@@ -59,9 +60,9 @@ namespace Net_React.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("product_details_pkey", x => x.id);
+                    table.PrimaryKey("products_pkey", x => x.id);
                     table.ForeignKey(
-                        name: "product_details_category_id_fkey",
+                        name: "products_category_id_fkey",
                         column: x => x.category_id,
                         principalTable: "categories",
                         principalColumn: "id");
@@ -96,12 +97,13 @@ namespace Net_React.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "categories",
-                columns: new[] { "id", "description", "name" },
+                columns: new[] { "id", "description", "image", "name" },
                 values: new object[,]
                 {
-                    { 2, "12.99m", "Category B" },
-                    { 3, "14.99m", "Category C" },
-                    { 4, "1", "Category A" }
+                    { 2, "12.99m", "B", "Category B" },
+                    { 3, "14.99m", "C", "Category C" },
+                    { 4, "1", "A", "Category A" },
+                    { 5, "15m", "D", "Category D" }
                 });
 
             migrationBuilder.CreateIndex(

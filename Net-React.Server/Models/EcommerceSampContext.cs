@@ -76,6 +76,7 @@ public partial class ECommerceSampContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Image).HasColumnName("image");
             entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .HasColumnName("name");
@@ -83,12 +84,12 @@ public partial class ECommerceSampContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("product_details_pkey");
+            entity.HasKey(e => e.Id).HasName("products_pkey");
 
             entity.ToTable("products");
 
             entity.Property(e => e.Id)
-                .HasDefaultValueSql("nextval('product_details_id_seq'::regclass)")
+                .HasDefaultValueSql("nextval('products_id_seq'::regclass)")
                 .HasColumnName("id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CreatedAt)
@@ -113,7 +114,7 @@ public partial class ECommerceSampContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("product_details_category_id_fkey");
+                .HasConstraintName("products_category_id_fkey");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -139,10 +140,10 @@ public partial class ECommerceSampContext : DbContext
         
         // Seed data
         modelBuilder.Entity<Category>().HasData(
-            new Category { Id = 4, Name = "Category A", Description = "1" },
-            new Category { Id = 2, Name = "Category B", Description = "12.99m" },
-            new Category { Id = 3, Name = "Category C", Description = "14.99m" },
-            new Category { Id = 5, Name = "Category D", Description = "15m" }
+            new Category { Id = 4, Name = "Category A", Image = "A", Description = "1" },
+            new Category { Id = 2, Name = "Category B", Image = "B", Description = "12.99m" },
+            new Category { Id = 3, Name = "Category C", Image = "C", Description = "14.99m" },
+            new Category { Id = 5, Name = "Category D", Image = "D", Description = "15m" }
         );
 
         OnModelCreatingPartial(modelBuilder);

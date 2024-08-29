@@ -17,7 +17,7 @@ namespace Net_React.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -105,6 +105,11 @@ namespace Net_React.Server.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -121,24 +126,28 @@ namespace Net_React.Server.Migrations
                         {
                             Id = 4,
                             Description = "1",
+                            Image = "A",
                             Name = "Category A"
                         },
                         new
                         {
                             Id = 2,
                             Description = "12.99m",
+                            Image = "B",
                             Name = "Category B"
                         },
                         new
                         {
                             Id = 3,
                             Description = "14.99m",
+                            Image = "C",
                             Name = "Category C"
                         },
                         new
                         {
                             Id = 5,
                             Description = "15m",
+                            Image = "D",
                             Name = "Category D"
                         });
                 });
@@ -149,7 +158,7 @@ namespace Net_React.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("nextval('product_details_id_seq'::regclass)");
+                        .HasDefaultValueSql("nextval('products_id_seq'::regclass)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer")
@@ -189,7 +198,7 @@ namespace Net_React.Server.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id")
-                        .HasName("product_details_pkey");
+                        .HasName("products_pkey");
 
                     b.HasIndex("CategoryId");
 
@@ -251,7 +260,7 @@ namespace Net_React.Server.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .IsRequired()
-                        .HasConstraintName("product_details_category_id_fkey");
+                        .HasConstraintName("products_category_id_fkey");
 
                     b.Navigation("Category");
                 });

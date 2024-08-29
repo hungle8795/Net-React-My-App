@@ -7,6 +7,7 @@ const UpdateCategory: FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [image, setImage] = useState<string | ''>('');
 
     /*const handleUpdateCategory = () => {*/
     const handleUpdateCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -17,15 +18,19 @@ const UpdateCategory: FC = () => {
             return;
         }
         if (name.trim() === '') {
-            alert("Name are required");
+            alert("Name is required");
             return;
         }
-        const updateCategory: Category = { id, name, description };
+        if (image.trim() === '') {
+            alert('Image is required');
+            return;
+        }
+        const updateCategory: Category = { id, name, image, description };
         try {
             const response = await axios.put(DotNetApi + `Category/Update/${id}`, updateCategory);
             /*.then(response => {*/
             console.log(response.data);
-            alert("Updated!");
+            alert("Updated. Reload page");
             location.reload();
         }
         catch (error) {
@@ -39,9 +44,25 @@ const UpdateCategory: FC = () => {
             <form onSubmit={handleUpdateCategory}>
                 <div>
                     <h2>Update Category</h2>
-                    <input type="text" value={id !== undefined ? id.toString() : ''} onChange={(e) => setId(e.target.value !== '' ? parseInt(e.target.value) : undefined)} placeholder="Category id"></input>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Category name"></input>
-                    <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Category description"></input>
+                    <input
+                        type="text"
+                        value={id !== undefined ? id.toString() : ''}
+                        onChange={(e) => setId(e.target.value !== '' ? parseInt(e.target.value) : undefined)} placeholder="Brand's id"></input>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)} placeholder="Brand's name"
+                    />
+                    <input
+                        type="text"
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)} placeholder="Brand's image"
+                    />
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)} placeholder="Brand's description"
+                    />
                     <button type="submit">Update Category</button>
                 </div>
             </form>

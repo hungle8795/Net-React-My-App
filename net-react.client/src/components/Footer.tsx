@@ -1,9 +1,9 @@
-import { FC} from "react";
+import { FC } from "react";
 
 const Footer: FC = () => {
     return (
         <div className="container-fluid d-flex justify-content-around">
-        <hr></hr>
+            <hr></hr>
             <div className="col-10 col-10 col-md-4 col-lg-4 col-xl-4 text-start">
                 <p>Category list</p>
                 <div>
@@ -11,7 +11,7 @@ const Footer: FC = () => {
                         <i className="fa-brands fa-facebook"></i>
                     </a>
                     <a href="#you" target="_blank">
-                        <i className="fa-brands fa-youtube"></i>    
+                        <i className="fa-brands fa-youtube"></i>
                     </a>
                     <a href="#lin" target="_blank">
                         <i className="fa-brands fa-linkedin"></i>

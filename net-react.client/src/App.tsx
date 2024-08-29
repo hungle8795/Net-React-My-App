@@ -2,9 +2,9 @@
 import './App.css';
 import { FC } from 'react';
 import CategoryList from './CategoryList';
-//import AddCategory from './AddCategory';
-//import DeleteCategory from './DeleteCategory';
-//import UpdateCategory from './UpdateCategory';
+import AddCategory from './AddCategory';
+import DeleteCategory from './DeleteCategory';
+import UpdateCategory from './UpdateCategory';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,9 +19,9 @@ const App: FC = () => {
             <Header />
             <div className="margin-top-60px">
                 <CategoryList />
-                {/*<AddCategory />*/}
-                {/*<DeleteCategory />*/}
-                {/*<UpdateCategory />*/}
+                <AddCategory />
+                <DeleteCategory />
+                <UpdateCategory />
             </div>
             <hr></hr>
             <Footer />
