@@ -19,11 +19,8 @@ const registerSchema = yup.object({
   lastName: yup.string().required('Last Name is required'),
   userName: yup.string().required('User Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(32, 'Password must not exceed 32 characters')
-    .required('Password is required'),
+  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 character'),
+  address: yup.string().required('Address Is required'),
 });
 
 const Register = () => {
@@ -45,12 +42,13 @@ const Register = () => {
       userName: '',
       email: '',
       password: '',
+      address: '',
     },
   });
   const onSubmitRegisterForm = async (data: IUserRegister) => {
     try {
       setLoading(true);
-      await register(data.firstName, data.lastName, data.userName, data.email, data.password);
+      await register(data.firstName, data.lastName, data.userName, data.email, data.password, data.address);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -93,6 +91,7 @@ const Register = () => {
           inputType='password'
           error={errors.password?.message}
         />
+        <InputField control={control} label='Address' inputName='address' error={errors.address?.message} />
         <div className='px-4 mt-2 mb-6 w-9/12 flex gap-2'>
           <h1>Already Have an account?</h1>
           <Link
