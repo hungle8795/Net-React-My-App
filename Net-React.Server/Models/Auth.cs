@@ -2,7 +2,7 @@
 
 namespace Net_React.Server.Models
 {
-    public class Accounts : BaseModel
+    public class Auth : BaseModel<long>
     {
         [Key]
         public int Id { get; set; }

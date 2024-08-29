@@ -2,7 +2,7 @@
 
 namespace Net_React.Server.Models
 {
-    public class Tokens : BaseModel
+    public class Tokens : BaseModel<long>
     {
         [Key]
         public int Id { get; set; }
@@ -11,6 +11,6 @@ namespace Net_React.Server.Models
 
         public DateTime RefreshExpires { get; set; }
         public int AccountId { get; set; }
-        public Accounts Account { get; set; }
+        public Auth Account { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Net_React.Server.DTOs.Accounts
+﻿namespace Net_React.Server.DTOs.Auth
 {
     public class LoginDTO
     {

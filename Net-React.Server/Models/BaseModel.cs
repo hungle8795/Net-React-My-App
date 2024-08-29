@@ -1,9 +1,11 @@
 ﻿namespace Net_React.Server.Models
 {
-    public class BaseModel
+    public class BaseModel<TID>
     {
-        public int Id { get; set; }
+        public TID Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
     }
 }

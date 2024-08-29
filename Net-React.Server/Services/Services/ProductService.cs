@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Azure;
 using backend.Data;
-using Net_React.Server.DTOs;
 using Net_React.Server.DTOs.Product;
 using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interfaces;
 using Net_React.Server.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+using Net_React.Server.DTOs.General;
+using backend.Models;
 
 namespace Net_React.Server.Services.Services
 {
@@ -24,23 +23,36 @@ namespace Net_React.Server.Services.Services
         /// GetAllProducts
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<GetProductDTO>>> GetAllProducts()
+        public async Task<IEnumerable<GetProductDTO>> GetAllProducts()
         {
-            var serviceResponse = new ServiceResponse<List<GetProductDTO>>();
+            var serviceResponse = new GeneralServiceResponseDto();
+            var products = await _context.Products
+                 .Select(q => new GetProductDTO
+                 {
+                     CreatedAt = q.CreatedAt,
+                     Description = q.Description,
+                     Price = q.Price,
+                     Name = q.ProductName,
+                     Image = q.ProductImage,
+                 })
+                 .OrderByDescending(q => q.CreatedAt)
+                 .ToListAsync();
             try
             {
-                var dbProducts = await _context.Products.ToListAsync();
-                serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDTO>(p)).ToList();
+                serviceResponse.IsSucceed = false;
+                serviceResponse.Message = "Get products successfully.";
+                //var dbProducts = await _context.Products.ToListAsync();
+                //serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDTO>(p)).ToList();
 
-                serviceResponse.Message = "Get Product successfully!";
+                //serviceResponse.Message = "Get Product successfully!";
             }
             catch (Exception ex)
             {
-                serviceResponse.IsSuccess = false;
+                serviceResponse.IsSucceed = false;
                 serviceResponse.Message = ex.Message;
             }
-            return serviceResponse;
 
+            return products;
         }
 
         /// <summary>
@@ -48,9 +60,10 @@ namespace Net_React.Server.Services.Services
         /// </summary>
         /// <param name="newProduct"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<AddProductDTO>>> AddProduct(AddProductDTO newProduct)
+        public async Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(AddProductDTO newProduct)
         {
             var serviceResponse = new ServiceResponse<List<AddProductDTO>>();
+
             try
             {
                 var product = _mapper.Map<Product>(newProduct);
@@ -66,7 +79,7 @@ namespace Net_React.Server.Services.Services
             }
             catch (Exception ex)
             {
-                serviceResponse.IsSuccess = false;
+                serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }
             return serviceResponse;
@@ -88,7 +101,7 @@ namespace Net_React.Server.Services.Services
             }
             catch (Exception ex)
             {
-                serviceResponse.IsSuccess = false;
+                serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }
 
@@ -100,9 +113,9 @@ namespace Net_React.Server.Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetProductDTO>> GetProductById(int id)
+        public async Task<ServiceResponseDto<GetProductDTO>> GetProductById(int id)
         {
-            var serviceResponse = new ServiceResponse<GetProductDTO>();
+            var serviceResponse = new ServiceResponseDto<GetProductDTO>();
             try
             {
                 var dbProduct = await _context.Products

@@ -3,25 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Net_React.Server.DTOs.User
 {
-    public class AddAccountDTO
+    public class RegisterDto
     {
         [Required]
-        public string FirstName { get; set; } = string.Empty;
+        public string FirstName { get; set; }
 
         [Required]
-        public string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; }
 
-        public string Role { get; set; } = string.Empty;
+        [Required(ErrorMessage = "UserName is required")]
+        public string UserName { get; set; }
+        public string Address { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Email address is invalid")]
         [Display(Name = "Email")]
-        public string? Email { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        public string Email { get; set; }
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Password is required")]
         [StringLength(100,ErrorMessage = "The {0} must be at least {2} characters long", MinimumLength = 8)]
         [Display(Name = "Password")]
-        public string? Password { get; set; }
+        public string Password { get; set; }
     }
 }

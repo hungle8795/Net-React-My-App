@@ -1,13 +1,15 @@
-﻿using Net_React.Server.DTOs.Product;
+﻿using Net_React.Server.DTOs.General;
+using Net_React.Server.DTOs.Product;
 using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interfaces;
+using Net_React.Server.DTOs;
+using backend.Models;
 
 namespace Net_React.Server.Services.Interfaces
 {
     public interface IProductService 
     {
-        Task<ServiceResponse<List<GetProductDTO>>> GetAllProducts();
-        Task<ServiceResponse<List<AddProductDTO>>> AddProduct(AddProductDTO newProduct);
+        Task<IEnumerable<GetProductDTO>> GetAllProducts();
+        Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(AddProductDTO newProduct);
         Task<ServiceResponse<List<GetProductDTO>>> DeleteProduct(int id);
 
         //Task<ProductDTO> GetProductByIdAsync(int id);

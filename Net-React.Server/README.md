@@ -58,3 +58,7 @@ appsettings.json
 | Post   | api/v1/Users              | Create a new user                    | Not required  |
 | Put    | api/v1/Users/{id}         | Update an existing user by ID        | Not required  |
 | Delete | api/v1/Users/{id}         | Delete an user by ID                 | Not required  |
+
+## Server:
+```Bash
+    dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 7.0.10

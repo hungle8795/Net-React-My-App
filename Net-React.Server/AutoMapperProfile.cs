@@ -10,11 +10,12 @@ namespace Net_React.Server
     {
         public AutoMapperProfile()
         {
-            // Account
-            CreateMap<Accounts, AddAccountDTO>();
-            CreateMap<AddAccountDTO, Accounts>();
+            // Auth
+            CreateMap<Auth, RegisterDto>();
+            CreateMap<RegisterDto, Auth>();
+
             //CreateMap<UpdateUserDTO, User>();
-            CreateMap<AccountReqDTO, Accounts>();
+            CreateMap<AccountReqDTO, Auth>();
             CreateMap<string, AccountRespDTO>();
 
             // Products

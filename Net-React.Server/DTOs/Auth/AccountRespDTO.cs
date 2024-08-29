@@ -2,7 +2,7 @@
 
 namespace Net_React.Server.DTOs.Auth
 {
-    public class AccountRespDTO : BaseModel
+    public class AccountRespDTO : BaseModel<long>
     {
         public string Token { get; set; }
         public int UserId { get; set; }

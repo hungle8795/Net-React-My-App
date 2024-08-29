@@ -40,19 +40,19 @@ namespace Net_React.Server.Controllers
         /// <returns></returns>
         [HttpPost()]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<ServiceResponse<List<AddProductDTO>>>> AddProduct(AddProductDTO newProduct)
+        public async Task<ActionResult<IEnumerable<List<AddProductDTO>>>> AddProduct(AddProductDTO newProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Ok(await _productService.AddProduct(newProduct));
+            return Ok(await _productService.AddNewProduct(newProduct));
         }
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<ServiceResponse<GetProductDTO>>> DeleteProduct(int id)
+        public async Task<ActionResult<IEnumerable<GetProductDTO>>> DeleteProduct(int id)
         {
             var response = await _productService.DeleteProduct(id);
             if (response.Data is null)

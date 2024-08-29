@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Net_React.Server.Models;
 
-public partial class User : BaseModel
+public partial class User : BaseModel<long>
 {
     public int Id { get; set; }
     public string? Lastname { get; set; } = string.Empty;
