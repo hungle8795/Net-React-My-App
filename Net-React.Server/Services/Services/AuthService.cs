@@ -121,7 +121,8 @@ namespace Net_React.Server.Services.Services
                     {
                         IsSucceed = false,
                         StatusCode = 400,
-                        Message = errorString
+                        Message = errorString,
+                        
                     };
                 }
 

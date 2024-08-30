@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs.Auth;
 using Net_React.Server.DTOs.User;
 using Net_React.Server.Services.Interfaces;
+using Net_React.Server.Services.Services;
 
 namespace Net_React.Server.Controllers
 {
@@ -14,6 +15,15 @@ namespace Net_React.Server.Controllers
         public AuthController(IAuthService accountService)
         {
             _accountService = accountService;
+        }
+
+        // Route -> Seed Roles to DB
+        [HttpPost]
+        [Route("seed-roles")]
+        public async Task<IActionResult> SeedRoles()
+        {
+            var seedResult = await _accountService.SeedRolesAsync();
+            return StatusCode(seedResult.StatusCode, seedResult.Message);
         }
 
         #region Register

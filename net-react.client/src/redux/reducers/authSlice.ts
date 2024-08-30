@@ -40,18 +40,17 @@ export const registerUser = createAsyncThunk(
   'registerUser',
   async (user: IUserRegister) => {
     try {
-      const initials = user.firstName
+      const initials = user.name
         .split(' ')
         .map((name) => name[0].toUpperCase())
         .join('');
-      console.log('Chưa thêm data vào được');
-      const UserResponse = await axiosInstance.post('/Auth/register', {
+
+      const UserResponse = await axiosInstance.post('/Users', {
         ...user,
         initials: initials,
       });
 
       const data = UserResponse.data;
-      console.log('data: ', data);
       return data;
     } catch (e) {
       const error = e as AxiosError;
@@ -64,10 +63,9 @@ export const loginUser = createAsyncThunk<
   User,
   AuthCreds,
   { rejectValue: { error: boolean; errorMsg: string } }
->('account/loginUser', async (credentials, { rejectWithValue }) => {
+>('auth/loginUser', async (credentials, { rejectWithValue }) => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response = await axiosInstance.post<any>('/Auth/login', credentials);
+    const response = await axiosInstance.post<any>('/Auths', credentials);
     const { data, success, message } = response.data;
 
     if (success) {
@@ -86,7 +84,6 @@ export const loginUser = createAsyncThunk<
     } else {
       throw new Error(message || 'Authentication failed');
     }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue({
       error: true,

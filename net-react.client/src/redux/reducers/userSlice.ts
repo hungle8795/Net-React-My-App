@@ -5,7 +5,7 @@ import axiosInstance from '../../common/axiosInstance';
 export const fetchUsers = createAsyncThunk('fetchUsers', async () => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await axiosInstance.get('/Accounts');
+    const response = await axiosInstance.get('/Users');
     return response.data;
   } catch (error) {
     throw error;
@@ -30,8 +30,8 @@ export const userSlice = createSlice({
         return action.payload;
       })
       .addCase(fetchUsers.rejected, (state) => {
-        console.log(state);
         console.log('Fetching users error');
+        console.log(state);
         return [];
       });
   },

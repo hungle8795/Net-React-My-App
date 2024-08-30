@@ -1,40 +1,34 @@
-import {useState } from 'react';
+import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-// import { registerUser } from '../../redux/reducers/authSlice';
-import { IUserRegister } from '../../types/auth';
-// import { useAppDispatch } from '../../hooks/reduxHook';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-// import { Box, Button, TextField, Typography } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth.hook';
-import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { IRegisterDto } from '../../types/auth.types';
 import InputField from '../../components/general/InputField';
-import { PATH_PUBLIC } from '../../routes/paths';
+import { yupResolver } from '@hookform/resolvers/yup';
+import useAuth from '../../hooks/useAuth.hook';
 import Button from '../../components/general/Button';
+import { toast } from 'react-hot-toast';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { PATH_PUBLIC } from '../../routes/paths';
 
-const registerSchema = yup.object({ 
-  firstName: yup.string().required('First Name is required'),
-  lastName: yup.string().required('Last Name is required'),
-  userName: yup.string().required('User Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 character'),
-  address: yup.string().required('Address Is required'),
-});
-
-const Register = () => {
-  // const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+const RegisterPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { register } = useAuth();
+
+  const registerSchema = Yup.object().shape({
+    firstName: Yup.string().required('First Name is required'),
+    lastName: Yup.string().required('Last Name is required'),
+    userName: Yup.string().required('User Name is required'),
+    email: Yup.string().required('Email is required').email('Input text must be a valid email'),
+    password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 character'),
+    address: Yup.string().required('Address Is required'),
+  });
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<IUserRegister>({
+  } = useForm<IRegisterDto>({
     resolver: yupResolver(registerSchema),
     defaultValues: {
       firstName: '',
@@ -45,7 +39,8 @@ const Register = () => {
       address: '',
     },
   });
-  const onSubmitRegisterForm = async (data: IUserRegister) => {
+
+  const onSubmitRegisterForm = async (data: IRegisterDto) => {
     try {
       setLoading(true);
       await register(data.firstName, data.lastName, data.userName, data.email, data.password, data.address);
@@ -64,6 +59,7 @@ const Register = () => {
 
   return (
     <div className='pageTemplate1'>
+      {/* <div>Left</div> */}
       <div className='max-sm:hidden flex-1 min-h-[600px] h-4/5 bg-gradient-to-tr from-[#DAC6FB] via-amber-400 to-[#AAC1F6] flex flex-col justify-center items-center rounded-l-2xl'>
         <div className='h-3/5 p-6 rounded-2xl flex flex-col gap-8 justify-center items-start bg-white bg-opacity-20 border border-[#ffffff55] relative'>
           <h1 className='text-6xl font-bold text-[#754eb4]'>Dev Empower</h1>
@@ -74,6 +70,7 @@ const Register = () => {
           <div className='absolute -bottom-20 right-20 w-32 h-32 bg-gradient-to-br from-[#cc2b5e] to-[#753a88] rounded-full blur-3xl'></div>
         </div>
       </div>
+      {/* <div>Right</div> */}
       <form
         onSubmit={handleSubmit(onSubmitRegisterForm)}
         className='flex-1 min-h-[600px] h-4/5 bg-[#f0ecf7] flex flex-col justify-center items-center rounded-r-2xl'
@@ -92,6 +89,7 @@ const Register = () => {
           error={errors.password?.message}
         />
         <InputField control={control} label='Address' inputName='address' error={errors.address?.message} />
+
         <div className='px-4 mt-2 mb-6 w-9/12 flex gap-2'>
           <h1>Already Have an account?</h1>
           <Link
@@ -111,4 +109,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

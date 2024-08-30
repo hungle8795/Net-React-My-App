@@ -8,6 +8,7 @@ namespace Net_React.Server.Services.Interfaces
     {
         //Task<ServiceResponse<List<GetUserDTO>>> GetAllUsers();
         //Task<ServiceResponse<GetUserDTO>> GetUserById(int id);
+        Task<GeneralServiceResponseDto> SeedRolesAsync();
         Task<GeneralServiceResponseDto> RegisterAsync(RegisterDto newUser);
         Task<LoginServiceResponseDTO?> LoginAsync(LoginDTO request);
         Task<LoginServiceResponseDTO?> MeAsync(MeDTO meDto);

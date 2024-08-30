@@ -24,6 +24,5 @@ namespace Net_React.Server.DTOs.User
         [StringLength(100,ErrorMessage = "The {0} must be at least {2} characters long", MinimumLength = 8)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-        public string Role { get; set; }
     }
 }

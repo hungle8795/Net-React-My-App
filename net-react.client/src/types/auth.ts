@@ -1,73 +1,37 @@
-export interface IRegisterDto {
-  firstName: string;
-  lastName: string;
-  userName: string;
+export interface IUserRegister {
+  name: string;
   email: string;
   password: string;
-  address: string;
+  initials: string;
 }
 
-export interface ILoginDto {
-  userName: string;
+export interface AuthCreds {
+  email: string;
   password: string;
 }
 
-export interface IUpdateRoleDto {
-  userName: string;
-  newRole: string;
+export interface ReturnedAuthCreds {
+  access_token: string;
 }
 
-export interface IAuthUser {
+export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
+  name: string;
   email: string;
-  createdAt: string;
-  roles: string[];
+  password: string;
+  initials: string;
 }
 
-export interface ILoginResponseDto {
-  newToken: string;
-  userInfo: IAuthUser;
+export interface UserState {
+  userList: [];
+  currentUser?: User;
+  success: boolean;
 }
 
-export interface IAuthContextState {
-  isAuthenticated: boolean;
-  isAuthLoading: boolean;
-  user?: IAuthUser;
-}
-
-export enum IAuthContextActionTypes {
-  INITIAL = 'INITIAL',
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-}
-
-export interface IAuthContextAction {
-  type: IAuthContextActionTypes;
-  payload?: IAuthUser;
-}
-
-export interface IAuthContext {
-  isAuthenticated: boolean;
-  isAuthLoading: boolean;
-  user?: IAuthUser;
-  login: (userName: string, password: string) => Promise<void>;
-  register: (
-    firstName: string,
-    lastName: string,
-    userName: string,
-    email: string,
-    password: string,
-    address: string
-  ) => Promise<void>;
-  logout: () => void;
-}
-
-export enum RolesEnum {
-  OWNER = 'OWNER',
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  USER = 'USER',
+export interface IAuthState {
+  loggedIn: boolean;
+  userInfo: User | null;
+  error: boolean;
+  errorMsg: string;
+  isRegistered: boolean;
 }
