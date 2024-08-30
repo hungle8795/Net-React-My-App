@@ -1,13 +1,20 @@
-import { useState, FC } from 'react';
+﻿import { useState, FC } from 'react';
 import axios from 'axios';
-import { Category } from './types';
-import { DotNetApi } from './helpers/DotNetApi';
+import { Category } from '../../types';
+import { DotNetApi } from '../../helpers/DotNetApi';
 
-const AddCategory: FC = () => {
+
+interface AddCategoryProps {
+    onCreate: () => void; // Định nghĩa prop onAdd là một hàm
+}
+
+const AddCategory: FC<AddCategoryProps> = ({ onCreate }) => {
     const [id, setId] = useState<number | undefined>(undefined);
-    const [name, setName] = useState<string | ''>('');
-    const [description, setDescription] = useState('');
-    const [image, setImage] = useState<string | ''>('');
+    const [name, setName] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [image, setImage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+
 
     //const handleAddCategory = () => {
     const handleAddCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,14 +34,21 @@ const AddCategory: FC = () => {
         }
         const newCategory: Category = { id, name, description, image };
         try {
+            setLoading(true);
             const response = await axios.post(DotNetApi + 'Category/Create', newCategory)
             console.log(response.data);
-            alert("Created. Reload page");
-            location.reload();
+            alert("Category created successfully!");
+            onCreate();
+            setId(undefined);
+            setName('');
+            setDescription('');
+            setImage('');
         }
         catch (error) {
             console.error('There was an error!', error);
-            alert("Record is exist!");
+            alert("Failed to add category. Please check if the record already exists.");
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -79,7 +93,10 @@ const AddCategory: FC = () => {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Brand's description"
                     />
-                    <button type="submit">Add</button>
+                    {/*<button type="submit">Add</button>*/}
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading ? 'Adding...' : 'Add Category'}
+                    </button>
                 </div>
             </form>
         </div>
@@ -87,3 +104,5 @@ const AddCategory: FC = () => {
 };
 
 export default AddCategory;
+
+

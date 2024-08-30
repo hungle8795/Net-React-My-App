@@ -1,13 +1,18 @@
 import { useState, FC } from "react";
 import axios from 'axios';
-import { Category } from "./types";
-import { DotNetApi } from './helpers/DotNetApi';
+import { Category } from "../../types";
+import { DotNetApi } from '../../helpers/DotNetApi';
 
-const UpdateCategory: FC = () => {
+
+interface UpdateCategoryProps {
+    onUpdate: () => void;
+}
+
+const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdate }) => {
     const [id, setId] = useState<number | undefined>(undefined);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [image, setImage] = useState<string | ''>('');
+    const [name, setName] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [image, setImage] = useState<string>('');
 
     /*const handleUpdateCategory = () => {*/
     const handleUpdateCategory = async (event: React.FormEvent<HTMLFormElement>) => {

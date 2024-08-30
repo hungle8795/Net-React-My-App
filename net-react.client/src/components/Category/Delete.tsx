@@ -1,6 +1,6 @@
 import { useState, FC } from 'react';
 import axios from 'axios';
-import { DotNetApi } from './helpers/DotNetApi';
+import { DotNetApi } from '../../helpers/DotNetApi';
 
 const DeleteCategory: FC = () => {
     const [id, setId] = useState<number | undefined>(undefined);
