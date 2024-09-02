@@ -1,16 +1,14 @@
-﻿using Net_React.Server.DTOs.General;
-using Net_React.Server.DTOs.Product;
-using Net_React.Server.Models;
-using Net_React.Server.DTOs;
+﻿using Net_React.Server.DTOs.Product;
 using backend.Models;
-
-namespace Net_React.Server.Services.Interfaces
+using Net_React.Server.DTOs.General;
+using System.Security.Claims;
+namespace Net_React.Server.Interfaces
 {
-    public interface IProductService 
+    public interface IProductService
     {
         Task<IEnumerable<GetProductDTO>> GetAllProducts();
-        Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(AddProductDTO newProduct);
         Task<ServiceResponse<List<GetProductDTO>>> DeleteProduct(int id);
+        Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(ClaimsPrincipal User, AddProductDTO newProduct, IFormFile image);
 
         //Task<ProductDTO> GetProductByIdAsync(int id);
         //Task<ProductDTO> GetProductByNameAsync(string name);
@@ -19,3 +17,4 @@ namespace Net_React.Server.Services.Interfaces
         //Task DeleteProductAsync(int id);
     }
 }
+

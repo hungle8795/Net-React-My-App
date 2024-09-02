@@ -1,6 +1,6 @@
 using Net_React.Server.Models;
 
-namespace backend_dotnet7.Core.Entities;
+namespace Net_React.Server.Models;
 
 public class Log : BaseModel<long>
 {

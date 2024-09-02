@@ -1,10 +1,9 @@
-﻿using backend_dotnet7.Core.Entities;
+﻿using Net_React.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Net_React.Server.Models;
 
-namespace backend.Data;
+namespace Net_React.Server.Data;
 
 public class DataContext : IdentityDbContext<ApplicationUser>
 {
@@ -25,14 +24,11 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     //public DbSet<User> Users { get; set; }
-    public DbSet<Auth> Auth { get; set; }
-    //public DbSet<Tokens> Tokens { get; set; }
     public DbSet<Log> Logs { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
-    //public virtual DbSet<Address> Addresses => Set<Address>();
     //public virtual DbSet<Gender> Genders => Set<Gender>();
     //public DbSet<Cart> Carts => Set<Cart>();
-    //public DbSet<CartItem> CartItems => Set<CartItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,29 +88,6 @@ public class DataContext : IdentityDbContext<ApplicationUser>
         //    //    .OnDelete(DeleteBehavior.ClientSetNull)
         //    //    .HasConstraintName("product_details_category_id_fkey");
         //});
-
-        modelBuilder.Entity<Auth>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("auth_pkey");
-            entity.ToTable("Auth");
-            entity.HasIndex(u => u.Email)
-            .IsUnique();
-            entity.HasMany(a => a.Tokens)
-            .WithOne(t => t.Account)
-            .HasForeignKey(t => t.AccountId);
-        });
-
-        modelBuilder.Entity<Tokens>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("token_pkey");
-
-            entity.ToTable("Tokens");
-
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
-            entity.HasOne(e => e.Account)
-            .WithMany(p => p.Tokens)
-            .HasForeignKey(pd => pd.AccountId);
-        });
 
         modelBuilder.Entity<Product>(entity =>
         {

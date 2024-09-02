@@ -21,6 +21,10 @@ import NotFoundPage from '../pages/public/NotFoundPage';
 import RegisterPage from '../pages/public/RegisterPage';
 import UnauthorizedPage from '../pages/public/UnauthorizedPage';
 
+// Product
+import AddProductPage from '../pages/product/AddProductPage';
+import ProductListPage from '../pages/dashboard/ProductListPage';
+
 const GlobalRouter = () => {
   return (
     <Routes>
@@ -39,6 +43,8 @@ const GlobalRouter = () => {
           <Route path={PATH_DASHBOARD.sendMessage} element={<SendMessagePage />} />
           <Route path={PATH_DASHBOARD.inbox} element={<InboxPage />} />
           <Route path={PATH_DASHBOARD.myLogs} element={<MyLogsPage />} />
+          <Route path={PATH_DASHBOARD.addProduct} element={<AddProductPage />} />
+          <Route path={PATH_DASHBOARD.productList} element={<ProductListPage />} />
           <Route path={PATH_DASHBOARD.user} element={<UserPage />} />
         </Route>
         <Route element={<AuthGuard roles={managerAccessRoles} />}>

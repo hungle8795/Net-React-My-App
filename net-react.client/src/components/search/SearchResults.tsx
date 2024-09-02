@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResultsProps } from '../../types/product';
+import { SearchResultsProps } from '../../types/product.types';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 

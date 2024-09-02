@@ -29,6 +29,18 @@ const Sidebar = () => {
         variant='secondary'
       />
       <Button
+        label='Add Product'
+        onClick={() => handleClick(PATH_DASHBOARD.addProduct)}
+        type='button'
+        variant='secondary'
+      />
+      <Button
+        label='List Products'
+        onClick={() => handleClick(PATH_DASHBOARD.productList)}
+        type='button'
+        variant='secondary'
+      />
+      <Button
         label='Send Message'
         onClick={() => handleClick(PATH_DASHBOARD.sendMessage)}
         type='button'

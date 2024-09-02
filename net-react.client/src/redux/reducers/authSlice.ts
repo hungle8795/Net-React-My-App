@@ -65,6 +65,7 @@ export const loginUser = createAsyncThunk<
   { rejectValue: { error: boolean; errorMsg: string } }
 >('auth/loginUser', async (credentials, { rejectWithValue }) => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await axiosInstance.post<any>('/Auths', credentials);
     const { data, success, message } = response.data;
 
@@ -84,6 +85,7 @@ export const loginUser = createAsyncThunk<
     } else {
       throw new Error(message || 'Authentication failed');
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue({
       error: true,

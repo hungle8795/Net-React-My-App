@@ -11,11 +11,11 @@ namespace Net_React.Server
         public AutoMapperProfile()
         {
             // Auth
-            CreateMap<Auth, RegisterDto>();
-            CreateMap<RegisterDto, Auth>();
+            //CreateMap<Auth, RegisterDto>();
+            //CreateMap<RegisterDto, Auth>();
 
             //CreateMap<UpdateUserDTO, User>();
-            CreateMap<AccountReqDTO, Auth>();
+            //CreateMap<AccountReqDTO, Auth>();
             CreateMap<string, AccountRespDTO>();
 
             // Products
@@ -23,8 +23,6 @@ namespace Net_React.Server
             CreateMap<AddProductDTO, Product>();
 
             // Cart
-
-
 
         }
     }

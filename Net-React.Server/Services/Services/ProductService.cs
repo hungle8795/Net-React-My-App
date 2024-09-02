@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
-using Azure;
-using backend.Data;
+using Net_React.Server.Data;
 using Net_React.Server.DTOs.Product;
 using Net_React.Server.Models;
-using Net_React.Server.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Net_React.Server.DTOs.General;
 using backend.Models;
+using Net_React.Server.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Logging;
+using System.Linq;
 
 namespace Net_React.Server.Services.Services
 {
@@ -14,10 +17,22 @@ namespace Net_React.Server.Services.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public ProductService(DataContext context, IMapper mapper)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogService _logService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public ProductService(
+            DataContext context, 
+            IMapper mapper,
+            ILogService logService, 
+            UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
+            _logService = logService;
+            _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
         }
         /// <summary>
         /// GetAllProducts
@@ -29,11 +44,14 @@ namespace Net_React.Server.Services.Services
             var products = await _context.Products
                  .Select(q => new GetProductDTO
                  {
-                     CreatedAt = q.CreatedAt,
+                     Name = q.Name,
+                     UserName = q.UserName,
+                     Color = q.Color,
                      Description = q.Description,
+                     Image = q.Image,
                      Price = q.Price,
-                     Name = q.ProductName,
-                     Image = q.ProductImage,
+                     Quality = q.Quality,
+                     CreatedAt = q.CreatedAt,
                  })
                  .OrderByDescending(q => q.CreatedAt)
                  .ToListAsync();
@@ -41,10 +59,6 @@ namespace Net_React.Server.Services.Services
             {
                 serviceResponse.IsSucceed = false;
                 serviceResponse.Message = "Get products successfully.";
-                //var dbProducts = await _context.Products.ToListAsync();
-                //serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDTO>(p)).ToList();
-
-                //serviceResponse.Message = "Get Product successfully!";
             }
             catch (Exception ex)
             {
@@ -60,22 +74,35 @@ namespace Net_React.Server.Services.Services
         /// </summary>
         /// <param name="newProduct"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(AddProductDTO newProduct)
+        public async Task<ServiceResponse<List<AddProductDTO>>> AddNewProduct(ClaimsPrincipal User, AddProductDTO newProduct, IFormFile image)
         {
             var serviceResponse = new ServiceResponse<List<AddProductDTO>>();
 
             try
             {
-                var product = _mapper.Map<Product>(newProduct);
+                // Save image to storage
+                string imageUrl = await SaveImageToLocalStorage(image);
 
-                _context.Products.Add(product);
+                Product product = new Product()
+                {
+                    Name = newProduct.Name,
+                    UserName = User.Identity.Name,
+                    Price = newProduct.Price,
+                    Color = newProduct.Color,
+                    Image = imageUrl,
+                    Quality = newProduct.Quality,
+                    Description = newProduct.Description,
+                };
+                
+                await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
 
-                serviceResponse.Data = await _context.Products
-                        .Select(p => _mapper.Map<AddProductDTO>(p))
-                        .ToListAsync();
-
-                serviceResponse.Message = "Product created successfully!";
+                return new ServiceResponse<List<AddProductDTO>>()
+                {
+                    Success = true,
+                    StatusCode = 201,
+                    Message = "Product saved successfully",
+                };
             }
             catch (Exception ex)
             {
@@ -84,6 +111,35 @@ namespace Net_React.Server.Services.Services
             }
             return serviceResponse;
         }
+
+        private async Task<string> SaveImageToLocalStorage(IFormFile image)
+        {
+            var rootFolder = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()));
+            var uniqueFileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+
+            try
+            {
+                string uploadsFolder = Path.Combine(rootFolder, "uploads/");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                //return new ImageUploadResult { Success = false, Message = ex.Message });
+            }
+
+            return $"uploads/{uniqueFileName}";
+
+        }
+
         public async Task<ServiceResponse<List<GetProductDTO>>> DeleteProduct(int id)
         {
             var serviceResponse = new ServiceResponse<List<GetProductDTO>>();

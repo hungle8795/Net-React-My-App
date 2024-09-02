@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook';
 import { RootState } from '../../redux/store';
 import Typography from '@mui/material/Typography';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { Product } from '../../types/product';
+import { Product } from '../../types/product.types';
 import SearchResults from '../search/SearchResults';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange } from '@mui/material/colors';

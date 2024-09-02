@@ -1,12 +1,11 @@
 using Net_React.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using backend_dotnet7.Core.Entities;
 using Net_React.Server.Interfaces;
-using backend.Data;
+using Net_React.Server.Data;
 using Net_React.Server.DTOs.Log;
 
-namespace backend_dotnet7.Core.Services;
+namespace Net_React.Server.Services;
 
 public class LogService : ILogService
 {

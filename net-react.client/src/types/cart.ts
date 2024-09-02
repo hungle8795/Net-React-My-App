@@ -1,4 +1,4 @@
-import { Product } from './product';
+import { Product } from './product.types';
 
 export interface ICartProducts extends Product {
   id: number;

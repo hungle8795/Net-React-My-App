@@ -12,6 +12,7 @@ namespace Net_React.Server.Services.Interfaces
         Task<GeneralServiceResponseDto> RegisterAsync(RegisterDto newUser);
         Task<LoginServiceResponseDTO?> LoginAsync(LoginDTO request);
         Task<LoginServiceResponseDTO?> MeAsync(MeDTO meDto);
+        Task<IEnumerable<string>> GetUsernamesListAsync();
         //Task<ServiceResponse<GetUserDTO>> UpdateUser(UpdateUserDTO updatedProduct);
         //Task<ServiceResponse<List<GetUserDTO>>> DeleteUser(int id);
     }

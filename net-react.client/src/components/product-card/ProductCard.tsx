@@ -10,7 +10,7 @@ import {
 import { useAppDispatch } from '../../hooks/reduxHook';
 import { addToCart } from '../../redux/reducers/cartSlice';
 import { useNavigate } from 'react-router-dom';
-import { ProductCardProps } from '../../types/product';
+import { ProductCardProps } from '../../types/product.types';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';

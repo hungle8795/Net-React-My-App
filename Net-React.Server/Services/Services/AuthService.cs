@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using backend.Data;
-using backend_dotnet7.Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -8,13 +6,14 @@ using Net_React.Server.Constants;
 using Net_React.Server.DTOs.Auth;
 using Net_React.Server.DTOs.General;
 using Net_React.Server.DTOs.User;
+using Net_React.Server.Data;
 using Net_React.Server.Interfaces;
 using Net_React.Server.Models;
 using Net_React.Server.Services.Interfaces;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Services.Services
 {
@@ -121,12 +120,12 @@ namespace Net_React.Server.Services.Services
                     {
                         IsSucceed = false,
                         StatusCode = 400,
-                        Message = errorString,
-                        
+                        Message = errorString
                     };
                 }
 
-                await _userManager.AddToRoleAsync(newUser, StaticUserRoles.USER);
+                //await _userManager.AddToRoleAsync(newUser, StaticUserRoles.USER);
+                await _userManager.AddToRoleAsync(newUser, StaticUserRoles.ADMIN);
                 await _logService.SaveNewLog(newUser.UserName, "Registered to Website");
             } 
             catch (Exception ex)
@@ -257,6 +256,17 @@ namespace Net_React.Server.Services.Services
                 CreatedAt = user.CreatedAt,
                 Roles = Roles
             };
+        }
+        #endregion
+
+        #region GetUsernamesListAsync
+        public async Task<IEnumerable<string>> GetUsernamesListAsync()
+        {
+            var userNames = await _userManager.Users
+                .Select(q => q.UserName)
+                .ToListAsync();
+
+            return userNames;
         }
         #endregion
     }

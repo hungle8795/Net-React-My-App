@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs.Auth;
 using Net_React.Server.DTOs.User;
 using Net_React.Server.Services.Interfaces;
-using Net_React.Server.Services.Services;
 
 namespace Net_React.Server.Controllers
 {
@@ -82,6 +81,17 @@ namespace Net_React.Server.Controllers
             {
                 return Unauthorized("Invalid Token");
             }
+        }
+        #endregion
+
+        #region GetUserNamesList
+        [HttpGet]
+        [Route("usernames")]
+        public async Task<ActionResult<IEnumerable<string>>> GetUserNamesList()
+        {
+            var usernames = await _accountService.GetUsernamesListAsync();
+
+            return Ok(usernames);
         }
         #endregion
         //[Authorize]

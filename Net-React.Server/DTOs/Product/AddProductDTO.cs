@@ -7,18 +7,16 @@ namespace Net_React.Server.DTOs.Product
     {
         [Required]
         [MaxLength(50)]
-        public string? Title { get; set; }
-        //public int? ProductDetailId { get; set; }
+        public string? Name { get; set; }
+        public string? Color { get; set; }
+        public int Quality { get; set; }
 
         [Required]
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
         public string? Description { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string? Image { get; set; }
         //public int CategoryId { get; set; }
         //public string? CategoryName { get; set; }
     }

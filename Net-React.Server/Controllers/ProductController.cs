@@ -1,37 +1,35 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Net_React.Server.DTOs;
+using Net_React.Server.Constants;
 using Net_React.Server.DTOs.Product;
+using Net_React.Server.Interfaces;
 using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
-using Net_React.Server.Services.Interfaces;
-using Net_React.Server.Services.Services;
-using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Net_React.Server.Controllers
 {
-
-    [Route("api/products")]
-    [Authorize(Policy = "AdminOnly")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly int MAX_BYTES = 5 * 1024 * 1024;
+        private readonly string[] ACCEPTED_FILE_TYPE = { ".jpg", ".png" };
+
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
 
-        /// <summary>
-        /// GetAll: Get all products in the database
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var productsDto = await _productService.GetAllProducts();
-            return Ok(productsDto);
-        }
+        ///// <summary>
+        ///// GetAll: Get all products in the database
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetAll()
+        //{
+        //    var productsDto = await _productService.GetAllProducts();
+        //    return Ok(productsDto);
+        //}
 
         /// <summary>
         /// AddProduct: Add product by admin role
@@ -39,15 +37,34 @@ namespace Net_React.Server.Controllers
         /// <param name="newProduct"></param>
         /// <returns></returns>
         [HttpPost()]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<IEnumerable<List<AddProductDTO>>>> AddProduct(AddProductDTO newProduct)
+        [Route("create")]
+        [Authorize()]
+        public async Task<IActionResult> AddProduct([FromForm] AddProductDTO newProduct, IFormFile image)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Ok(await _productService.AddNewProduct(newProduct));
+            //if (image == null || image.Length == 0) return BadRequest("Please select a file.");
+            //if (image.Length > MAX_BYTES) return BadRequest("File size exceeds the maximum limit.");
+            //if (ACCEPTED_FILE_TYPE.Any(a => a == Path.GetExtension(image.FileName).ToLower())) return BadRequest("Invalid file type");
+
+            var result = await _productService.AddNewProduct(User, newProduct, image);
+
+            if (result.Success)
+                return Ok(result.Message);
+
+            return StatusCode(result.StatusCode, result.Message);
+        }
+
+        [HttpGet]
+        [Route("list")]
+        [Authorize(Roles = StaticUserRoles.OwnerAdmin)]
+        public async Task<ActionResult<IEnumerable<GetProductDTO>>> GetAllProducts()
+        {
+            var messages = await _productService.GetAllProducts();
+            return Ok(messages);
         }
 
         [HttpDelete("{id}")]
@@ -62,6 +79,8 @@ namespace Net_React.Server.Controllers
 
             return Ok(response);
         }
+
+
         //[HttpGet("{id:int}")]
         //public async Task<IActionResult> GetByIdAsync(int id)
         //{

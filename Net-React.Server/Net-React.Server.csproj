@@ -53,8 +53,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Message\" />
     <Folder Include="Entities\" />
     <Folder Include="Migrations\" />
+    <Folder Include="uploads\" />
     <Folder Include="SeedData\" />
   </ItemGroup>
 

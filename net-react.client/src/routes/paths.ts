@@ -19,5 +19,7 @@ export const PATH_PUBLIC = {
     admin: '/dashboard/admin',
     manager: '/dashboard/manager',
     user: '/dashboard/user',
+    addProduct: '/dashboard/product/create',
+    productList: '/dashboard/product/list',
   };
   
