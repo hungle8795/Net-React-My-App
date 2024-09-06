@@ -33,6 +33,13 @@ namespace Net_React.Server.Services.Services
             var product = await productRepository.GetByNameAsync(name);
             return _mapper.Map<ProductDTO>(product);
         }
+        
+        public async Task<List<ProductDTO>> GetProductByCategoryIdAsync(int categoryId)
+        {
+            var productRepository = _unitOfWork.ProductRepository() as IProductRepository;
+            var product = await productRepository.GetByCategoryIdAsync(categoryId);
+            return _mapper.Map<List<ProductDTO>>(product);
+        }
         public async Task AddProductAsync(ProductDTO productDto)
         {
             var product = _mapper.Map<Product>(productDto);

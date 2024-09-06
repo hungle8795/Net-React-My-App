@@ -2,8 +2,12 @@ import { useState, FC } from 'react';
 import axios from 'axios';
 import { DotNetApi } from '../../helpers/DotNetApi';
 
-const DeleteCategory: FC = () => {
+interface DeleteCategoryProps {
+    onDeleteCategory: () => void;
+}
+const DeleteCategory: FC<DeleteCategoryProps> = ({ onDeleteCategory }) => {
     const [id, setId] = useState<number | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleDeleteCategory = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -11,17 +15,32 @@ const DeleteCategory: FC = () => {
             alert("Category ID is required");
             return;
         }
+        try {
+            setLoading(true);
+            const response = await axios.delete(DotNetApi + `Category/Delete/${id}`);
+            console.log('Category deleted: ', response.data);
+            alert("Deleted. Reload page");
+            onDeleteCategory();
+        }
+        catch (error) {
+            console.error('There was an error!', error);
+            alert("Id not found!");
+        }
+        finally {
+            setLoading(false);
+        }
         //axios.delete(DotNetApi + 'Category/Delete/' + id)
-        axios.delete(DotNetApi + `Category/Delete/${id}`)
-            .then(response => {
-                console.log('Category deleted: ', response.data);
-                alert("Deleted. Reload page");
-                location.reload();
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-                alert("Id not found!");
-            });
+        //axios.delete(DotNetApi + `Category/Delete/${id}`)
+
+        //    .then(response => {
+        //        console.log('Category deleted: ', response.data);
+        //        alert("Deleted. Reload page");
+        //        location.reload();
+        //    })
+        //    .catch(error => {
+        //        console.error('There was an error!', error);
+        //        alert("Id not found!");
+        //    });
     };
 
     return (
@@ -36,6 +55,9 @@ const DeleteCategory: FC = () => {
                         placeholder="Category ID"
                     />
                     <button type="submit">Delete</button>
+                    <button type="submit" className="btn btn-primary">
+                        {loading ? "Deleting..." : "Delete Category"}
+                    </button>
                 </div>
             </form>
         </div>

@@ -5,10 +5,10 @@ import { DotNetApi } from '../../helpers/DotNetApi';
 
 
 interface AddCategoryProps {
-    onCreate: () => void; // Định nghĩa prop onAdd là một hàm
+    onCreateCategory: () => void; // Định nghĩa prop onAdd là một hàm
 }
 
-const AddCategory: FC<AddCategoryProps> = ({ onCreate }) => {
+const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -38,7 +38,7 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreate }) => {
             const response = await axios.post(DotNetApi + 'Category/Create', newCategory)
             console.log(response.data);
             alert("Category created successfully!");
-            onCreate();
+            onCreateCategory();
             setId(undefined);
             setName('');
             setDescription('');

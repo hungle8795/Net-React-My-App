@@ -21,8 +21,8 @@ const CategoryList: FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const fetchCategories = async () => {
         axios.get<Category[]>(DotNetApi + 'Category')
-            .then(respose => {
-                setCategories(respose.data);
+            .then(response => {
+                setCategories(response.data);
                 setLoading(false);
             })
             .catch(
@@ -43,9 +43,10 @@ const CategoryList: FC = () => {
                 categories.map(category =>
                     <div className="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 mt-3" key={category.id}>
                         {/*<Link to={`/products/${category.id}`} className="btn btn-primary">*/}
-                        <Link to={`/products`} className="btn btn-primary">
+                        <Link to={`/products/${category.id}`} className="btn btn-primary">
                             <img src={brand1} className="w-100" />
                         </Link>
+                        <p aria-disabled="false">{category.id}</p>
                         {/*<button className="btn btn-outline-primary mb-3">*/}
                         {/*    <img src={brand1} className="w-100" />*/}
                         {/*</button>*/}

@@ -8,7 +8,16 @@ export interface Category {
 export interface Product {
     id: number;
     name: string;
-    description: string;
     price: number;
-    imageUrl: string;
+    image: string;
+    quantity: string;
+    categoryId: number;
+    createdAt: string;
+    updatedAt: string;
+    description: string;
+}
+
+export interface IFile {
+    url: string,
+    name: string,
 }

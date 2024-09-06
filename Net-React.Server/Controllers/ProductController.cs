@@ -9,7 +9,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 namespace Net_React.Server.Controllers
 {
 
-    [Route("api/products")]
+    [Route("api/product")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -39,9 +39,18 @@ namespace Net_React.Server.Controllers
             return productDto == null ? NotFound() : Ok(productDto);
         }
 
+        [HttpGet("{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
+        {
+            var productDto = await _productService.GetProductByCategoryIdAsync(categoryId);
+            return productDto == null ? NotFound() : Ok(productDto);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Add([FromBody] ProductDTO productDto)
         {
+            productDto.CreatedAt= DateTime.Now;
+            productDto.UpdatedAt = DateTime.Now;
             await _productService.AddProductAsync(productDto);
             return CreatedAtAction("GetByIdAsync", new { id = productDto.Id }, productDto);
         }

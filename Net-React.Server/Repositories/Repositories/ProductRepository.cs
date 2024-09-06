@@ -15,5 +15,9 @@ namespace Net_React.Server.Repositories.Repositories
             return await _context.Set<Product>()
             .FirstOrDefaultAsync(c => c.Name == name);
         }
+        public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
+        {
+            return await _context.Products.Where(c => c.CategoryId == categoryId).ToListAsync();
+        }
     }
 }

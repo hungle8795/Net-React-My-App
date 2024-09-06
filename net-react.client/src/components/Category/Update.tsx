@@ -5,14 +5,16 @@ import { DotNetApi } from '../../helpers/DotNetApi';
 
 
 interface UpdateCategoryProps {
-    onUpdate: () => void;
+    onUpdateCategory: () => void;
 }
 
-const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdate }) => {
+const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdateCategory }) => {
+    /* const UpdateCategory: FC<UpdateCategoryProps> = () => {*/
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [image, setImage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     /*const handleUpdateCategory = () => {*/
     const handleUpdateCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -32,15 +34,24 @@ const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdate }) => {
         }
         const updateCategory: Category = { id, name, image, description };
         try {
-            const response = await axios.put(DotNetApi + `Category/Update/${id}`, updateCategory);
+            setLoading(true);
+            const response = await axios.put(DotNetApi + `category/update/${id}`, updateCategory);
             /*.then(response => {*/
             console.log(response.data);
             alert("Updated. Reload page");
-            location.reload();
+            onUpdateCategory();
+            setId(undefined);
+            setName("");
+            setDescription("");
+            setImage("");
+            //location.reload();
         }
         catch (error) {
             console.log(error);
             alert("Error!");
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -68,7 +79,10 @@ const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdate }) => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)} placeholder="Brand's description"
                     />
-                    <button type="submit">Update Category</button>
+                    {/*                   <button type="submit">Update Category</button>*/}
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading ? "Updaing..." : "Update Category"}
+                    </button>
                 </div>
             </form>
         </div>
