@@ -9,8 +9,9 @@ const Products: FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const { categoryId } = useParams<{ categoryId: string }>();
     const fetchProducts = async () => {
-        const cateId = categoryId !== undefined ? parseInt(categoryId, 10) : 0;
-        axios.get<Product[]>(DotNetApi + 'product/' + cateId)
+        const host = DotNetApi + 'product';
+        const link = categoryId !== undefined ? host + '/categoryid/' + parseInt(categoryId, 10) : host;
+        axios.get<Product[]>(link)
             .then(response => {
                 setProducts(response.data);
             })
@@ -24,7 +25,7 @@ const Products: FC = () => {
         fetchProducts();
     }, [categoryId]);
     const tableProducts =
-        <div>
+        <div className="row rounded w-75 m-auto">
             {products.length > 0 ?
                 products.map(product =>
                     <div className="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 mt-3" key={product.id}>

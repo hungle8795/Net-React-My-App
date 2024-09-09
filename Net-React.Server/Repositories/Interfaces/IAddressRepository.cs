@@ -7,7 +7,7 @@ namespace Net_React.Server.Repositories.Interfaces
     {
         Task<IEnumerable<Address>> GetAllAsync();
         Task<Address> GetByIdAsync(int id);
-        Task<Address> GetByUserIdAsync(int userId);
+        Task<IEnumerable<Address>> GetAllByUserIdAsync(int userId);
         Task AddAsync(Address address);
         Task UpdateAsync(Address address);
         Task DeleteAsync(int id);

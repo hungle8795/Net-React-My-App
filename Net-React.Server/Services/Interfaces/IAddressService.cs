@@ -8,7 +8,7 @@ namespace Net_React.Server.Services.Interfaces
     {
         Task<IEnumerable<AddressDTO>> GetAllAddressesAsync();
         Task<AddressDTO> GetAddressByIdAsync(int id);
-        Task<AddressDTO> GetAddressByUserIdAsync(int userId);
+        Task<IEnumerable<AddressDTO>> GetAllAddressByUserIdAsync(int userId);
         Task AddAddressAsync(AddressDTO addressDto);
         Task UpdateAddressAsync(AddressDTO addressDto);
         Task DeleteAddressAsync(int id);

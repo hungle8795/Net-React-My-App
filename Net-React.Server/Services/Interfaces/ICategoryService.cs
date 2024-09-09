@@ -8,7 +8,7 @@ namespace Net_React.Server.Services.Interfaces
     {
         Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync();
         Task<CategoryDTO> GetCategoryByIdAsync(int id);
-        Task<CategoryDTO> GetCategoryByNameAsync(string name);
+        Task<IEnumerable<CategoryDTO>> GetCategoryByNameAsync(string name);
         Task AddCategoryAsync(CategoryDTO categoryDto);
         Task UpdateCategoryAsync(CategoryDTO categoryDto);
         Task DeleteCategoryAsync(int id);

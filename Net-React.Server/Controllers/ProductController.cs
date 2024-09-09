@@ -32,27 +32,27 @@ namespace Net_React.Server.Controllers
             return productDto != null ? Ok(productDto) : NotFound();
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("name/{name}")]
         public async Task<IActionResult> GetByName(string name)
         {
-            var productDto = await _productService.GetProductByNameAsync(name);
+            var productDto = await _productService.GetAllProductByNameAsync(name);
             return productDto == null ? NotFound() : Ok(productDto);
         }
 
-        [HttpGet("{categoryId}")]
+        [HttpGet("categoryId/{categoryId}")]
         public async Task<IActionResult> GetByCategoryId(int categoryId)
         {
-            var productDto = await _productService.GetProductByCategoryIdAsync(categoryId);
+            var productDto = await _productService.GetAllProductByCategoryIdAsync(categoryId);
             return productDto == null ? NotFound() : Ok(productDto);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Add([FromBody] ProductDTO productDto)
+        public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
         {
             productDto.CreatedAt= DateTime.Now;
             productDto.UpdatedAt = DateTime.Now;
             await _productService.AddProductAsync(productDto);
-            return CreatedAtAction("GetByIdAsync", new { id = productDto.Id }, productDto);
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = productDto.Id }, productDto);
         }
 
         [HttpPut("update/{id}")]

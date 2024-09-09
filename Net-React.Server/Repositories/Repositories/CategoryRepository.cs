@@ -9,9 +9,9 @@ namespace Net_React.Server.Repositories.Repository
         public CategoryRepository(ECommerceSampContext context) : base(context)
         { 
         }
-        public async Task<Category> GetByNameAsync(string name)
+        public async Task<IEnumerable<Category>> GetAllByNameAsync(string name)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);  
+            return await _context.Categories.Where(n => n.Name == name).ToListAsync();  
         }
     }
 }

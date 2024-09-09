@@ -23,17 +23,17 @@ namespace Net_React.Server.Controllers
             return Ok(addressesDto);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("id/{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var addressDto = await _addressService.GetAddressByIdAsync(id);
             return addressDto == null ? NotFound() : Ok(addressDto);
         }
 
-        [HttpGet("{userid}")]
+        [HttpGet("userid/{userid}")]
         public async Task<ActionResult<Address>> GetByUserId(int userId)
         {
-            var addressDto = await _addressService.GetAddressByUserIdAsync(userId);
+            var addressDto = await _addressService.GetAllAddressByUserIdAsync(userId);
             return addressDto != null ? Ok(addressDto) : NotFound();
         }
 

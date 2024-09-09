@@ -26,11 +26,11 @@ namespace Net_React.Server.Services.Services
             var address = await _unitOfWork.Repository<Address>().GetByIdAsync(id);
             return _mapper.Map<AddressDTO>(address);
         }
-        public async Task<AddressDTO> GetAddressByUserIdAsync(int userId)
+        public async Task<IEnumerable<AddressDTO>> GetAllAddressByUserIdAsync(int userId)
         {
-            var addressRepository = _unitOfWork.AddressRepository() as IAddressRepository;
-            var address = await addressRepository.GetByUserIdAsync(userId);
-            return _mapper.Map<AddressDTO>(address);
+            var addressRepository = _unitOfWork.AddressRepository();
+            var addresses = await addressRepository.GetAllByUserIdAsync(userId);
+            return _mapper.Map<IEnumerable<AddressDTO>>(addresses);
         }
         public async Task AddAddressAsync(AddressDTO addressDto)
         {

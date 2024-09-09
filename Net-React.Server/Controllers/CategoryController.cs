@@ -26,14 +26,14 @@ namespace Net_React.Server.Controllers
         }
 
         //[HttpGet("id")]
-        [HttpGet("{id:int}")]
+        [HttpGet("id/{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var categoryDto = await _categoryService.GetCategoryByIdAsync(id);
             return categoryDto == null ? NotFound() : Ok(categoryDto);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("name/{name}")]
         public async Task<ActionResult> GetByName(string name)
         {
             var categoryDto = await _categoryService.GetCategoryByNameAsync(name);

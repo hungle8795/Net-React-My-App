@@ -26,11 +26,11 @@ namespace Net_React.Server.Services.Services
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
             return _mapper.Map<CategoryDTO>(category);
         }
-        public async Task<CategoryDTO> GetCategoryByNameAsync(string name)
+        public async Task<IEnumerable<CategoryDTO>> GetCategoryByNameAsync(string name)
         {
-            var categoryRepository = _unitOfWork.CategoryRepository() as ICategoryRepository;
-            var category = await categoryRepository.GetByNameAsync(name);
-            return _mapper.Map<CategoryDTO>(category);
+            var categoryRepository = _unitOfWork.CategoryRepository();
+            var categories = await categoryRepository.GetAllByNameAsync(name);
+            return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
         }
         public async Task AddCategoryAsync(CategoryDTO categoryDto)
         {

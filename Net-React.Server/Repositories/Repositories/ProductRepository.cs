@@ -10,12 +10,11 @@ namespace Net_React.Server.Repositories.Repositories
         public ProductRepository(ECommerceSampContext context) : base(context)
         {
         }
-        public async Task<Product> GetByNameAsync(string name)
+        public async Task<IEnumerable<Product>> GetAllByNameAsync(string name)
         {
-            return await _context.Set<Product>()
-            .FirstOrDefaultAsync(c => c.Name == name);
+            return await _context.Products.Where(n => n.Name == name).ToListAsync();
         }
-        public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
+        public async Task<IEnumerable<Product>> GetAllByCategoryIdAsync(int categoryId)
         {
             return await _context.Products.Where(c => c.CategoryId == categoryId).ToListAsync();
         }

@@ -24,6 +24,7 @@ const Body: FC = () => {
                     <Route path="/category/update" element={<UpdateCategory onUpdateCategory={() => { }} />} />
                     <Route path="/category/delete/:id" element={<DeleteCategory onDeleteCategory={() => { }} />} />
                     <Route path="/products/:categoryId" element={<Products />} />
+                    <Route path="/products/" element={<Products />} />
                     <Route path="/product/add/" element={<AddProduct onCreateProduct={() => { }} />} />
                     <Route path="/product/update" element={<UpdateProduct onUpdateProduct={() => { }} />} />
                     <Route path="/product/delete/:id" element={<DeleteProduct onDeleteProduct={() => { }} />} />

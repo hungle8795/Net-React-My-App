@@ -27,15 +27,21 @@ namespace Net_React.Server.Data
         }
         public ICategoryRepository CategoryRepository()
         {
-            return (ICategoryRepository)Repository<Category>();
+            var categoryRepository = new CategoryRepository(_context);
+            _repositories.Add(typeof(Category), categoryRepository);
+            return categoryRepository;
         }
         public IProductRepository ProductRepository()
         {
-            return (IProductRepository)Repository<Product>();
+            var productRepository = new ProductRepository(_context);
+            _repositories.Add(typeof(Product), productRepository);
+            return productRepository;
         }
         public IAddressRepository AddressRepository()
         {
-            return (IAddressRepository)Repository<Address>();
+            var addressRepository = new AddressRepository(_context);
+            _repositories.Add(typeof(Address), addressRepository);
+            return addressRepository;
         }
         public async Task<int> CompleteAsync()
         {

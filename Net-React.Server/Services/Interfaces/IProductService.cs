@@ -8,8 +8,8 @@ namespace Net_React.Server.Services.Interfaces
     {
         Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
         Task<ProductDTO> GetProductByIdAsync(int id);
-        Task<ProductDTO> GetProductByNameAsync(string name); 
-        Task<List<ProductDTO>> GetProductByCategoryIdAsync(int categoryId);
+        Task<IEnumerable<ProductDTO>> GetAllProductByNameAsync(string name); 
+        Task<IEnumerable<ProductDTO>> GetAllProductByCategoryIdAsync(int categoryId);
         Task AddProductAsync(ProductDTO ProductDTO);
         Task UpdateProductAsync(ProductDTO ProductDTO);
         Task DeleteProductAsync(int id);

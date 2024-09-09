@@ -27,24 +27,31 @@ namespace Net_React.Server.Services.Services
             var product = await _unitOfWork.Repository<Product>().GetByIdAsync(id);
             return _mapper.Map<ProductDTO>(product);
         }
-        public async Task<ProductDTO> GetProductByNameAsync(string name)
+        public async Task<IEnumerable<ProductDTO>> GetAllProductByNameAsync(string name)
         {
-            var productRepository = _unitOfWork.ProductRepository() as IProductRepository;
-            var product = await productRepository.GetByNameAsync(name);
-            return _mapper.Map<ProductDTO>(product);
+            var productRepository = _unitOfWork.ProductRepository();
+            var products = await productRepository.GetAllByNameAsync(name);
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
         
-        public async Task<List<ProductDTO>> GetProductByCategoryIdAsync(int categoryId)
+        public async Task<IEnumerable<ProductDTO>> GetAllProductByCategoryIdAsync(int categoryId)
         {
-            var productRepository = _unitOfWork.ProductRepository() as IProductRepository;
-            var product = await productRepository.GetByCategoryIdAsync(categoryId);
-            return _mapper.Map<List<ProductDTO>>(product);
+                var productRepository = _unitOfWork.ProductRepository();
+                var products = await productRepository.GetAllByCategoryIdAsync(categoryId);
+                return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
         public async Task AddProductAsync(ProductDTO productDto)
         {
-            var product = _mapper.Map<Product>(productDto);
-            await _unitOfWork.Repository<Product>().AddAsync(product);
-            await _unitOfWork.CompleteAsync();
+            try
+            {
+                var product = _mapper.Map<Product>(productDto);
+                await _unitOfWork.Repository<Product>().AddAsync(product);
+                await _unitOfWork.CompleteAsync();
+            }
+            catch(Exception e)
+            {
+                var a = e.Message; 
+            }
         }
         public async Task UpdateProductAsync(ProductDTO productDto)
         {

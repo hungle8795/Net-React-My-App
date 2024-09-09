@@ -14,10 +14,10 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
     const [price, setPrice] = useState<number | undefined>(undefined);
     const [image, setImage] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [quantity, setQuantity] = useState<string>('');
+    const [quantity, setQuantity] = useState<number | undefined>(undefined);
     const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
-    const [createdAt, setCreatedAt] = useState<string>(new Date().toLocaleString());
-    const [updatedAt, setUpdatedAt] = useState<string>(new Date().toLocaleString());
+    const [createdAt, setCreatedAt] = useState<Date>(new Date());
+    const [updatedAt, setUpdatedAt] = useState<Date>(new Date());
     const [loading, setLoading] = useState<boolean>(false);
 
 
@@ -33,6 +33,10 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert("Name is required");
             return;
         }
+        if (description === "") {
+            alert('Description is required');
+            return;
+        }
         if (image.trim() === '') {
             alert('Image is required');
             return;
@@ -41,14 +45,17 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert('Price is required');
             return;
         }
+        if (quantity === undefined) {
+            alert('Quantity is required');
+            return;
+        }
         if (categoryId === undefined) {
             alert('CategoryId is required');
             return;
         }
-        setDescription("");
-        setQuantity("");
-        setCreatedAt("");
-        setUpdatedAt("");
+        //setDescription("");
+        //setCreatedAt(new Date().toLocaleString());
+        //setUpdatedAt(new Date().toLocaleString());
         const newProduct: Product = { id, name, description, price, quantity, categoryId, createdAt, updatedAt, image};
         try {
             setLoading(true);
@@ -60,10 +67,18 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             setName('');
             setPrice(undefined);
             setImage('');
+            setCreatedAt(new Date());
+            setUpdatedAt(new Date());
         }
         catch (error) {
             console.error('There was an error!', error);
             alert("Failed to add product. Please check if the record already exists.");
+            setId(undefined);
+            setName('');
+            setPrice(undefined);
+            setImage('');
+            setCreatedAt(new Date());
+            setUpdatedAt(new Date());
         } finally {
             setLoading(false);
         }
@@ -100,9 +115,21 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
                     />
                     <input
                         type="text"
-                        value={price !== undefined ? price.toString() : ''}
+                        value={quantity !== undefined ? quantity.toString() : ''}
+                        onChange={(e) => setQuantity(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        placeholder="Product's quantity"
+                    />
+                    <input
+                        type="text"
+                        value={categoryId !== undefined ? categoryId.toString() : ''}
                         onChange={(e) => setCategoryId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="CategoryId"
+                    />
+                    <input
+                        type="text"
+                        value={description !== '' ? description : ''}
+                        onChange={(e) => setDescription(e.target.value !== '' ? e.target.value : '')}
+                        placeholder="Description"
                     />
                     <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading ? 'Adding...' : 'Add Product'}

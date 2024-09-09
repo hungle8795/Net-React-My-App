@@ -10,10 +10,10 @@ export interface Product {
     name: string;
     price: number;
     image: string;
-    quantity: string;
+    quantity: number;
     categoryId: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     description: string;
 }
 
