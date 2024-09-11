@@ -12,8 +12,8 @@ export interface Product {
     image: string;
     quantity: number;
     categoryId: number;
-    createdAt: Date;
-    updatedAt: Date;
+    //createdAt: Date;
+    //updatedAt: Date;
     description: string;
 }
 

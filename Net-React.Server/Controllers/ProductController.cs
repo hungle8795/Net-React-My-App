@@ -26,7 +26,7 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var productDto = await _productService.GetProductByIdAsync(id);
             return productDto != null ? Ok(productDto) : NotFound();
@@ -49,10 +49,8 @@ namespace Net_React.Server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
         {
-            productDto.CreatedAt= DateTime.Now;
-            productDto.UpdatedAt = DateTime.Now;
             await _productService.AddProductAsync(productDto);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = productDto.Id }, productDto);
+            return CreatedAtAction(nameof(GetById), new { id = productDto.Id }, productDto);
         }
 
         [HttpPut("update/{id}")]

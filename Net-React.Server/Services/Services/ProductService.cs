@@ -45,6 +45,8 @@ namespace Net_React.Server.Services.Services
             try
             {
                 var product = _mapper.Map<Product>(productDto);
+                product.CreatedAt = DateTime.Now;
+                product.UpdatedAt = DateTime.Now;   
                 await _unitOfWork.Repository<Product>().AddAsync(product);
                 await _unitOfWork.CompleteAsync();
             }

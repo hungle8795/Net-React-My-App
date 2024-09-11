@@ -32,7 +32,7 @@ const Products: FC = () => {
                         <div className="border border-dark text-center w-90 my-3 mx-auto rounded">
                             <img src={brand1} className="w-100" />
                             <h5 className="pt-3">{product.name}</h5>
-                            <h5 className="pt-3">{product.price}</h5>
+                            <h5 className="pt-3">{product.price}$</h5>
                             <button className="btn btn-outline-primary mb-3">Detail</button>
                         </div>
                     </div>

@@ -15,10 +15,8 @@ const UpdateProduct: FC<UpdateProductProps> = ({ onUpdateProduct }) => {
     const [price, setPrice] = useState<number | undefined>(undefined);
     const [image, setImage] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [quantity, setQuantity] = useState<string>('');
+    const [quantity, setQuantity] = useState<number | undefined>(undefined);
     const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
-    const [createdAt, setCreatedAt] = useState<string>(new Date().toLocaleString());
-    const [updatedAt, setUpdatedAt] = useState<string>(new Date().toLocaleString());
     const [loading, setLoading] = useState<boolean>(false);
 
     /*const handleUpdateProduct = () => {*/
@@ -41,15 +39,16 @@ const UpdateProduct: FC<UpdateProductProps> = ({ onUpdateProduct }) => {
             alert('Price is required');
             return;
         }
+        if (quantity === undefined) {
+            alert('Quantity is required');
+            return;
+        }
         if (categoryId === undefined) {
             alert('CategoryId is required');
             return;
         }
         setDescription("");
-        setQuantity("");
-        setCreatedAt("");
-        setUpdatedAt("");
-        const updateProduct: Product = { id, name, description, price, quantity, categoryId, createdAt, updatedAt, image };
+        const updateProduct: Product = { id, name, description, price, quantity, categoryId, image };
         try {
             setLoading(true);
             const response = await axios.put(DotNetApi + `Product/Update/${id}`, updateProduct);
@@ -59,7 +58,9 @@ const UpdateProduct: FC<UpdateProductProps> = ({ onUpdateProduct }) => {
             setId(undefined);
             setName('');
             setPrice(undefined);
+            setQuantity(undefined);
             setImage('');
+            setCategoryId(undefined)
         }
         catch (error) {
             console.error('There was an error!', error);
@@ -90,12 +91,17 @@ const UpdateProduct: FC<UpdateProductProps> = ({ onUpdateProduct }) => {
                     />
                     <input
                         type="text"
-                        value={price !== undefined ? price.toString() : ''}
-                        onChange={(e) => setPrice(e.target.value !== '' ? parseInt(e.target.value) : undefined)} placeholder="Product's price"
+                        value={price !== undefined ? price.toString() + "$" : ''}
+                        onChange={(e) => setPrice(e.target.value.replace("$", "") !== '' ? parseInt(e.target.value.replace("$", "")) : undefined)} placeholder="Product's price"
                     />
                     <input
                         type="text"
-                        value={price !== undefined ? price.toString() : ''}
+                        value={quantity !== undefined ? quantity.toString() : ''}
+                        onChange={(e) => setQuantity(e.target.value !== '' ? parseInt(e.target.value) : undefined)} placeholder="Product's quantity"
+                    />
+                    <input
+                        type="text"
+                        value={categoryId !== undefined ? categoryId.toString() : ''}
                         onChange={(e) => setCategoryId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="CategoryId"
                     />

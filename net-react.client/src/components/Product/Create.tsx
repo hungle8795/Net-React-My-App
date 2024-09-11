@@ -16,8 +16,6 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
     const [description, setDescription] = useState<string>('');
     const [quantity, setQuantity] = useState<number | undefined>(undefined);
     const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
-    const [createdAt, setCreatedAt] = useState<Date>(new Date());
-    const [updatedAt, setUpdatedAt] = useState<Date>(new Date());
     const [loading, setLoading] = useState<boolean>(false);
 
 
@@ -53,10 +51,7 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert('CategoryId is required');
             return;
         }
-        //setDescription("");
-        //setCreatedAt(new Date().toLocaleString());
-        //setUpdatedAt(new Date().toLocaleString());
-        const newProduct: Product = { id, name, description, price, quantity, categoryId, createdAt, updatedAt, image};
+        const newProduct: Product = { id, name, description, price, quantity, categoryId, image};
         try {
             setLoading(true);
             const response = await axios.post(DotNetApi + 'product/create', newProduct);
@@ -67,18 +62,12 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             setName('');
             setPrice(undefined);
             setImage('');
-            setCreatedAt(new Date());
-            setUpdatedAt(new Date());
+            setCategoryId(undefined);
+            setQuantity(undefined);
         }
         catch (error) {
             console.error('There was an error!', error);
             alert("Failed to add product. Please check if the record already exists.");
-            setId(undefined);
-            setName('');
-            setPrice(undefined);
-            setImage('');
-            setCreatedAt(new Date());
-            setUpdatedAt(new Date());
         } finally {
             setLoading(false);
         }
