@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
 using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
 using Net_React.Server.Services.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Net_React.Server.Controllers
 {
@@ -13,6 +15,7 @@ namespace Net_React.Server.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
         public CategoryController(ICategoryService categoryService)
         {
             this._categoryService = categoryService;
@@ -41,9 +44,30 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromBody] CategoryDTO categoryDto)
+        public async Task<IActionResult> Post(IFormFile image, [FromForm] string name, [FromForm] int id, [FromForm] string description)
         {
-            await _categoryService.AddCategoryAsync(categoryDto);   
+            if (!Directory.Exists(_storagePath))
+            {
+                Directory.CreateDirectory(_storagePath);
+            }
+            if (image == null || image.Length == 0 || image == null)
+            {
+                return BadRequest("Invalid.");
+            }
+
+            //var filePath = Path.Combine(_storagePath, image.FileName);
+            var fileName = Path.GetFileName(image.FileName);
+            var filePath = Path.Combine(_storagePath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+            var categoryDto = new CategoryDTO();
+            categoryDto.Name = name;
+            categoryDto.Description = description;
+            categoryDto.Id = id;
+            categoryDto.Image = $"/images/{fileName}";
+            await _categoryService.AddCategoryAsync(categoryDto);
             return CreatedAtAction(nameof(GetById), new {id = categoryDto.Id }, categoryDto);
         }
 

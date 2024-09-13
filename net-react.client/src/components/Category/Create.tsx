@@ -1,6 +1,5 @@
 ﻿import { useState, FC } from 'react';
 import axios from 'axios';
-import { Category } from '../../types';
 import { DotNetApi } from '../../helpers/DotNetApi';
 
 
@@ -10,12 +9,21 @@ interface AddCategoryProps {
 
 const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
     const [id, setId] = useState<number | undefined>(undefined);
-    const [name, setName] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
-    const [image, setImage] = useState<string>('');
+    const [name, setName] = useState<string | "">("");
+    const [description, setDescription] = useState<string | "">("");
+    const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+/*    const [error, setError] = useState<string | null>(null);*/
 
-
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const file = event.target.files?.[0];
+            setImage(event.target.files[0]);
+            setImagePreview(URL.createObjectURL(file)); // Create a preview URL
+           /* setError(null);*/
+        }
+    };
     //const handleAddCategory = () => {
     const handleAddCategory = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -28,21 +36,30 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
             alert("Name is required");
             return;
         }
-        if (image.trim() === '') {
-            alert('Image is required');
+        if (!image) {
+            alert("Image is required");
             return;
         }
-        const newCategory: Category = { id, name, description, image };
+        /*const newCategory: Category = { id, name, description, image };*/
         try {
+            const formData = new FormData();
+            formData.append('id', id.toString());
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('image', image);
             setLoading(true);
-            const response = await axios.post(DotNetApi + 'Category/Create', newCategory)
+            const response = await axios.post(DotNetApi + 'Category/Create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             console.log(response.data);
             alert("Category created successfully!");
             onCreateCategory();
             setId(undefined);
             setName('');
             setDescription('');
-            setImage('');
+            setImage(null);
         }
         catch (error) {
             console.error('There was an error!', error);
@@ -71,7 +88,7 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
                     <h2>Add Category</h2>
                     <input
                         type="text"
-                        value={id !== undefined ? id.toString() : ''}
+                        value={id !== undefined ? id.toString() : undefined}
                         onChange={(e) => setId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="Brand's id"
                     />
@@ -81,12 +98,22 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
                         onChange={(e) => setName(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Brand's name"
                     />
-                    <input
-                        type="text"
-                        value={image !== '' ? image : ''}
-                        onChange={(e) => setImage(e.target.value !== '' ? e.target.value : '')}
-                        placeholder="Brand's image"
-                    />
+                    {/*<input*/}
+                    {/*    type="text"*/}
+                    {/*    value={image !== '' ? image : ''}*/}
+                    {/*    onChange={(e) => setImage(e.target.value !== '' ? e.target.value : '')}*/}
+                    {/*    placeholder="Brand's image"*/}
+                    {/*/>*/}
+                    <div>
+                        <div className="mb-3">
+                            <input type="file" accept="image/*" onChange={handleImageChange} required />
+                        </div>
+                        {imagePreview && <img src={imagePreview} alt="Image Preview" className="img-preview mb-3" style={{ maxWidth: '50%', height: 'auto' }} />}
+                        {/*<button type="submit" className="btn btn-primary" disabled={loading}>*/}
+                        {/*    {loading ? 'Uploading...' : 'Upload Image'}*/}
+                        {/*</button>*/}
+                        {/*{error && <p className="text-danger">{error}</p>}*/}
+                    </div>
                     <input
                         type="text"
                         value={description}

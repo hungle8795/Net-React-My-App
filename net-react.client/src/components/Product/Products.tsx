@@ -1,13 +1,23 @@
 import axios from "axios";
 import { FC, useState, useEffect } from "react";
 import { DotNetApi } from "../../helpers/DotNetApi";
-import { Product } from "../../types";
+import { Category, Product } from "../../types";
 import brand1 from '../../../src/assets/Image/brand1.jpg';
 import { useParams } from 'react-router-dom';
 
 const Products: FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const { categoryId } = useParams<{ categoryId: string }>();
+    const [cates, setCate] = useState<Category | null>(null);
+    const fetchCategoryImage = async () => {
+        try {
+            const link = categoryId !== undefined ? `${DotNetApi}category/id/${categoryId}` : "";
+            const response = await axios.get<Category>(link);
+            setCate(response.data);
+        } catch (error) {
+            console.log('There was an error!', error);
+        } finally { }
+    };
     const fetchProducts = async () => {
         const host = DotNetApi + 'product';
         const link = categoryId !== undefined ? host + '/categoryid/' + parseInt(categoryId, 10) : host;
@@ -22,8 +32,23 @@ const Products: FC = () => {
             );
     };
     useEffect(() => {
+        fetchCategoryImage();
         fetchProducts();
     }, [categoryId]);
+
+    const categoryImage =
+        <div className="">
+            {cates ?
+                <div key={cates.id}>
+                    <img src={cates.image} alt={cates.image} width="100%"></img>
+                </div>
+                : (
+                    <div>
+                        <p>No image found.</p>
+                    </div>
+                )}
+        </div>
+
     const tableProducts =
         <div className="row rounded w-75 m-auto">
             {products.length > 0 ?
@@ -44,6 +69,7 @@ const Products: FC = () => {
         </div>
     return (
         <div>
+            {categoryImage}
             {tableProducts}
         </div>
     )
