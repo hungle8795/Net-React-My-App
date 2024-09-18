@@ -10,6 +10,7 @@ import UpdateProduct from "./Product/Update";
 import DeleteProduct from "./Product/Delete";
 import UploadImage from "./UploadImage";
 import Home from "./Home";
+import UserLogin from "./UserLogin";
 
 const Body: FC = () => {
     return (
@@ -29,6 +30,7 @@ const Body: FC = () => {
                     <Route path="/product/update" element={<UpdateProduct onUpdateProduct={() => { }} />} />
                     <Route path="/product/delete/:id" element={<DeleteProduct onDeleteProduct={() => { }} />} />
                     <Route path="/uploadimage" element={<UploadImage />} />
+                    <Route path="/userlogin" element={<UserLogin />} />
                 </Routes>
             </Router>
         </div>

@@ -48,9 +48,11 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
             formData.append('description', description);
             formData.append('image', image);
             setLoading(true);
+            const token = localStorage.getItem('token');
             const response = await axios.post(DotNetApi + 'Category/Create', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
                 },
             });
             console.log(response.data);

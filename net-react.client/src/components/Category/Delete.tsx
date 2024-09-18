@@ -8,6 +8,7 @@ interface DeleteCategoryProps {
 const DeleteCategory: FC<DeleteCategoryProps> = ({ onDeleteCategory }) => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
+    const token = localStorage.getItem('token');
 
     const handleDeleteCategory = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -17,7 +18,11 @@ const DeleteCategory: FC<DeleteCategoryProps> = ({ onDeleteCategory }) => {
         }
         try {
             setLoading(true);
-            const response = await axios.delete(DotNetApi + `Category/Delete/${id}`);
+            const response = await axios.delete(DotNetApi + `Category/Delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
             console.log('Category deleted: ', response.data);
             alert("Deleted. Reload page");
             onDeleteCategory();

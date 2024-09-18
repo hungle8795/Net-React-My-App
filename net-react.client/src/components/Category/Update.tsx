@@ -15,6 +15,7 @@ const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdateCategory }) => {
     const [description, setDescription] = useState<string>('');
     const [image, setImage] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const token = localStorage.getItem('token');
 
     /*const handleUpdateCategory = () => {*/
     const handleUpdateCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +36,11 @@ const UpdateCategory: FC<UpdateCategoryProps> = ({ onUpdateCategory }) => {
         const updateCategory: Category = { id, name, image, description };
         try {
             setLoading(true);
-            const response = await axios.put(DotNetApi + `category/update/${id}`, updateCategory);
+            const response = await axios.put(DotNetApi + `category/update/${id}`, updateCategory, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
             /*.then(response => {*/
             console.log(response.data);
             alert("Updated. Reload page");
