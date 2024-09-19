@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Models;
 
-public partial class ECommerceSampContext : DbContext
+public partial class EcommerceSampContext : DbContext
 {
-    public ECommerceSampContext()
+    public EcommerceSampContext()
     {
     }
 
-    public ECommerceSampContext(DbContextOptions<ECommerceSampContext> options)
+    public EcommerceSampContext(DbContextOptions<EcommerceSampContext> options)
         : base(options)
     {
     }
@@ -33,86 +33,32 @@ public partial class ECommerceSampContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("addresses_pkey");
 
-            entity.ToTable("addresses");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ChromeStreetaddress)
-                .HasMaxLength(20)
-                .HasColumnName("chrome_streetaddress");
-            entity.Property(e => e.City)
-                .HasMaxLength(20)
-                .HasColumnName("city");
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(50)
-                .HasColumnName("first_name");
-            entity.Property(e => e.LastName)
-                .HasMaxLength(50)
-                .HasColumnName("last_name");
-            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
-            entity.Property(e => e.Province)
-                .HasMaxLength(20)
-                .HasColumnName("province");
-            entity.Property(e => e.Region)
-                .HasMaxLength(50)
-                .HasColumnName("region");
-            entity.Property(e => e.RoomNumber).HasColumnName("room_number");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.ZipCode)
-                .HasMaxLength(20)
-                .HasColumnName("zip_code");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.66236'::timestamp without time zone");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.662361'::timestamp without time zone");
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("addresses_user_id_fkey");
-            //entity.Ignore(n => n.Region); Fluent API
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("Category_pkey");
 
-            entity.ToTable("categories");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Image).HasColumnName("image");
-            entity.Property(e => e.Name)
-                .HasMaxLength(20)
-                .HasColumnName("name");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.662361'::timestamp without time zone");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.662362'::timestamp without time zone");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("products_pkey");
 
-            entity.ToTable("products");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("nextval('products_id_seq'::regclass)")
-                .HasColumnName("id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasColumnName("price");
-            entity.Property(e => e.Quantity)
-                .HasDefaultValue(0)
-                .HasColumnName("quantity");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("updated_at");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.Quantity).HasDefaultValue(0);
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
-                .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("products_category_id_fkey");
         });
@@ -121,30 +67,12 @@ public partial class ECommerceSampContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("users_pkey");
 
-            entity.ToTable("users");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Address)
-                .HasMaxLength(255)
-                .HasColumnName("address");
-            entity.Property(e => e.Email)
-                .HasMaxLength(255)
-                .HasColumnName("email");
-            entity.Property(e => e.Firstname)
-                .HasMaxLength(50)
-                .HasColumnName("firstname");
-            entity.Property(e => e.Lastname)
-                .HasMaxLength(50)
-                .HasColumnName("lastname");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.658845'::timestamp without time zone");
+            entity.Property(e => e.PasswordHash).HasDefaultValueSql("''::text");
+            entity.Property(e => e.Role).HasDefaultValueSql("''::text");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("'2024-09-19 09:46:39.662357'::timestamp without time zone");
+            entity.Property(e => e.UserName).HasDefaultValueSql("''::text");
         });
-        
-        // Seed data
-        modelBuilder.Entity<Category>().HasData(
-            new Category { Id = 4, Name = "Category A", Image = "A", Description = "1" },
-            new Category { Id = 2, Name = "Category B", Image = "B", Description = "12.99m" },
-            new Category { Id = 3, Name = "Category C", Image = "C", Description = "14.99m" },
-            new Category { Id = 5, Name = "Category D", Image = "D", Description = "15m" }
-        );
 
         OnModelCreatingPartial(modelBuilder);
     }

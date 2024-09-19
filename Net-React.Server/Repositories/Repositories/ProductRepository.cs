@@ -7,7 +7,7 @@ namespace Net_React.Server.Repositories.Repositories
 {
     public class ProductRepository : Repository<Product>, IProductRepository
     {
-        public ProductRepository(ECommerceSampContext context) : base(context)
+        public ProductRepository(EcommerceSampContext context) : base(context)
         {
         }
         public async Task<IEnumerable<Product>> GetAllByNameAsync(string name)

@@ -9,6 +9,7 @@ namespace Net_React.Server.Data
         ICategoryRepository CategoryRepository();
         IProductRepository ProductRepository();
         IAddressRepository AddressRepository();
+        IUserRepository UserRepository();
         Task<int> CompleteAsync();
         void Dispose();
     }

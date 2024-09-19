@@ -8,9 +8,9 @@ namespace Net_React.Server.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ECommerceSampContext _context;
+        private readonly EcommerceSampContext _context;
         private readonly Dictionary<Type, object> _repositories = new();
-        public UnitOfWork(ECommerceSampContext context)
+        public UnitOfWork(EcommerceSampContext context)
         {
             _context = context;
         }
@@ -42,6 +42,12 @@ namespace Net_React.Server.Data
             var addressRepository = new AddressRepository(_context);
             _repositories.Add(typeof(Address), addressRepository);
             return addressRepository;
+        }
+        public IUserRepository UserRepository()
+        {
+            var userRepository = new UserRepository(_context);
+            _repositories.Add(typeof(User), userRepository);
+            return userRepository;
         }
         public async Task<int> CompleteAsync()
         {
