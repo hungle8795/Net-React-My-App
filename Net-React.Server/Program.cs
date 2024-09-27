@@ -33,8 +33,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 
-// Configure JWT Authentication
-var key = builder.Configuration["Jwt:Key"];
+//Configure JWT Authentication
+var key = builder.Configuration["Jwt:Key"] ;
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,21 +62,21 @@ builder.Services.AddAuthorization(options =>
 });
 
 //Authen
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//}).AddCookie(options =>
-//{
-//    options.LoginPath = "";
-//});
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+{
+    options.LoginPath = "";
+});
 
 //Connect to  DB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddScoped((provider) => new NpgsqlConnection(connectionString));
 
 //Connect to DbContext
-builder.Services.AddDbContext<EcommerceSampContext>(options =>
+builder.Services.AddDbContext<ECommerceSampContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Sign in Unit Of Works
@@ -96,6 +96,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Sign in AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);

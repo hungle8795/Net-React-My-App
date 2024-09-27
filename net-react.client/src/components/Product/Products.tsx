@@ -4,6 +4,7 @@ import { DotNetApi } from "../../helpers/DotNetApi";
 import { Category, Product } from "../../types";
 import brand1 from '../../../src/assets/Image/brand1.jpg';
 import { useParams } from 'react-router-dom';
+import { ProductImage } from "../../helpers/ImageFolder";
 
 const Products: FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -40,7 +41,7 @@ const Products: FC = () => {
         <div className="">
             {cates ?
                 <div key={cates.id}>
-                    <img src={cates.image} alt={cates.image} width="100%"></img>
+                    <img src={ProductImage + "/" + cates.image} width="1000px" height="300px"></img>
                 </div>
                 : (
                     <div>

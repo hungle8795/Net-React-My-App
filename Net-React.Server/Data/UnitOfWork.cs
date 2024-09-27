@@ -8,9 +8,9 @@ namespace Net_React.Server.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly EcommerceSampContext _context;
+        private readonly ECommerceSampContext _context;
         private readonly Dictionary<Type, object> _repositories = new();
-        public UnitOfWork(EcommerceSampContext context)
+        public UnitOfWork(ECommerceSampContext context)
         {
             _context = context;
         }

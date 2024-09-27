@@ -1,6 +1,5 @@
-﻿import { useState, FC } from 'react';
+﻿import React, { useState, FC } from 'react';
 import axios from 'axios';
-import { Product } from '../../types';
 import { DotNetApi } from '../../helpers/DotNetApi';
 
 
@@ -12,13 +11,20 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState<string>('');
     const [price, setPrice] = useState<number | undefined>(undefined);
-    const [image, setImage] = useState<string>('');
+    const [image, setImage] = useState<File | null>(null);
     const [description, setDescription] = useState<string>('');
     const [quantity, setQuantity] = useState<number | undefined>(undefined);
     const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const file = event.target.files?.[0];
+            setImage(event.target.files[0]);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    }
     //const handleAddCategory = () => {
     const handleAddProduct = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -31,11 +37,7 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert("Name is required");
             return;
         }
-        if (description === "") {
-            alert('Description is required');
-            return;
-        }
-        if (image.trim() === '') {
+        if (!image) {
             alert('Image is required');
             return;
         }
@@ -51,17 +53,34 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert('CategoryId is required');
             return;
         }
-        const newProduct: Product = { id, name, description, price, quantity, categoryId, image};
+        if (description === "") {
+            alert('Description is required');
+            return;
+        }
         try {
+            const formData = new FormData();
+            formData.append("id", id.toString());
+            formData.append("name", name);
+            formData.append("image", image);
+            formData.append("price", price.toString());
+            formData.append("quantity", quantity.toString());
+            formData.append("categoryId", categoryId.toString());
+            formData.append("description", description);
             setLoading(true);
-            const response = await axios.post(DotNetApi + 'product/create', newProduct);
+            const token = localStorage.getItem('token');
+            const response = await axios.post(DotNetApi + 'product/create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
+                },
+            });
             console.log(response.data);
             alert("Product created successfully!");
             onCreateProduct();
             setId(undefined);
             setName('');
+            setImage(null);
             setPrice(undefined);
-            setImage('');
             setCategoryId(undefined);
             setQuantity(undefined);
         }
@@ -90,12 +109,18 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
                         onChange={(e) => setName(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Product's name"
                     />
-                    <input
-                        type="text"
-                        value={image !== '' ? image : ''}
-                        onChange={(e) => setImage(e.target.value !== '' ? e.target.value : '')}
-                        placeholder="Product's image"
-                    />
+                    {/*<input*/}
+                    {/*    type="text"*/}
+                    {/*    value={image !== '' ? image : ''}*/}
+                    {/*    onChange={(e) => setImage(e.target.value !== '' ? e.target.value : '')}*/}
+                    {/*    placeholder="Product's image"*/}
+                    {/*/>*/}
+                    <div>
+                        <div className="mb-3">
+                            <input type="file" accept="image/*" onChange={handleImageChange} required />
+                        </div>
+                        {imagePreview && <img src={imagePreview} alt="Image Preview" className="img-preview mb-3" style={{ height: "200px" }} />}
+                    </div>
                     <input
                         type="text"
                         value={price !== undefined ? price.toString() : ''}

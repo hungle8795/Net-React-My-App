@@ -13,6 +13,7 @@ namespace Net_React.Server.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages");
         public ProductController(IProductService productService)
         {
             _productService = productService;
@@ -47,8 +48,31 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
+        public async Task<IActionResult> Post([FromForm] int id, [FromForm] string name,
+            IFormFile image, [FromBody] int quantity, [FromBody] int price, [FromBody] int categoryId, [FromBody] string description)
         {
+            if (!Directory.Exists(_storagePath))
+            {
+                Directory.CreateDirectory(_storagePath);
+            }
+            if(image == null || image.Length == 0 || image == null)
+            {
+                return BadRequest("Invalid.");
+            }
+
+            var fileName = Path.GetFileName(image.FileName);
+            var filePath = Path.Combine(_storagePath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+            var productDto = new ProductDTO();
+            productDto.Id = id;
+            productDto.Name = name;
+            productDto.Image = fileName;
+            productDto.Quantity = quantity;
+            productDto.Price = price;
+            productDto.CategoryId = categoryId;
             await _productService.AddProductAsync(productDto);
             return CreatedAtAction(nameof(GetById), new { id = productDto.Id }, productDto);
         }
@@ -63,7 +87,15 @@ namespace Net_React.Server.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
-            await _productService.GetProductByIdAsync(id);
+            var productDto = await _productService.GetProductByIdAsync(id);
+            var fileName = Path.GetFileName(productDto.Image);
+            var filePath = Path.Combine(_storagePath, fileName);
+            if(!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Not found image");
+            } 
+            await _productService.DeleteProductAsync(id);
+            System.IO.File.Delete(filePath);
             return NoContent();
         }
     }

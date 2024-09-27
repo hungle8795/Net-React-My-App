@@ -53,6 +53,8 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="SeedData\" />
+    <Folder Include="wwwroot\categoryImages\" />
+    <Folder Include="wwwroot\productImages\" />
   </ItemGroup>
 
 </Project>

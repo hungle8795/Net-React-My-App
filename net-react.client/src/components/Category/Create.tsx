@@ -100,21 +100,11 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
                         onChange={(e) => setName(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Brand's name"
                     />
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    value={image !== '' ? image : ''}*/}
-                    {/*    onChange={(e) => setImage(e.target.value !== '' ? e.target.value : '')}*/}
-                    {/*    placeholder="Brand's image"*/}
-                    {/*/>*/}
                     <div>
                         <div className="mb-3">
                             <input type="file" accept="image/*" onChange={handleImageChange} required />
                         </div>
-                        {imagePreview && <img src={imagePreview} alt="Image Preview" className="img-preview mb-3" style={{ maxWidth: '50%', height: 'auto' }} />}
-                        {/*<button type="submit" className="btn btn-primary" disabled={loading}>*/}
-                        {/*    {loading ? 'Uploading...' : 'Upload Image'}*/}
-                        {/*</button>*/}
-                        {/*{error && <p className="text-danger">{error}</p>}*/}
+                        {imagePreview && <img src={imagePreview} alt="Image Preview" className="img-preview mb-3" style={{ height: "200px" }} />}
                     </div>
                     <input
                         type="text"
@@ -122,7 +112,6 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Brand's description"
                     />
-                    {/*<button type="submit">Add</button>*/}
                     <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading ? 'Adding...' : 'Add Category'}
                     </button>

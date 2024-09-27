@@ -7,7 +7,7 @@ namespace Net_React.Server.Repositories.Repositories
 {
     public class AddressRepository : Repository<Address>, IAddressRepository
     {
-        public AddressRepository(EcommerceSampContext context) : base(context)
+        public AddressRepository(ECommerceSampContext context) : base(context)
         {
         }
         public async Task<IEnumerable<Address>> GetAllByUserIdAsync(int userId)

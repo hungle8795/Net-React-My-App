@@ -31,10 +31,12 @@ namespace Net_React.Server.Services.Services
             var Users = await UserRepository.GetByUserNameAsync(UserName);
             return _mapper.Map<IEnumerable<UserDTO>>(Users);
         }
-        public async Task AddUserAsync(UserDTO UserDTO)
+        public async Task AddUserAsync(UserDTO UserDto)
         {
-            var User = _mapper.Map<User>(UserDTO);
-            await _unitOfWork.Repository<User>().AddAsync(User);
+            var user = _mapper.Map<User>(UserDto);
+            user.CreatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
+            await _unitOfWork.Repository<User>().AddAsync(user);
             await _unitOfWork.CompleteAsync();
         }
         public async Task UpdateUserAsync(UserDTO UserDTO)

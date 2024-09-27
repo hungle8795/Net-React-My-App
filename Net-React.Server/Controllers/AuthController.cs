@@ -20,16 +20,23 @@ namespace Net_React.Server.Controllers
             _userService = userService;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDTO userDto)
+        public async Task<IActionResult> Post([FromBody] UserDTO userDto)
         {
+            //userDto.Id = Guid.NewGuid();
             userDto.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.PasswordHash);
             await _userService.AddUserAsync(userDto);
             return CreatedAtAction(nameof(_userService.GetByUserNameAsync), new { id = userDto.UserName }, userDto);
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserDTO userDto)
+        public IActionResult Login(string userName, string password, string role)
         {
+            var userDto = new UserDTO()
+            {
+                UserName = userName,
+                PasswordHash = password,
+                Role = role
+            };
             var user = _userService.GetByUserNameAsync(userDto.UserName).Result.FirstOrDefault();
             if (user == null || !BCrypt.Net.BCrypt.Verify(userDto.PasswordHash, user.PasswordHash))
             {

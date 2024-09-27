@@ -11,14 +11,15 @@ import DeleteProduct from "./Product/Delete";
 import UploadImage from "./UploadImage";
 import Home from "./Home";
 import UserLogin from "./UserLogin";
+import LoginSite from "./LoginSite";
 
 const Body: FC = () => {
     return (
         <div className="margin-top-60px">
             <Router>
                 <Routes>
-                    {/*<Route path="/" element={<Home />} />*/}
-                    {/*<Route path="/login" element={<Login />} />*/}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<LoginSite />} />
                     <Route path="/" element={<Home />} />
                     <Route path="/categories" element={<CategoryList />} />
                     <Route path="/category/add/" element={<AddCategory onCreateCategory={() => { }} />} />

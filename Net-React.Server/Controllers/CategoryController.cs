@@ -12,11 +12,11 @@ namespace Net_React.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+        private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "categoryImages");
         public CategoryController(ICategoryService categoryService)
         {
             this._categoryService = categoryService;
@@ -56,7 +56,6 @@ namespace Net_React.Server.Controllers
                 return BadRequest("Invalid.");
             }
 
-            //var filePath = Path.Combine(_storagePath, image.FileName);
             var fileName = Path.GetFileName(image.FileName);
             var filePath = Path.Combine(_storagePath, fileName);
             using (var stream = new FileStream(filePath, FileMode.Create))
@@ -67,9 +66,9 @@ namespace Net_React.Server.Controllers
             categoryDto.Name = name;
             categoryDto.Description = description;
             categoryDto.Id = id;
-            categoryDto.Image = $"/images/{fileName}";
+            categoryDto.Image = fileName;
             await _categoryService.AddCategoryAsync(categoryDto);
-            return CreatedAtAction(nameof(GetById), new {id = categoryDto.Id }, categoryDto);
+            return CreatedAtAction(nameof(GetById), new { id = categoryDto.Id }, categoryDto);
         }
 
         [HttpPut("update/{id}")]
@@ -82,7 +81,16 @@ namespace Net_React.Server.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
+            var categoryDto = await _categoryService.GetCategoryByIdAsync(id);
+            var fileName = Path.GetFileName(categoryDto.Image);
+            var filePath = Path.Combine(_storagePath, fileName);
+            var check = System.IO.File.Exists(filePath);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Not found image.");
+            }
             await _categoryService.DeleteCategoryAsync(id);
+            System.IO.File.Delete(filePath);
             return NoContent();
         }
     }

@@ -14,6 +14,8 @@ namespace Net_React.Server.Helpers
             CreateMap<ProductDTO, Product>();
             CreateMap<Address, AddressDTO>();
             CreateMap<AddressDTO, Address>();
+            CreateMap<User, UserDTO>();
+            CreateMap<UserDTO, User>();
         }
     }
 }
