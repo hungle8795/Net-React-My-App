@@ -43,6 +43,7 @@ const CategoryList: FC = () => {
 
     return (
         <div className="container">
+            <p className="pb-5">This is the brand's list</p>
             {loading ? <p>Loading...</p> : tableCategories}
         </div>
     );

@@ -2,9 +2,8 @@ import axios from "axios";
 import { FC, useState, useEffect } from "react";
 import { DotNetApi } from "../../helpers/DotNetApi";
 import { Category, Product } from "../../types";
-import brand1 from '../../../src/assets/Image/brand1.jpg';
 import { useParams } from 'react-router-dom';
-import { ProductImage } from "../../helpers/ImageFolder";
+import { ProductImage, CategoryImage } from "../../helpers/ImageFolder";
 
 const Products: FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -41,7 +40,7 @@ const Products: FC = () => {
         <div className="">
             {cates ?
                 <div key={cates.id}>
-                    <img src={ProductImage + "/" + cates.image} width="1000px" height="300px"></img>
+                    <img src={CategoryImage + cates.image} width="1000px" height="300px"></img>
                 </div>
                 : (
                     <div>
@@ -51,14 +50,14 @@ const Products: FC = () => {
         </div>
 
     const tableProducts =
-        <div className="row rounded w-75 m-auto">
+        <div className="row rounded w-75 m-auto mt-5">
             {products.length > 0 ?
                 products.map(product =>
-                    <div className="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 mt-3" key={product.id}>
+                    <div className="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 mt-4" key={product.id}>
                         <div className="border border-dark text-center w-90 my-3 mx-auto rounded">
-                            <img src={brand1} className="w-100" />
-                            <h5 className="pt-3">{product.name}</h5>
-                            <h5 className="pt-3">{product.price}$</h5>
+                            <img src={ProductImage + product.image} className="w-100 rounded" height="150px" />
+                            <h5>{product.name}</h5>
+                            <h5>{product.price}$</h5>
                             <button className="btn btn-outline-primary mb-3">Detail</button>
                         </div>
                     </div>

@@ -10,12 +10,12 @@ interface AddProductProps {
 const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
     const [id, setId] = useState<number | undefined>(undefined);
     const [name, setName] = useState<string>('');
-    const [price, setPrice] = useState<number | undefined>(undefined);
     const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [price, setPrice] = useState<number | undefined>(undefined);
     const [description, setDescription] = useState<string>('');
     const [quantity, setQuantity] = useState<number | undefined>(undefined);
     const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,16 +59,16 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
         }
         try {
             const formData = new FormData();
-            formData.append("id", id.toString());
-            formData.append("name", name);
-            formData.append("image", image);
-            formData.append("price", price.toString());
-            formData.append("quantity", quantity.toString());
-            formData.append("categoryId", categoryId.toString());
-            formData.append("description", description);
+            formData.append('id', id.toString());
+            formData.append('name', name);
+            formData.append('image', image);
+            formData.append('price', price.toString());
+            formData.append('quantity', quantity.toString());
+            formData.append('categoryId', categoryId.toString());
+            formData.append('description', description);
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.post(DotNetApi + 'product/create', formData, {
+            const response = await axios.post(DotNetApi + 'Product/Create', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`
@@ -83,6 +83,8 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             setPrice(undefined);
             setCategoryId(undefined);
             setQuantity(undefined);
+            setDescription("");
+            setImage(null);
         }
         catch (error) {
             console.error('There was an error!', error);
@@ -123,19 +125,19 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
                     </div>
                     <input
                         type="text"
-                        value={price !== undefined ? price.toString() : ''}
+                        value={price !== undefined ? price.toString() : undefined}
                         onChange={(e) => setPrice(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="Product's price"
                     />
                     <input
                         type="text"
-                        value={quantity !== undefined ? quantity.toString() : ''}
+                        value={quantity !== undefined ? quantity.toString() : undefined}
                         onChange={(e) => setQuantity(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="Product's quantity"
                     />
                     <input
                         type="text"
-                        value={categoryId !== undefined ? categoryId.toString() : ''}
+                        value={categoryId !== undefined ? categoryId.toString() : undefined}
                         onChange={(e) => setCategoryId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
                         placeholder="CategoryId"
                     />

@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
-using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
-using Net_React.Server.Services.Services;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Net_React.Server.Controllers
 {
@@ -45,7 +39,8 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post(IFormFile image, [FromForm] string name, [FromForm] int id, [FromForm] string description)
+        public async Task<IActionResult> Post(IFormFile image, [FromForm] string name, 
+            [FromForm] int id, [FromForm] string description)
         {
             if (!Directory.Exists(_storagePath))
             {

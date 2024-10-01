@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
-using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
-using Net_React.Server.Services.Services;
-using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Net_React.Server.Controllers
 {
-
+    [ApiController]
     [Route("api/product")]
     public class ProductController : ControllerBase
     {
@@ -48,8 +44,9 @@ namespace Net_React.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromForm] int id, [FromForm] string name,
-            IFormFile image, [FromBody] int quantity, [FromBody] int price, [FromBody] int categoryId, [FromBody] string description)
+        public async Task<IActionResult> Post(IFormFile image, [FromForm] int id, [FromForm] string name,
+            [FromForm] int price, [FromForm] int quantity, 
+            [FromForm] int categoryId, [FromForm] string description)
         {
             if (!Directory.Exists(_storagePath))
             {
@@ -73,6 +70,7 @@ namespace Net_React.Server.Controllers
             productDto.Quantity = quantity;
             productDto.Price = price;
             productDto.CategoryId = categoryId;
+            productDto.Description = description;
             await _productService.AddProductAsync(productDto);
             return CreatedAtAction(nameof(GetById), new { id = productDto.Id }, productDto);
         }
