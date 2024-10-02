@@ -8,7 +8,7 @@ interface AddCategoryProps {
 }
 
 const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
-    const [id, setId] = useState<number | undefined>(undefined);
+    const [id, setId] = useState<string | ''>('');
     const [name, setName] = useState<string | "">("");
     const [description, setDescription] = useState<string | "">("");
     const [image, setImage] = useState<File | null>(null);
@@ -43,7 +43,7 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
         /*const newCategory: Category = { id, name, description, image };*/
         try {
             const formData = new FormData();
-            formData.append('id', id.toString());
+            formData.append('id', id);
             formData.append('name', name);
             formData.append('description', description);
             formData.append('image', image);
@@ -58,10 +58,11 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
             console.log(response.data);
             alert("Category created successfully!");
             onCreateCategory();
-            setId(undefined);
+            setId('');
             setName('');
             setDescription('');
             setImage(null);
+            setImagePreview(null);
         }
         catch (error) {
             console.error('There was an error!', error);
@@ -90,8 +91,8 @@ const AddCategory: FC<AddCategoryProps> = ({ onCreateCategory }) => {
                     <h2>Add Category</h2>
                     <input
                         type="text"
-                        value={id !== undefined ? id.toString() : undefined}
-                        onChange={(e) => setId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        value={id !== '' ? id : ''}
+                        onChange={(e) => setId(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Brand's id"
                     />
                     <input

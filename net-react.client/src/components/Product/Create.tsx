@@ -8,14 +8,14 @@ interface AddProductProps {
 }
 
 const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
-    const [id, setId] = useState<number | undefined>(undefined);
+    const [id, setId] = useState<string | ''>('');
     const [name, setName] = useState<string>('');
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [price, setPrice] = useState<number | undefined>(undefined);
+    const [price, setPrice] = useState<string | ''>('');
     const [description, setDescription] = useState<string>('');
-    const [quantity, setQuantity] = useState<number | undefined>(undefined);
-    const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
+    const [quantity, setQuantity] = useState<string | ''>('');
+    const [categoryId, setCategoryId] = useState<string | ''>('');
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
     const handleAddProduct = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (id === undefined) {
+        if (id === '') {
             alert("Category ID is required");
             return;
         }
@@ -41,15 +41,15 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             alert('Image is required');
             return;
         }
-        if (price === undefined) {
+        if (price === '') {
             alert('Price is required');
             return;
         }
-        if (quantity === undefined) {
+        if (quantity === '') {
             alert('Quantity is required');
             return;
         }
-        if (categoryId === undefined) {
+        if (categoryId === '') {
             alert('CategoryId is required');
             return;
         }
@@ -59,12 +59,12 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
         }
         try {
             const formData = new FormData();
-            formData.append('id', id.toString());
+            formData.append('id', id);
             formData.append('name', name);
             formData.append('image', image);
-            formData.append('price', price.toString());
-            formData.append('quantity', quantity.toString());
-            formData.append('categoryId', categoryId.toString());
+            formData.append('price', price);
+            formData.append('quantity', quantity);
+            formData.append('categoryId', categoryId);
             formData.append('description', description);
             setLoading(true);
             const token = localStorage.getItem('token');
@@ -77,12 +77,12 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
             console.log(response.data);
             alert("Product created successfully!");
             onCreateProduct();
-            setId(undefined);
+            setId('');
             setName('');
             setImage(null);
-            setPrice(undefined);
-            setCategoryId(undefined);
-            setQuantity(undefined);
+            setPrice('');
+            setCategoryId('');
+            setQuantity('');
             setDescription("");
             setImage(null);
         }
@@ -101,8 +101,8 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
                     <h2>Add Product</h2>
                     <input
                         type="text"
-                        value={id !== undefined ? id.toString() : ''}
-                        onChange={(e) => setId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        value={id !== '' ? id : ''}
+                        onChange={(e) => setId(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Product's id"
                     />
                     <input
@@ -125,20 +125,20 @@ const AddProduct: FC<AddProductProps> = ({ onCreateProduct }) => {
                     </div>
                     <input
                         type="text"
-                        value={price !== undefined ? price.toString() : undefined}
-                        onChange={(e) => setPrice(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        value={price !== '' ? price : ''}
+                        onChange={(e) => setPrice(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Product's price"
                     />
                     <input
                         type="text"
-                        value={quantity !== undefined ? quantity.toString() : undefined}
-                        onChange={(e) => setQuantity(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        value={quantity !== '' ? quantity : ''}
+                        onChange={(e) => setQuantity(e.target.value !== '' ? e.target.value : '')}
                         placeholder="Product's quantity"
                     />
                     <input
                         type="text"
-                        value={categoryId !== undefined ? categoryId.toString() : undefined}
-                        onChange={(e) => setCategoryId(e.target.value !== undefined ? parseInt(e.target.value) : undefined)}
+                        value={categoryId !== '' ? categoryId : ''}
+                        onChange={(e) => setCategoryId(e.target.value !== '' ? e.target.value : '')}
                         placeholder="CategoryId"
                     />
                     <input
