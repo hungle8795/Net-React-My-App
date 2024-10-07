@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
 using Net_React.Server.Services.Interfaces;
 
@@ -6,7 +7,7 @@ namespace Net_React.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    //[Authorize]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

@@ -7,7 +7,7 @@ namespace Net_React.Server.Repositories.Repositories
 {
     public class UserRepository: Repository<User>, IUserRepository
     {
-        public UserRepository(ECommerceSampContext context) : base(context)
+        public UserRepository(EcommerceSampContext context) : base(context)
         {
         }
         public async Task<IEnumerable<User>> GetByUserNameAsync(string userName)

@@ -7,9 +7,9 @@ namespace Net_React.Server.Repositories.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly ECommerceSampContext _context;
+        protected readonly EcommerceSampContext _context;
         private readonly DbSet<T> _dbSet;
-        public Repository(ECommerceSampContext dbContext)
+        public Repository(EcommerceSampContext dbContext)
         {
             _context = dbContext;
             _dbSet = _context.Set<T>();
