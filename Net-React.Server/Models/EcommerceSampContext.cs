@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Net_React.Server.Models;
 
-public partial class EcommerceSampContext : DbContext
+public partial class ECommerceSampContext : DbContext
 {
-    public EcommerceSampContext()
+    public ECommerceSampContext()
     {
     }
 
-    public EcommerceSampContext(DbContextOptions<EcommerceSampContext> options)
+    public ECommerceSampContext(DbContextOptions<ECommerceSampContext> options)
         : base(options)
     {
     }

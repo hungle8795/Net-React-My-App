@@ -7,7 +7,7 @@ namespace Net_React.Server.Repositories.Repositories
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
-        public CategoryRepository(EcommerceSampContext context) : base(context)
+        public CategoryRepository(ECommerceSampContext context) : base(context)
         { 
         }
         public async Task<IEnumerable<Category>> GetAllByNameAsync(string name)

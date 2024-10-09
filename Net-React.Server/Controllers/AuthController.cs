@@ -93,7 +93,7 @@ namespace Net_React.Server.Controllers
         private string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TfA7JjzNQ5Rs7SKP"));
-            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256));
+            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {

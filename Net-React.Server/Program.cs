@@ -113,7 +113,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddScoped((provider) => new NpgsqlConnection(connectionString));
 
 //Connect to DbContext
-builder.Services.AddDbContext<EcommerceSampContext>(options =>
+builder.Services.AddDbContext<ECommerceSampContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Sign in Unit Of Works
@@ -139,7 +139,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 //// Seed Data
-//builder.Services.AddDbContext<EcommerceSampContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<ECommerceSampContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
