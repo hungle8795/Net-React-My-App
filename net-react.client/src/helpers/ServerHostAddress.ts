@@ -1,0 +1,1 @@
+export const Server_HostAddress = "http://localhost:5197";

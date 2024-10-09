@@ -7,7 +7,8 @@ namespace Net_React.Server.Repositories.Interfaces
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product> GetByIdAsync(int id);
-        Task<Product> GetByNameAsync(string name);
+        Task<IEnumerable<Product>> GetAllByNameAsync(string name); 
+        Task<IEnumerable<Product>> GetAllByCategoryIdAsync(int categoryId);
         Task AddAsync(Product entity);
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);

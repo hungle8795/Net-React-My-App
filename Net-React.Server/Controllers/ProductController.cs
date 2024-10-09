@@ -1,101 +1,101 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Net_React.Server.DTOs;
-using Net_React.Server.DTOs.Product;
-using Net_React.Server.Models;
-using Net_React.Server.Repositories.Interface;
 using Net_React.Server.Services.Interfaces;
-using Net_React.Server.Services.Services;
-using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Net_React.Server.Controllers
 {
-
-    [Route("api/products")]
-    [Authorize(Policy = "AdminOnly")]
     [ApiController]
+    [Route("api/product")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages");
         public ProductController(IProductService productService)
         {
             _productService = productService;
         }
 
-        /// <summary>
-        /// GetAll: Get all products in the database
-        /// </summary>
-        /// <returns></returns>
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var productsDto = await _productService.GetAllProducts();
+            var productsDto = await _productService.GetAllProductsAsync();
             return Ok(productsDto);
         }
 
-        /// <summary>
-        /// AddProduct: Add product by admin role
-        /// </summary>
-        /// <param name="newProduct"></param>
-        /// <returns></returns>
-        [HttpPost()]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<ServiceResponse<List<AddProductDTO>>>> AddProduct(AddProductDTO newProduct)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            return Ok(await _productService.AddProduct(newProduct));
+            var productDto = await _productService.GetProductByIdAsync(id);
+            return productDto != null ? Ok(productDto) : NotFound();
         }
 
-        [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<ServiceResponse<GetProductDTO>>> DeleteProduct(int id)
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetByName(string name)
         {
-            var response = await _productService.DeleteProduct(id);
-            if (response.Data is null)
+            var productDto = await _productService.GetAllProductByNameAsync(name);
+            return productDto == null ? NotFound() : Ok(productDto);
+        }
+
+        [HttpGet("categoryId/{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
+        {
+            var productDto = await _productService.GetAllProductByCategoryIdAsync(categoryId);
+            return productDto == null ? NotFound() : Ok(productDto);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Post(IFormFile image, [FromForm] int id, [FromForm] string name,
+            [FromForm] int price, [FromForm] int quantity, 
+            [FromForm] int categoryId, [FromForm] string description)
+        {
+            if (!Directory.Exists(_storagePath))
             {
-                return NotFound(response);
+                Directory.CreateDirectory(_storagePath);
+            }
+            if(image == null || image.Length == 0 || image == null)
+            {
+                return BadRequest("Invalid.");
             }
 
-            return Ok(response);
+            var fileName = Path.GetFileName(image.FileName);
+            var filePath = Path.Combine(_storagePath, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+            var productDto = new ProductDTO();
+            productDto.Id = id;
+            productDto.Name = name;
+            productDto.Image = fileName;
+            productDto.Quantity = quantity;
+            productDto.Price = price;
+            productDto.CategoryId = categoryId;
+            productDto.Description = description;
+            await _productService.AddProductAsync(productDto);
+            return CreatedAtAction(nameof(GetById), new { id = productDto.Id }, productDto);
         }
-        //[HttpGet("{id:int}")]
-        //public async Task<IActionResult> GetByIdAsync(int id)
-        //{
-        //    var productDto = await _productService.GetProductByIdAsync(id);
-        //    return productDto != null ? Ok(productDto) : NotFound();
-        //}
 
-        //[HttpGet("{name}")]
-        //public async Task<IActionResult> GetByName(string name)
-        //{
-        //    var productDto = await _productService.GetProductByNameAsync(name);
-        //    return productDto == null ? NotFound() : Ok(productDto);
-        //}
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update([FromBody] ProductDTO productDto)
+        {
+            await _productService.UpdateProductAsync(productDto);
+            return Ok(productDto);
+        }
 
-        //[HttpPost("create")]
-        //public async Task<IActionResult> Add([FromBody] ProductDTO productDto)
-        //{
-        //    await _productService.AddProductAsync(productDto);
-        //    return CreatedAtAction("GetByIdAsync", new { id = productDto.Id }, productDto);
-        //}
-
-        //[HttpPut("update/{id}")]
-        //public async Task<IActionResult> Update([FromBody] ProductDTO productDto)
-        //{
-        //    await _productService.UpdateProductAsync(productDto);
-        //    return Ok(productDto);
-        //}
-
-        //[HttpDelete("delete/{id}")]
-        //public async Task<IActionResult> DeleteById(int id)
-        //{
-        //    await _productService.GetProductByIdAsync(id);
-        //    return NoContent();
-        //}
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            var productDto = await _productService.GetProductByIdAsync(id);
+            var fileName = Path.GetFileName(productDto.Image);
+            var filePath = Path.Combine(_storagePath, fileName);
+            if(!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Not found image");
+            } 
+            await _productService.DeleteProductAsync(id);
+            System.IO.File.Delete(filePath);
+            return NoContent();
+        }
     }
-
 }

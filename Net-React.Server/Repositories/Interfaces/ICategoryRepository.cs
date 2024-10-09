@@ -1,5 +1,6 @@
 ﻿using Net_React.Server.Models;
 using Net_React.Server.Repositories.Interfaces;
+using Net_React.Server.Repositories.Repository;
 using System.Linq.Expressions;
 
 namespace Net_React.Server.Repositories.Interface
@@ -8,7 +9,7 @@ namespace Net_React.Server.Repositories.Interface
     {
         Task<IEnumerable<Category>> GetAllAsync();
         Task<Category> GetByIdAsync(int id);
-        Task<Category> GetByNameAsync(string name);
+        Task<IEnumerable<Category>> GetAllByNameAsync(string name);
         Task AddAsync(Category category);
         Task UpdateAsync(Category category);
         Task DeleteAsync(int id);
